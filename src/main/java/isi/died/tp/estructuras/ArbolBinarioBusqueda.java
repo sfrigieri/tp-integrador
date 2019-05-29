@@ -91,21 +91,30 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public boolean contiene(E unValor) {
 		// TODO 1.a
-		return false;
+		return this.valor.equals(unValor) || this.izquierdo.contiene(unValor) || this.derecho.contiene(unValor);
 	}
 
 	@Override
 	public int profundidad() {
 		// TODO 1.b
-		return 0;
+		if (this.izquierdo.esVacio() && this.derecho.esVacio())
+			return 0;
+		return profundidad(this.izquierdo, this.derecho);
 	}
 
+	private int profundidad(Arbol<E> izq,Arbol<E> der) {
+		return 1+Math.max(izq.profundidad(), der.profundidad());
+	}
+	
 	@Override
 	public int cuentaNodosDeNivel(int nivel) {
 		// TODO 1.c
-		return 0;
+		if (nivel == 0)
+			return 1;
+		return this.izquierdo.cuentaNodosDeNivel(nivel-1) + this.derecho.cuentaNodosDeNivel(nivel-1) ;
 	}
 
+	
 	@Override
 	public boolean esCompleto() {
 		// TODO 1.d
