@@ -3,6 +3,7 @@ package isi.died.tp.estructuras;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
 	protected Arbol<E> izquierdo;
@@ -110,7 +111,10 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	public int cuentaNodosDeNivel(int nivel) {
 		// TODO 1.c
 		if (nivel == 0)
-			return 1;
+			if (this.valor != null)
+				return 1;
+			else 
+				return 0;
 		return this.izquierdo.cuentaNodosDeNivel(nivel-1) + this.derecho.cuentaNodosDeNivel(nivel-1) ;
 	}
 
@@ -118,13 +122,62 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public boolean esCompleto() {
 		// TODO 1.d
-		return false;
+		if(this.esLleno())
+			return true;
+		//Si n-1 es lleno
+		if(this.profundidad() != 0 && this.esLleno(this.profundidad()-1)){
+			
+			ArrayList<Arbol> valoresHoja = new ArrayList<Arbol>();
+			
+			this.getHojas(valoresHoja, this, this.profundidad()-1);
+			
+			//Al menos la hoja de más a la izquierda debe no ser vacía
+			if(valoresHoja.get(0).esVacio())
+				return false;
+			
+			boolean anteriorVacio = false;
+			
+			//Y las demás hojas deben ser continuamente vacías o no vacías
+			for(Arbol<E> a : valoresHoja) {
+			
+				if(a.esVacio())
+					anteriorVacio = true;
+				else if(anteriorVacio)
+						return false;
+	
+			}
+			
+			return true;
+		}
+		else
+			return false;
 	}
 
+	private void getHojas(ArrayList<Arbol> valoresHoja, ArbolBinarioBusqueda<E> padre,int nivel) {
+		
+		if(nivel == 0) {
+			valoresHoja.add(padre.izquierdo);
+			valoresHoja.add(padre.derecho);
+		}
+		else {
+			getHojas(valoresHoja, (ArbolBinarioBusqueda<E>) padre.izquierdo, nivel-1);
+			getHojas(valoresHoja, (ArbolBinarioBusqueda<E>) padre.derecho, nivel-1);
+		}
+
+	}
+	
 	@Override
 	public boolean esLleno() {
 		// TODO 1.e
-		return false;
+		if(this.valor == null)
+			return false;
+		return this.esLleno(this.profundidad());
+	
+	}
+	
+	private boolean esLleno(int nivel) {
+		
+		return Math.pow(2,nivel) == this.cuentaNodosDeNivel(nivel);
 	}
 
 }
