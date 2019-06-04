@@ -7,14 +7,14 @@ public class App {
 	public static void main(String[] args) {
 		
 	final ArbolVacio arbol = new ArbolVacio();
-	final ArbolBinarioBusqueda<Long> arbol1 = new ArbolBinarioBusqueda((long) 0);
-	final ArbolBinarioBusqueda<Long> arbol2 = new ArbolBinarioBusqueda((long) 0,new ArbolVacio(),new ArbolBinarioBusqueda((long) 1));
-	final ArbolBinarioBusqueda<Long> arbol3 = new ArbolBinarioBusqueda((long) 0,new ArbolBinarioBusqueda((long) 1),new ArbolVacio());
-	final ArbolBinarioBusqueda<Long> arbol4 = new ArbolBinarioBusqueda((long) 0,new ArbolBinarioBusqueda((long) 1,new ArbolBinarioBusqueda((long) 4,new ArbolVacio<Long>(), new ArbolVacio<Long>()),new ArbolBinarioBusqueda((long) 28)), new ArbolBinarioBusqueda((long) 13,new ArbolBinarioBusqueda((long) 43),new ArbolBinarioBusqueda((long) 33)));
-	final ArbolBinarioBusqueda<Long> arbol5 = new ArbolBinarioBusqueda((long) 0,new ArbolBinarioBusqueda((long) 1,new ArbolBinarioBusqueda((long) 4),new ArbolBinarioBusqueda((long) 28)), new ArbolVacio());
-	final ArbolBinarioBusqueda<Long> arbol6 = new ArbolBinarioBusqueda((long) 0,new ArbolBinarioBusqueda((long) 1,new ArbolBinarioBusqueda((long) 4),new ArbolBinarioBusqueda((long) 28)), new ArbolBinarioBusqueda((long) 304934));
-	System.out.println("Arbol contiene 28? "+arbol4.contiene((long) 28));
-	System.out.println("Arbol contiene 5? "+arbol4.contiene((long) 5));
+	final ArbolBinarioBusqueda<Integer> arbol1 = new ArbolBinarioBusqueda(0);
+	final ArbolBinarioBusqueda<Integer> arbol2 = new ArbolBinarioBusqueda(0,new ArbolVacio(),new ArbolBinarioBusqueda(1));
+	final ArbolBinarioBusqueda<Integer> arbol3 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1),new ArbolVacio());
+	final ArbolBinarioBusqueda<Integer> arbol4 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1,new ArbolBinarioBusqueda(4,new ArbolVacio(), new ArbolVacio()),new ArbolBinarioBusqueda(28)), new ArbolBinarioBusqueda(13,new ArbolBinarioBusqueda(43),new ArbolBinarioBusqueda(33)));
+	final ArbolBinarioBusqueda<Integer> arbol5 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1,new ArbolBinarioBusqueda(4),new ArbolBinarioBusqueda(28)), new ArbolVacio());
+	final ArbolBinarioBusqueda<Integer> arbol6 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1,new ArbolBinarioBusqueda(4),new ArbolBinarioBusqueda(28)), new ArbolBinarioBusqueda(304934));
+	System.out.println("Arbol contiene 28? "+arbol4.contiene(28));
+	System.out.println("Arbol contiene 5? "+arbol4.contiene(5));
 	System.out.println("Profundidad Arbol Vacio es: "+arbol.profundidad());
 	System.out.println("Profundidad Arbol Binario4 es: "+arbol4.profundidad());
 	System.out.println("Cantidad de Nodos en Nivel de Arbol Binario4:");

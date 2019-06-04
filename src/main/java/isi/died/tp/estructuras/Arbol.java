@@ -27,13 +27,13 @@ public abstract class Arbol<E extends Comparable<E>> {
 	
 	public abstract void agregar(E a);
 
-	public abstract int profundidad();
+	public abstract Integer profundidad();
 
-	public abstract int cuentaNodosDeNivel(int nivel);
+	public abstract Integer cuentaNodosDeNivel(int nivel);
 
 	public abstract boolean esCompleto();
 
 	public abstract boolean esLleno();
 
-	
+	public abstract List<E> rango(E inicio, E fin);
 }
