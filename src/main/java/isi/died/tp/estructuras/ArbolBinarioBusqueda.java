@@ -96,19 +96,19 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	}
 
 	@Override
-	public int profundidad() {
+	public Integer profundidad() {
 		// TODO 1.b
 		if (this.izquierdo.esVacio() && this.derecho.esVacio())
 			return 0;
 		return profundidad(this.izquierdo, this.derecho);
 	}
 
-	private int profundidad(Arbol<E> izq,Arbol<E> der) {
+	private Integer profundidad(Arbol<E> izq,Arbol<E> der) {
 		return 1+Math.max(izq.profundidad(), der.profundidad());
 	}
 	
 	@Override
-	public int cuentaNodosDeNivel(int nivel) {
+	public Integer cuentaNodosDeNivel(int nivel) {
 		// TODO 1.c
 		if (nivel == 0)
 			if (this.valor != null)
