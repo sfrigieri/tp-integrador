@@ -35,5 +35,5 @@ public abstract class Arbol<E extends Comparable<E>> {
 
 	public abstract boolean esLleno();
 
-	
+	public abstract List<E> rango(E inicio, E fin);
 }
