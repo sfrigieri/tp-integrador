@@ -33,6 +33,7 @@ public class App {
 	System.out.println("Arbol Binario5 es Lleno?: "+arbol5.esLleno());
 	System.out.println("Arbol Binario6 es Completo?: "+arbol6.esCompleto());
 	System.out.println("Arbol Binario6 es Lleno?: "+arbol6.esLleno());
+	// esto es solo una prueba!
 	}
 
 }
