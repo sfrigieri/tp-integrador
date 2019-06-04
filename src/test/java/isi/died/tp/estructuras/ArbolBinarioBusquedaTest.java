@@ -1,44 +1,46 @@
 package isi.died.tp.estructuras;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import isi.died.tp.estructuras.*;
+import org.junit.Ignore;
 
 public class ArbolBinarioBusquedaTest {
 
-	private ArbolVacio arbol;
-	private ArbolBinarioBusqueda<Long> arbol1;
-	private ArbolBinarioBusqueda<Long> arbol2;
-	private ArbolBinarioBusqueda<Long> arbol3;
-	private ArbolBinarioBusqueda<Long> arbol4;
-	private ArbolBinarioBusqueda<Long> arbol5;
-	private ArbolBinarioBusqueda<Long> arbol6;
+	private ArbolVacio<Integer> arbol;
+	private ArbolBinarioBusqueda<Integer> arbol1;
+	private ArbolBinarioBusqueda<Integer> arbol2;
+	private ArbolBinarioBusqueda<Integer> arbol3;
+	private ArbolBinarioBusqueda<Integer> arbol4;
+	private ArbolBinarioBusqueda<Integer> arbol5;
+	private ArbolBinarioBusqueda<Integer> arbol6;
 	
 	@Before
 	public void init() {
-		arbol = new ArbolVacio();
-		arbol1 = new ArbolBinarioBusqueda(0);
-		arbol2 = new ArbolBinarioBusqueda(0,new ArbolVacio(),new ArbolBinarioBusqueda(1));
-		arbol3 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1),new ArbolVacio());
-		arbol4 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1,new ArbolBinarioBusqueda(4,new ArbolVacio(), new ArbolVacio()),new ArbolBinarioBusqueda(28)), new ArbolBinarioBusqueda(13,new ArbolBinarioBusqueda(43),new ArbolBinarioBusqueda(33)));
-		arbol5 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1,new ArbolBinarioBusqueda(4),new ArbolBinarioBusqueda(28)), new ArbolVacio());
-		arbol6 = new ArbolBinarioBusqueda(0,new ArbolBinarioBusqueda(1,new ArbolBinarioBusqueda(4),new ArbolBinarioBusqueda(28)), new ArbolBinarioBusqueda(304934));
+		arbol = new ArbolVacio<Integer>();
+		arbol1 = new ArbolBinarioBusqueda<Integer>(0);
+		arbol2 = new ArbolBinarioBusqueda<Integer>(0,new ArbolVacio<Integer>(),new ArbolBinarioBusqueda<Integer>(1));
+		arbol3 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1),new ArbolVacio<Integer>());
+		arbol4 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4,new ArbolVacio<Integer>(), new ArbolVacio<Integer>()),new ArbolBinarioBusqueda<Integer>(28)), new ArbolBinarioBusqueda<Integer>(13,new ArbolBinarioBusqueda<Integer>(43),new ArbolBinarioBusqueda<Integer>(33)));
+		arbol5 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4),new ArbolBinarioBusqueda<Integer>(28)), new ArbolVacio<Integer>());
+		arbol6 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4),new ArbolBinarioBusqueda<Integer>(28)), new ArbolBinarioBusqueda<Integer>(304934));
 		
 	}
 	
 	@Test
 	public void testContiene() {
-		fail("Not yet implemented");
+		assertFalse(arbol.contiene(28));
+		assertTrue(arbol4.contiene(28));
+		assertFalse(arbol4.contiene(5));
 	}
-
+	
+	@Ignore
 	@Test
 	public void testEqualsArbolOfE() {
 		fail("Not yet implemented");
 	}
 
+	@Ignore
 	@Test
 	public void testAgregar() {
 		fail("Not yet implemented");
@@ -52,7 +54,9 @@ public class ArbolBinarioBusquedaTest {
 
 	@Test
 	public void testCuentaNodosDeNivel() {
-		assertTrue(arbol1.esCompleto());
+		assertTrue(arbol4.cuentaNodosDeNivel(0).equals(1));
+		assertTrue(arbol4.cuentaNodosDeNivel(1).equals(2));
+		assertTrue(arbol4.cuentaNodosDeNivel(2).equals(4));
 	}
 
 	@Test
