@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Ignore;
+import isi.died.tp.dominio.*;
+import java.util.ArrayList;
 
 public class ArbolBinarioBusquedaTest {
 
@@ -14,6 +16,8 @@ public class ArbolBinarioBusquedaTest {
 	private ArbolBinarioBusqueda<Integer> arbol4;
 	private ArbolBinarioBusqueda<Integer> arbol5;
 	private ArbolBinarioBusqueda<Integer> arbol6;
+	private ArbolBinarioBusqueda<Insumo> arbolInsumos;
+	
 	
 	@Before
 	public void init() {
@@ -24,6 +28,16 @@ public class ArbolBinarioBusquedaTest {
 		arbol4 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4,new ArbolVacio<Integer>(), new ArbolVacio<Integer>()),new ArbolBinarioBusqueda<Integer>(28)), new ArbolBinarioBusqueda<Integer>(13,new ArbolBinarioBusqueda<Integer>(43),new ArbolBinarioBusqueda<Integer>(33)));
 		arbol5 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4),new ArbolBinarioBusqueda<Integer>(28)), new ArbolVacio<Integer>());
 		arbol6 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4),new ArbolBinarioBusqueda<Integer>(28)), new ArbolBinarioBusqueda<Integer>(304934));
+		
+		arbolInsumos = new ArbolBinarioBusqueda<Insumo>(new Insumo(3));
+		arbolInsumos.agregar(new Insumo(0));
+		arbolInsumos.agregar(new Insumo(2));
+		arbolInsumos.agregar(new Insumo(20));
+		arbolInsumos.agregar(new Insumo(3));
+		arbolInsumos.agregar(new Insumo(232424));
+		arbolInsumos.agregar(new Insumo(22));
+		arbolInsumos.agregar(new Insumo(67));
+
 		
 	}
 	
@@ -79,4 +93,12 @@ public class ArbolBinarioBusquedaTest {
 		assertFalse(arbol6.esLleno());
 	}
 
+	
+
+	@Test
+	public void testRango() {
+		ArrayList<Insumo> listaInsumos = arbolInsumos.rango(new Insumo(0),new Insumo(1));
+		assertTrue(listaInsumos.size() == 1);
+		assertTrue(listaInsumos.get(0).getStock() == 0);
+	}
 }

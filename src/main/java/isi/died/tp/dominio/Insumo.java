@@ -12,6 +12,14 @@ public class Insumo implements Comparable<Insumo>{
 	double peso;
 	boolean esRefrigerado;
 	
+	public Insumo(int stock) {
+		this.stock = stock;
+		}
+	
+	public Insumo() {
+		this.id = 1;
+	};
+	
 	@Override
 	public int compareTo (Insumo i) {
 		return (this.stock-i.stock);
@@ -24,5 +32,9 @@ public class Insumo implements Comparable<Insumo>{
 	public void actualizarStock(double cant) {
 	
 		
+	}
+
+	public int getStock() {
+		return this.stock;
 	}
 }

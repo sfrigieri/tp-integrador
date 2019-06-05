@@ -1,6 +1,7 @@
 package isi.died.tp.estructuras;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public abstract class Arbol<E extends Comparable<E>> {
 
@@ -35,5 +36,5 @@ public abstract class Arbol<E extends Comparable<E>> {
 
 	public abstract boolean esLleno();
 
-	public abstract List<E> rango(E inicio, E fin);
+	public abstract ArrayList<E> rango(E inicio, E fin);
 }

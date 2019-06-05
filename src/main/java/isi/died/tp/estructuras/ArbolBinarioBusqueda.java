@@ -179,19 +179,19 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		
 		return Math.pow(2,nivel) == this.cuentaNodosDeNivel(nivel);
 	}
-
+	
 	@Override
-	public List<E> rango(E inicio,E fin){
-		List<E> lista = new ArrayList<E>();
-		int compararStockMin =this.valor.compareTo(inicio);
-		int compararStockMax =this.valor.compareTo(fin);
+	public ArrayList<E> rango(E inicio,E fin){
+		ArrayList<E> lista = new ArrayList<E>();
+		int compararMin =this.valor.compareTo(inicio);
+		int compararMax =this.valor.compareTo(fin);
 		
-		if(compararStockMax <= 0 && compararStockMin >= 0) {
+		if(compararMax <= 0 && compararMin >= 0) {
 			lista.addAll(this.izquierdo().rango(inicio, fin));
 			lista.add(valor);
 			lista.addAll(this.derecho().rango(inicio, fin));
 		}else {
-			if(compararStockMax < 0) 
+			if(compararMax < 0) 
 				lista.addAll(this.derecho().rango(inicio, fin));
 			else
 				lista.addAll(this.izquierdo().rango(inicio, fin));
