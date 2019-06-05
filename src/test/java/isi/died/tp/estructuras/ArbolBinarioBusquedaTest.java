@@ -34,7 +34,7 @@ public class ArbolBinarioBusquedaTest {
 		arbolInsumos.agregar(new Insumo(2));
 		arbolInsumos.agregar(new Insumo(20));
 		arbolInsumos.agregar(new Insumo(3));
-		arbolInsumos.agregar(new Insumo(232424));
+		arbolInsumos.agregar(new Insumo(232));
 		arbolInsumos.agregar(new Insumo(22));
 		arbolInsumos.agregar(new Insumo(67));
 
@@ -97,8 +97,26 @@ public class ArbolBinarioBusquedaTest {
 
 	@Test
 	public void testRango() {
-		ArrayList<Insumo> listaInsumos = arbolInsumos.rango(new Insumo(0),new Insumo(1));
-		assertTrue(listaInsumos.size() == 1);
-		assertTrue(listaInsumos.get(0).getStock() == 0);
+		
+		int stockMin = 0;
+		int stockMax = 1;
+		
+		ArrayList<Insumo> listaInsumos;
+		
+		listaInsumos = arbolInsumos.rango(new Insumo(stockMin),new Insumo(stockMax));
+		if(listaInsumos.size() != 0)
+		assertTrue(listaInsumos.get(0).getStock() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock() <= stockMax);
+		
+		stockMin = 0;
+		stockMax = 80;
+		listaInsumos = arbolInsumos.rango(new Insumo(stockMin),new Insumo(stockMax));
+		if(listaInsumos.size() != 0)
+		assertTrue(listaInsumos.get(0).getStock() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock() <= stockMax);
+	
+		stockMin = 200;
+		stockMax = 300;
+		listaInsumos = arbolInsumos.rango(new Insumo(stockMin),new Insumo(stockMax));
+		if(listaInsumos.size() != 0)
+		assertTrue(listaInsumos.get(0).getStock() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock() <= stockMax);
 	}
 }
