@@ -97,7 +97,7 @@ public class ArbolBinarioBusquedaTest {
 
 	@Test
 	public void testRango() {
-		
+		//no me gusta esto!
 		int stockMin = 0;
 		int stockMax = 1;
 		
