@@ -7,6 +7,7 @@ public class PlantaProduccion extends Planta {
 
 	private List<Stock> listaDeStock;
 	
+	@Override
 	public Boolean necesitaInsumo(Insumo i) {
 		for(Stock stock : this.listaDeStock) {
 			if(stock.getInsumo().equals(i) && stock.getPuntoPedido()>stock.getCantidad())
@@ -15,15 +16,35 @@ public class PlantaProduccion extends Planta {
 		 return false;
 	}
 	
+	@Override
+	public Integer cantidadNecesariaInsumo(Insumo i) {
+		for(Stock stock : this.listaDeStock) {
+			if(stock.getInsumo().equals(i)) {
+				int cantidadNecesaria = stock.getPuntoPedido()-stock.getCantidad();
+				if(cantidadNecesaria > 0)
+					return cantidadNecesaria;
+			}
+		}
+		 return 0;
+	}
+	
 	
 	public Double costoTotal() {
-		return listaDeStock.stream().distinct().mapToDouble(( e)-> e.getInsumo().getCosto()*e.getCantidad()).sum();
+		return listaDeStock
+				.stream()
+				.distinct()
+				.mapToDouble(( e)-> e.getInsumo().getCosto()*e.getCantidad())
+				.sum();
 		
 		}
 	
 
 	public List<Insumo> stockEntre(Integer s1, Integer s2) {
-		return listaDeStock.stream().filter((s)  -> ( s.getCantidad()>=s1 && s.getCantidad()<=s2)).map((s)  -> ( s.getInsumo())).collect(Collectors.toList());
+		return listaDeStock
+				.stream()
+				.filter((s) -> ( s.getCantidad()>=s1 && s.getCantidad()<=s2))
+				.map((s)  -> ( s.getInsumo()))
+				.collect(Collectors.toList());
 		
 		}
 

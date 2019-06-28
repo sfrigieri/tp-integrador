@@ -16,6 +16,10 @@ public abstract class Planta {
 			return null;
 		}
 		
+		public Integer cantidadNecesariaInsumo(Insumo i) {
+			 return 0;
+		}
+		
 		public String getNombre() {
 			return this.nombre;
 		}
