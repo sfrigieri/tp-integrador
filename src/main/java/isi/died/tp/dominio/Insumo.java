@@ -34,7 +34,7 @@ public class Insumo implements Comparable<Insumo>{
 		
 	}
 
-	public int getStock() {
-		return this.stock;
+	public Double getCosto() {
+		return this.costo;
 	}
 }
