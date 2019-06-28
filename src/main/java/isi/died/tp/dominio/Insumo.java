@@ -24,6 +24,10 @@ public class Insumo implements Comparable<Insumo>{
 	public int compareTo (Insumo i) {
 		return (this.stock-i.stock);
 	}
+	
+	public Integer getStock() {
+		return this.stock;
+	}
 
 	public boolean hayStock(double cant) {
 		return false;
