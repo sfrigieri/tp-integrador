@@ -1,17 +1,11 @@
 package isi.died.tp.estructuras;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
-
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Planta;
-import isi.died.tp.dominio.PlantaAcopio;
-import isi.died.tp.dominio.PlantaProduccion;
 
 public class GrafoPlanta extends Grafo<Planta> {
 
@@ -35,6 +29,7 @@ public class GrafoPlanta extends Grafo<Planta> {
 				if(p.necesitaInsumo(i)) return p;
 			}
 		}
+		
 		return null;
 	}
 
@@ -54,24 +49,24 @@ public class GrafoPlanta extends Grafo<Planta> {
 	}
 
 	public Planta buscarPlanta(Insumo i){
-		
+
 		//Asumiendo PlantaAcopio como Fuente y PlantaFinal como Sumidero
 		Planta inicial = this.vertices
 				.stream()
 				.filter( v -> this.gradoEntrada(v)==0)
 				.findFirst().get().getValor();
 
-		//Retorno Dikstra modificado para recibir un TreeMap con valores ordenados naturamente.
+		//Retorno Dikstra modificado para recibir un TreeMap con valores ordenados naturalmente.
 		TreeMap<Integer,Planta> plantasPorDistancia = this.caminosMinimoDikstra(inicial);
-		
+
 		Planta plantaPrioritaria = null;
 		int cantMax = 0;
-		
+
 		while (!plantasPorDistancia.isEmpty()){ 
-			
+
 			Planta actual = plantasPorDistancia.pollFirstEntry().getValue();
 			int cantNecesaria = actual.cantidadNecesariaInsumo(i);
-			
+
 			if(cantNecesaria > cantMax) {
 				cantMax = cantNecesaria;
 				plantaPrioritaria = actual;
@@ -84,30 +79,30 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 
 
-private List<Planta> buscarPlantasCercanas(Vertice<Planta> v1,int saltos){
+	private List<Planta> buscarPlantasCercanas(Vertice<Planta> v1,int saltos){
 
-	HashSet<Vertice<Planta>> visitados = new HashSet<Vertice<Planta>>();
-	visitados.add(v1);
-	return this.buscarPlantasCercanas(v1, saltos, visitados);
+		HashSet<Vertice<Planta>> visitados = new HashSet<Vertice<Planta>>();
+		visitados.add(v1);
+		return this.buscarPlantasCercanas(v1, saltos, visitados);
 
-}
-
-private List<Planta> buscarPlantasCercanas(Vertice<Planta> v1,int saltos,HashSet<Vertice<Planta>> visitados){
-
-	List<Planta> plantas = new ArrayList<Planta>();
-
-	if(saltos >= 0) {
-		if(!visitados.contains(v1)) {
-			plantas.add(v1.getValor());
-			visitados.add(v1);
-		}
-
-		for(Vertice<Planta> ady: this.getAdyacentes(v1))
-			plantas.addAll(buscarPlantasCercanas(ady, saltos-1, visitados));
 	}
 
-	return plantas;
-}
+	private List<Planta> buscarPlantasCercanas(Vertice<Planta> v1,int saltos,HashSet<Vertice<Planta>> visitados){
+
+		List<Planta> plantas = new ArrayList<Planta>();
+
+		if(saltos >= 0) {
+			if(!visitados.contains(v1)) {
+				plantas.add(v1.getValor());
+				visitados.add(v1);
+			}
+
+			for(Vertice<Planta> ady: this.getAdyacentes(v1))
+				plantas.addAll(buscarPlantasCercanas(ady, saltos-1, visitados));
+		}
+
+		return plantas;
+	}
 
 
 }

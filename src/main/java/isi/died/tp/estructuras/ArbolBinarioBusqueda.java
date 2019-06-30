@@ -127,7 +127,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		//Si n-1 es lleno
 		if(this.profundidad() != 0 && this.esLleno(this.profundidad()-1)){
 			
-			ArrayList<Arbol> valoresHoja = new ArrayList<Arbol>();
+			ArrayList<Arbol<E>> valoresHoja = new ArrayList<Arbol<E>>();
 			
 			this.getHojas(valoresHoja, this, this.profundidad()-1);
 			
@@ -153,7 +153,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 			return false;
 	}
 
-	private void getHojas(ArrayList<Arbol> valoresHoja, ArbolBinarioBusqueda<E> padre,int nivel) {
+	private void getHojas(ArrayList<Arbol<E>> valoresHoja, ArbolBinarioBusqueda<E> padre,int nivel) {
 		
 		if(nivel == 0) {
 			valoresHoja.add(padre.izquierdo);
