@@ -38,16 +38,16 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public List<E> inOrden() {
 		List<E> lista = new ArrayList<E>();
-		lista.addAll(this.izquierdo.preOrden());
+		lista.addAll(this.izquierdo.inOrden());
 		lista.add(this.valor);
-		lista.addAll(this.derecho.preOrden());
+		lista.addAll(this.derecho.inOrden());
 		return lista;
 	}
 	@Override
 	public List<E> posOrden() {
 		List<E> lista = new ArrayList<E>();
-		lista.addAll(this.izquierdo.preOrden());
-		lista.addAll(this.derecho.preOrden());
+		lista.addAll(this.izquierdo.posOrden());
+		lista.addAll(this.derecho.posOrden());
 		lista.add(this.valor);
 		return lista;
 

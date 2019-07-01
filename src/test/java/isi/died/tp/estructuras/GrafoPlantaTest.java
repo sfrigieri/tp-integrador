@@ -121,7 +121,6 @@ public class GrafoPlantaTest {
 
 	}
 	
-	
 	@Test
 	public void testStockEntre() {
 		
@@ -169,7 +168,8 @@ public class GrafoPlantaTest {
 	
 	@Test
 	public void testBuscarPlantaA() {
-		Planta p = grafo.buscarPlanta(plantaA, InsumoE, 3);
+
+	 	Planta p = grafo.buscarPlanta(plantaA, InsumoE, 3);
 		assertTrue(p.equals(plantaE));
 		
 		p = grafo.buscarPlanta(plantaA, InsumoE, 1);
@@ -177,7 +177,7 @@ public class GrafoPlantaTest {
 		
 		p = grafo.buscarPlanta(plantaA, InsumoE, 0);
 		assertTrue(p == null);
-
+	
 	}
 	
 	@Test

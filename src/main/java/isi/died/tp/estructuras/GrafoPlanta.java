@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Planta;
 
@@ -25,7 +27,7 @@ public class GrafoPlanta extends Grafo<Planta> {
 		List<Planta> plantasCercanas = buscarPlantasCercanas(this.getNodo(inicial),saltos);
 
 		if (!plantasCercanas.isEmpty()){
-			for(Planta p : plantasCercanas){ 
+			for(Planta p : plantasCercanas){
 				if(p.necesitaInsumo(i)) return p;
 			}
 		}
@@ -81,24 +83,24 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 	private List<Planta> buscarPlantasCercanas(Vertice<Planta> v1,int saltos){
 
-		HashSet<Vertice<Planta>> visitados = new HashSet<Vertice<Planta>>();
+		List<Vertice<Planta>> visitados = new ArrayList<Vertice<Planta>>();
 		visitados.add(v1);
 		return this.buscarPlantasCercanas(v1, saltos, visitados);
 
 	}
 
-	private List<Planta> buscarPlantasCercanas(Vertice<Planta> v1,int saltos,HashSet<Vertice<Planta>> visitados){
+	private List<Planta> buscarPlantasCercanas(Vertice<Planta> v1,int saltos,List<Vertice<Planta>> visitados){
 
 		List<Planta> plantas = new ArrayList<Planta>();
-
+		List<Vertice<Planta>> copiaVisitados = visitados.stream().collect(Collectors.toList());
 		if(saltos >= 0) {
-			if(!visitados.contains(v1)) {
+			if(!copiaVisitados.contains(v1)) {
 				plantas.add(v1.getValor());
-				visitados.add(v1);
+				copiaVisitados.add(v1);
 			}
 
 			for(Vertice<Planta> ady: this.getAdyacentes(v1))
-				plantas.addAll(buscarPlantasCercanas(ady, saltos-1, visitados));
+				plantas.addAll(buscarPlantasCercanas(ady, saltos-1, copiaVisitados));
 		}
 
 		return plantas;
