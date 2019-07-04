@@ -178,13 +178,29 @@ public class Grafo<T> {
 		return false;
 	}
 
+
+
+	public List<List<Vertice<T>>> caminos(T v1,T v2){
+		return this.caminos(new Vertice(v1), new Vertice(v2));
+	}
+
+
+	public List<List<Vertice<T>>> caminos(Vertice<T> v1,Vertice<T> v2){
+		List<List<Vertice<T>>>salida = new ArrayList<List<Vertice<T>>>();
+		List<Vertice<T>> marcados = new ArrayList<Vertice<T>>();
+		marcados.add(v1);
+		buscarCaminosAux(v1,v2,marcados,salida);
+		return salida;
+	}
+	
+	
 	private void buscarCaminosAux(Vertice<T> v1,Vertice<T> v2, List<Vertice<T>> marcados, List<List<Vertice<T>>> todos) {
-		List<Vertice<T>> adyacentes = this.getAdyacentes(v1);
+
 		// Vector copiaMarcados;
 		List<Vertice<T>>  copiaMarcados =null;
 		;
 
-		for(Vertice<T> ady: adyacentes){
+		for(Vertice<T> ady: this.getAdyacentes(v1)){
 			System.out.println(">> " + ady);
 			copiaMarcados = marcados.stream().collect(Collectors.toList());
 			if(ady.equals(v2)) {
@@ -199,19 +215,6 @@ public class Grafo<T> {
 			}
 		}
 
-	}
-
-	public List<List<Vertice<T>>> caminos(T v1,T v2){
-		return this.caminos(new Vertice(v1), new Vertice(v2));
-	}
-
-
-	public List<List<Vertice<T>>> caminos(Vertice<T> v1,Vertice<T> v2){
-		List<List<Vertice<T>>>salida = new ArrayList<List<Vertice<T>>>();
-		List<Vertice<T>> marcados = new ArrayList<Vertice<T>>();
-		marcados.add(v1);
-		buscarCaminosAux(v1,v2,marcados,salida);
-		return salida;
 	}
 
 	public TreeMap<Integer,T> caminosMinimoDikstra(T valorOrigen){
@@ -239,7 +242,7 @@ public class Grafo<T> {
 		TreeMap<Integer,Vertice<T>> aVisitar= new TreeMap<Integer,Vertice<T>>();
 
 		aVisitar.put(0,origen);
-
+	
 		while (!aVisitar.isEmpty()) {
 			Entry<Integer, Vertice<T>> nodo = aVisitar.pollFirstEntry();
 			visitados.add(nodo.getValue());
@@ -470,6 +473,33 @@ public class Grafo<T> {
 		}	
 	}
 	
+	
+	public Integer alcanzarSumideros(Vertice<T> v1,int saltos){
+		List<Vertice<T>> visitados = new ArrayList<Vertice<T>>();
+		List<Vertice<T>> sumideros = new ArrayList<Vertice<T>>();
+		visitados.add(v1);
+		this.alcanzarSumideros(v1,saltos, visitados,sumideros);
+		return sumideros.size();
+	
+
+	}
+
+	private void alcanzarSumideros(Vertice<T> v1,int saltos,List<Vertice<T>> visitados,List<Vertice<T>> sumideros){
+
+		if(saltos >= 0) { 
+
+				if(saltos == 0  && this.getAdyacentes(v1).size() == 0 && !sumideros.contains(v1))
+					sumideros.add(v1);
+
+					for(Vertice<T> ady: this.getAdyacentes(v1)) {
+						if(!visitados.contains(ady)) { 
+							List<Vertice<T>> copiaVisitados = visitados.stream().collect(Collectors.toList());
+							copiaVisitados.add(ady);
+							alcanzarSumideros(ady,saltos-1, copiaVisitados,sumideros);
+						}
+					}
+		}	
+	}
 	
 	public Boolean existeCaminoRec(Vertice<T> v1, Vertice<T> v2, Integer n, Integer max) {
 		List<Vertice<T>> visitados = new ArrayList<Vertice<T>>();

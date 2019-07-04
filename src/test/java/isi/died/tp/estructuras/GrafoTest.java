@@ -263,4 +263,20 @@ public class GrafoTest {
 		assertTrue(grafo2.existeCaminoRecCondSaltoImpar(grafo2.getNodo(6), cond));
 	}
 
+	
+	
+	@Test	
+	public void testAlcanzarSumideros() {
+		
+		assertTrue(grafo.alcanzarSumideros(grafo.getNodo(plantaA),1) == 0);
+		
+		assertTrue(grafo.alcanzarSumideros(grafo.getNodo(plantaA),2) == 1);
+		
+		assertTrue(grafo.alcanzarSumideros(grafo.getNodo(plantaA),3) == 1);
+
+		assertTrue(grafo.alcanzarSumideros(grafo.getNodo(plantaA),4) == 1);
+		
+		assertTrue(grafo.alcanzarSumideros(grafo.getNodo(plantaA),5) == 1);
+	}
+
 }
