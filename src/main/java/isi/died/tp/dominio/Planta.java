@@ -7,7 +7,7 @@ public abstract class Planta {
 		protected int id;
 		protected String nombre;
 		
-		
+		//hola
 		protected Planta(int id, String nombre) {
 			super();
 			this.id = id;
