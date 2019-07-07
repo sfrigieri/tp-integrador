@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import isi.died.tp.dominio.Insumo;
-import isi.died.tp.dominio.Planta;
+import isi.died.tp.model.Insumo;
+import isi.died.tp.model.Planta;
 
 public class GrafoPlanta extends Grafo<Planta> {
 

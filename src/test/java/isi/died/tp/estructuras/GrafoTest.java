@@ -8,7 +8,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import isi.died.tp.dominio.*;
+
+import isi.died.tp.model.*;
 
 public class GrafoTest {
 

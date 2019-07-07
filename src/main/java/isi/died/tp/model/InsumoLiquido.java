@@ -1,4 +1,4 @@
-package isi.died.tp.dominio;
+package isi.died.tp.model;
 
 
 public class InsumoLiquido extends Insumo{

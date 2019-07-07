@@ -1,2 +1,2 @@
 # Integrantes del grupo
-## Frigieri Santiago - Holub German - Scipioni Santiago
+## Frigieri Santiago - Holub German - Hominal Williams

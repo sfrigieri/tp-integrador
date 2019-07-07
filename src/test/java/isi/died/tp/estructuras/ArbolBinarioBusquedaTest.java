@@ -3,8 +3,11 @@ package isi.died.tp.estructuras;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import isi.died.tp.model.*;
+
 import org.junit.Ignore;
-import isi.died.tp.dominio.*;
+
 import java.util.ArrayList;
 
 public class ArbolBinarioBusquedaTest {
