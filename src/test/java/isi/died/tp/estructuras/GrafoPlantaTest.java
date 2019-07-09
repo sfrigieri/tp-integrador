@@ -37,7 +37,7 @@ public class GrafoPlantaTest {
 		plantaD = new PlantaProduccion(4, "D");
 		plantaE = new PlantaProduccion(5, "E");
 		plantaF = new PlantaAcopio(6, "F");
-		
+		/*
 		// CostoTotal PlantaA = 140928.0
 		InsumoA = new Insumo(1, 30, 500); 
 		InsumoB = new Insumo(2, 300, 20);
@@ -69,7 +69,7 @@ public class GrafoPlantaTest {
 		plantaE.addStock(6, 4, 15, InsumoD); //Necesita 9
 		plantaE.addStock(7, 35, 50, InsumoE); //Necesita 15
 		plantaE.addStock(8, 25, 10, InsumoF); //CostoTotal PlantaE = 44700.0
-
+*/
 		
 		grafo = new GrafoPlanta();
 		

@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 
 public class PlantaProduccion extends Planta {
 
-	private List<Stock> listaDeStock;
+	private List<StockProduccion> listaDeStock;
 	
 	
 	
 	public PlantaProduccion(int id, String nombre) {
 		super(id, nombre);
-		listaDeStock = new ArrayList<Stock>();
+		listaDeStock = new ArrayList<StockProduccion>();
 	}
 
 	@Override
@@ -56,9 +56,9 @@ public class PlantaProduccion extends Planta {
 		}
 
 	@Override
-	public void addStock(int id, int cantidad, int puntoPedido, Insumo ins) {
+	public void addStock(int id, int cantidad, int puntoPedido, Insumo ins, Planta planta) {
 		if(this.getStock(ins) == null)
-			listaDeStock.add(new Stock(id, cantidad, puntoPedido, ins));
+			listaDeStock.add(new StockProduccion(id, cantidad, puntoPedido, ins, planta));
 		}
 	
 	@Override

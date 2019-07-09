@@ -32,14 +32,31 @@ public class ArbolBinarioBusquedaTest {
 		arbol5 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4),new ArbolBinarioBusqueda<Integer>(28)), new ArbolVacio<Integer>());
 		arbol6 = new ArbolBinarioBusqueda<Integer>(0,new ArbolBinarioBusqueda<Integer>(1,new ArbolBinarioBusqueda<Integer>(4),new ArbolBinarioBusqueda<Integer>(28)), new ArbolBinarioBusqueda<Integer>(304934));
 		
-		arbolInsumos = new ArbolBinarioBusqueda<Insumo>(new Insumo(8,3));
-		arbolInsumos.agregar(new Insumo(1,0));
-		arbolInsumos.agregar(new Insumo(2,2));
-		arbolInsumos.agregar(new Insumo(3,20));
-		arbolInsumos.agregar(new Insumo(4,3));
-		arbolInsumos.agregar(new Insumo(5,232));
-		arbolInsumos.agregar(new Insumo(6,22));
-		arbolInsumos.agregar(new Insumo(7,67));
+		Insumo ins1 = new Insumo(1);
+		ins1.setStock(new StockAcopio(0,0));
+		Insumo ins2 = new Insumo(2);
+		ins2.setStock(new StockAcopio(0,2));
+		Insumo ins3 = new Insumo(3);
+		ins3.setStock(new StockAcopio(0,20));
+		Insumo ins4 = new Insumo(4);
+		ins4.setStock(new StockAcopio(0,3));
+		Insumo ins5 = new Insumo(5);
+		ins5.setStock(new StockAcopio(0,232));
+		Insumo ins6 = new Insumo(6);
+		ins6.setStock(new StockAcopio(0,22));
+		Insumo ins7 = new Insumo(7);
+		ins7.setStock(new StockAcopio(0,67));
+		Insumo ins8 = new Insumo(8);
+		ins8.setStock(new StockAcopio(0,3));
+		
+		arbolInsumos = new ArbolBinarioBusqueda<Insumo>(ins8);
+		arbolInsumos.agregar(ins1);
+		arbolInsumos.agregar(ins2);
+		arbolInsumos.agregar(ins3);
+		arbolInsumos.agregar(ins4);
+		arbolInsumos.agregar(ins5);
+		arbolInsumos.agregar(ins6);
+		arbolInsumos.agregar(ins7);
 
 		
 	}
@@ -106,20 +123,29 @@ public class ArbolBinarioBusquedaTest {
 		
 		ArrayList<Insumo> listaInsumos;
 		
-		listaInsumos = arbolInsumos.rango(new Insumo(0,stockMin),new Insumo(0,stockMax));
+		Insumo insMin = new Insumo(0);
+		insMin.setStock(new StockAcopio(0,0));
+		Insumo insMax = new Insumo(1);
+		insMax.setStock(new StockAcopio(0,1));
+		
+		listaInsumos = arbolInsumos.rango(insMin,insMax);
 		if(listaInsumos.size() != 0)
-		assertTrue(listaInsumos.get(0).getStock() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock() <= stockMax);
+		assertTrue(listaInsumos.get(0).getStock().getCantidad() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock().getCantidad() <= stockMax);
 		
 		stockMin = 0;
 		stockMax = 80;
-		listaInsumos = arbolInsumos.rango(new Insumo(0,stockMin),new Insumo(0,stockMax));
+		insMin.getStock().setCantidad(0);
+		insMax.getStock().setCantidad(80);
+		listaInsumos = arbolInsumos.rango(insMin,insMax);
 		if(listaInsumos.size() != 0)
-		assertTrue(listaInsumos.get(0).getStock() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock() <= stockMax);
+		assertTrue(listaInsumos.get(0).getStock().getCantidad() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock().getCantidad() <= stockMax);
 	
 		stockMin = 200;
 		stockMax = 300;
-		listaInsumos = arbolInsumos.rango(new Insumo(0,stockMin),new Insumo(0,stockMax));
+		insMin.getStock().setCantidad(200);
+		insMax.getStock().setCantidad(300);
+		listaInsumos = arbolInsumos.rango(insMin,insMax);
 		if(listaInsumos.size() != 0)
-		assertTrue(listaInsumos.get(0).getStock() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock() <= stockMax);
+		assertTrue(listaInsumos.get(0).getStock().getCantidad() >= stockMin && listaInsumos.get(listaInsumos.size()-1).getStock().getCantidad() <= stockMax);
 	}
 }

@@ -64,7 +64,7 @@ public abstract class Planta {
 			
 			}
 
-		public void addStock(int id, int cantidad, int puntoPedido, Insumo ins) {
+		public void addStock(int id, int cantidad, int puntoPedido, Insumo ins, Planta planta) {
 
 			}
 		

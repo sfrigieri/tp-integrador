@@ -8,9 +8,6 @@ import isi.died.tp.dao.util.*;
 public class EmpresaDaoDefault implements EmpresaDao {
 
 
-	private static Grafo<Planta> GRAFO_MATERIAL  = new Grafo<Planta>();
-	private static Integer SECUENCIA_ID;
-	
-	private CsvSource dataSource;
+
 	
 }

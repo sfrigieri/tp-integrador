@@ -21,7 +21,7 @@ public class PlantaAcopio extends Planta {
 		return listaDeInsumos
 				.stream()
 				.distinct()
-				.mapToDouble(( e)-> e.getCosto()*e.getStock())
+				.mapToDouble(( e)-> e.getCosto()*e.getStock().getCantidad())
 				.sum();
 		
 		}
@@ -31,7 +31,7 @@ public class PlantaAcopio extends Planta {
 	public List<Insumo> stockEntre(Integer s1, Integer s2) {
 		return listaDeInsumos
 				.stream()
-				.filter((s) -> ( s.getStock()>=s1 && s.getStock()<=s2))
+				.filter((s) -> ( s.getStock().getCantidad()>=s1 && s.getStock().getCantidad()<=s2))
 				.collect(Collectors.toList());
 		
 		}
