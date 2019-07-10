@@ -14,7 +14,7 @@ public class Camion {
 	
 	
 	
-	public Camion(int id, Double costoKm, Boolean aptoLiquidos, Double capacidad) {
+	public Camion(int id, double costoKm, Boolean aptoLiquidos, double capacidad) {
 		super();
 		this.id = id;
 		this.costoKm = costoKm;
@@ -22,8 +22,8 @@ public class Camion {
 		this.capacidad = capacidad;
 	}
 
-	public Camion(int id, String marca, String modelo, String dominio, Integer año, Double costoKm,
-			Boolean aptoLiquidos, Double capacidad) {
+	public Camion(int id, String marca, String modelo, String dominio, int año, double costoKm,
+			Boolean aptoLiquidos, double capacidad) {
 		super();
 		this.id = id;
 		this.marca = marca;
@@ -63,10 +63,10 @@ public class Camion {
 	public void setAño(int año) {
 		this.año = año;
 	}
-	public Double getCostoKm() {
+	public double getCostoKm() {
 		return costoKm;
 	}
-	public void setCostoKm(Double costoKm) {
+	public void setCostoKm(double costoKm) {
 		this.costoKm = costoKm;
 	}
 	public Boolean getAptoLiquidos() {

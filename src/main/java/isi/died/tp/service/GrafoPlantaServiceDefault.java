@@ -27,17 +27,18 @@ public class GrafoPlantaServiceDefault implements GrafoPlantaService {
 		List<Integer> costos = new ArrayList<Integer>();
 		List<Integer> pesos = new ArrayList<Integer>();
 		int capCamion = (int) camion.getCapacidad();
+		
 		int cantStocks = listaDisponibles.size();
 
 		//Recibo arraylist con StockAcopio,  respetando posiciones creo array pesos y array costos.
 		for(StockAcopio stock : listaDisponibles) {
 			costos.add((int) (stock.getCantidad()*stock.getInsumo().getCosto()));
 		}
-
+	
 		for(StockAcopio stock : listaDisponibles) {
 			pesos.add((int) (stock.getCantidad()*stock.getInsumo().getPeso()));
 		}
-
+		
 
 		int i, p; 
 		int[][] resultado = new int[cantStocks+1][capCamion+1]; 
@@ -50,15 +51,15 @@ public class GrafoPlantaServiceDefault implements GrafoPlantaService {
 			resultado[i][0] = 0;   
 		
 		
-		for (i = 0; i <= cantStocks; i++) { 
-			for (p = 0; p <= capCamion; p++){
+		for (i = 1; i <= cantStocks; i++) { 
+			for (p = 1; p <= capCamion; p++){
 				if (pesos.get(i-1) <= p) 
 					resultado[i][p] = Math.max(costos.get(i-1) + resultado[i-1][p-pesos.get(i-1)],  resultado[i-1][p]); 
 				else
 					resultado[i][p] = resultado[i-1][p]; 
 			} 
 		} 
-
+		//System.out.println(resultado[cantStocks][capCamion]);
 		//Busco stocks que pertenecen a la selección final
 		int temp = capCamion;
 		List<StockAcopio> listaResultante = new ArrayList<StockAcopio>();
