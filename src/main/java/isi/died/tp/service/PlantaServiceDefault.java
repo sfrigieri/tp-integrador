@@ -3,27 +3,41 @@ package isi.died.tp.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import isi.died.tp.dao.PlantaDao;
-import isi.died.tp.dao.PlantaDaoDefault;
-import isi.died.tp.model.Camion;
-import isi.died.tp.model.StockAcopio;
+import isi.died.tp.dao.*;
+import isi.died.tp.model.*;
+import isi.died.tp.estructuras.*;
 
-
-public class GrafoPlantaServiceDefault implements GrafoPlantaService {
+public class PlantaServiceDefault implements PlantaService {
 
 
 	private PlantaDao dao;
 
 
-	public GrafoPlantaServiceDefault() {
+	public PlantaServiceDefault() {
 		super();
 		this.dao = new PlantaDaoDefault();
 	}
 
+	@Override
+    public int flujoMaximoRed(Vertice<Planta> origen){
+       
+    	int flujoMaximo = 0;
+    	int flujoActual = Integer.MAX_VALUE;
+    	
+    	while(flujoActual > 0) {
+    		flujoActual = this.dao.buscarProximoFlujoDisponible(origen);
+    		flujoMaximo = flujoMaximo + flujoActual;
+
+        }
+         
+    	dao.resetFlujo();
+    	
+        return flujoMaximo;
+    }
 
 	@Override
 	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> listaDisponibles) {
-
+		
 		List<Integer> costos = new ArrayList<Integer>();
 		List<Integer> pesos = new ArrayList<Integer>();
 		int capCamion = (int) camion.getCapacidad();

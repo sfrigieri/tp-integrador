@@ -7,11 +7,11 @@ import isi.died.tp.service.*;
 
 public class GrafoPlantaController {
 
-	private GrafoPlantaService gps;
+	private PlantaService gps;
 	
 	public GrafoPlantaController() {
 		super();
-		this.gps = new GrafoPlantaServiceDefault();
+		this.gps = new PlantaServiceDefault();
 	}
 
 	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> listaDisponibles) {

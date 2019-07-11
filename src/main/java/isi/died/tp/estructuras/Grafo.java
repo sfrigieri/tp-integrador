@@ -66,7 +66,14 @@ public class Grafo<T> {
 	}
 
 
-	protected List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
+    public List<T> listaVertices(){
+    	List<T> lista = new ArrayList<>();
+    	this.vertices.forEach(v -> lista.add(v.getValor()));
+    	return lista;
+    }
+    
+    
+    public List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
 		List<Vertice<T>> salida = new ArrayList<Vertice<T>>();
 		for(Arista<T> enlace : this.aristas){
 			if( enlace.getInicio().equals(unNodo)){
@@ -92,6 +99,15 @@ public class Grafo<T> {
 		Integer res =0;
 		for(Arista<T> arista : this.aristas){
 			if(arista.getInicio().equals(vertice)) ++res;
+		}
+		return res;
+	}
+	
+	
+	public List<Arista<T>> getAristasSalientes(Vertice<T> vertice){
+		List<Arista<T>>  res = new ArrayList<Arista<T>>();
+		for(Arista<T> arista : this.aristas){
+			if(arista.getInicio().equals(vertice)) res.add(arista);
 		}
 		return res;
 	}
@@ -181,7 +197,7 @@ public class Grafo<T> {
 
 
 	public List<List<Vertice<T>>> caminos(T v1,T v2){
-		return this.caminos(new Vertice(v1), new Vertice(v2));
+		return this.caminos(new Vertice<T>(v1), new Vertice<T>(v2));
 	}
 
 

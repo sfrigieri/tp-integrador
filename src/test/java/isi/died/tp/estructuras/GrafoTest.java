@@ -50,39 +50,7 @@ public class GrafoTest {
 		plantaD = new PlantaProduccion(4, "D");
 		plantaE = new PlantaProduccion(5, "E");
 		plantaF = new PlantaAcopio(6, "F");
-/*
-		// CostoTotal PlantaA = 140928.0
-		InsumoA = new Insumo(1, 30, 500); 
-		InsumoB = new Insumo(2, 300, 20);
-		InsumoC = new Insumo(3, 140, 39);
-		InsumoD = new Insumo(4, 600, 10);
-		InsumoE = new Insumo(5, 1000, 100);
-		InsumoF = new Insumo(6, 292, 29);
 
-		plantaA.addInsumo(InsumoA);
-		plantaA.addInsumo(InsumoB);
-		plantaA.addInsumo(InsumoC);
-		plantaA.addInsumo(InsumoD);
-		plantaA.addInsumo(InsumoE);
-		plantaA.addInsumo(InsumoF);
-
-		plantaB.addStock(1, 3, 5, InsumoA); //Necesita 2
-		plantaB.addStock(2, 5, 10, InsumoB);//Necesita 5
-		//CostoTotal PlantaB = 1590.0
-
-		plantaC.addStock(3, 30, 10, InsumoC);
-		plantaC.addStock(9, 5, 7, InsumoE); //Necesita 2  
-		plantaC.addStock(10, 3, 5, InsumoA); //Necesita 2
-		//CostoTotal PlantaC = 9290.0
-
-		plantaD.addStock(4, 5, 10, InsumoB); //Necesita 5
-		plantaD.addStock(5, 4, 15, InsumoD); //Necesita 9
-		//CostoTotal PlantaD = 3900.0
-
-		plantaE.addStock(6, 4, 15, InsumoD); //Necesita 9
-		plantaE.addStock(7, 35, 50, InsumoE); //Necesita 15
-		plantaE.addStock(8, 25, 10, InsumoF); //CostoTotal PlantaE = 44700.0
-*/
 
 		grafo = new GrafoPlanta();
 

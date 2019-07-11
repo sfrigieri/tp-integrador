@@ -49,9 +49,50 @@ public class Arista<T> {
 	public String toString() {
 		return "( "+this.inicio.getValor()+" --> "+this.fin.getValor()+" )";
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fin == null) ? 0 : fin.hashCode());
+		result = prime * result + ((inicio == null) ? 0 : inicio.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof Arista<?>) && ((Arista<?>)obj).getValor().equals(this.valor); 
 	}
+	
+	
+	public double getDuracionViajeMin() {
+		return 0;
+	}
+
+
+	public void setDuracionViajeMin(double duracionViajeMin) {
+	}
+
+
+	public int getPesoMaxTon() {
+		return 0;
+	}
+
+
+
+	public void setPesoMax(int pesoMaxTon) {
+		
+	}
+
+
+	public int getPesoEnCurso() {
+		return 0;
+	}
+
+
+	public void setPesoEnCurso(int pesoEnCursoTon) {
+
+	}
+
+	
 }
