@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import isi.died.tp.app.Main;
 import isi.died.tp.controller.GestionEntidadesController;
 import isi.died.tp.controller.InsumoController;
 import isi.died.tp.controller.MenuController;
@@ -39,25 +40,10 @@ public class GestionEntidades {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Gestión de Entidades");
-		JButton agregar = new JButton("Agregar"), modificar = new JButton("Modificar"), eliminar = new JButton("Eliminar"), camino = new JButton("Agregar Camino");
+		JButton agregar = new JButton("Agregar"), modificar = new JButton("Modificar"), eliminar = new JButton("Eliminar"), camino = new JButton("Agregar Camino"),
+				volver = new JButton("Volver");
 		JComboBox<String> opcionSeleccionada = new JComboBox<String>();
-		/*JMenuBar barraMenu;
-		JMenu menu;
-		JMenuItem menuItem;
-				
-		//barra arriba
-		barraMenu = new JMenuBar();
-		menu = new JMenu("Opciones");
-		barraMenu.add(menu);
-		menuItem = new JMenuItem("Información");
-		menuItem.addActionListener(e -> info(ventana));
-		menu.add(menuItem);
-		menu.addSeparator();
-		menuItem = new JMenuItem("Salir");
-		menuItem.addActionListener(e->ventana.dispatchEvent(new WindowEvent(ventana, WindowEvent.WINDOW_CLOSING)));
-		menu.add(menuItem);
-		ventana.setJMenuBar(barraMenu);*/
-				
+			
 		//titulo
 		constraints.insets=new Insets(5, 5, 100, 5);
 		constraints.gridx=0;
@@ -104,6 +90,17 @@ public class GestionEntidades {
 		constraints.gridy=5;
 		panel.add(camino, constraints);
 		camino.setEnabled(false);
+		
+		//boton volver
+		constraints.anchor=GridBagConstraints.SOUTH;
+		constraints.insets.set(50, 10, 5, 5);
+		constraints.gridx = 6;
+		constraints.gridwidth = 2;
+		constraints.gridy=10;
+		panel.add(volver, constraints);
+				
+		//listener volver
+		volver.addActionListener(a -> Main.mostrarInterfaz());
 				
 		//listener seleccion
 		opcionSeleccionada.addActionListener (new ActionListener () {
@@ -203,8 +200,8 @@ public class GestionEntidades {
 			}
 		});
 				
-		//listener eliminarX
-		eliminar.addActionListener(new ActionListener() {
+		//listener caminoPlanta
+		camino.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				switch((String)opcionSeleccionada.getSelectedItem()){
 				case "Planta":
