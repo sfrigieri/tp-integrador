@@ -14,8 +14,8 @@ public class MenuController {
 
 	private GestionEntidades interfazGestionEntidades;
 	
-	public MenuController(InsumoDao dao, JFrame ventana) {
-		interfazGestionEntidades = new GestionEntidades(dao, ventana);
+	public MenuController(JFrame ventana) {
+		interfazGestionEntidades = new GestionEntidades(ventana);
 		//interfazGestionLogistica = new GestionLogistica(dao, ventana);
 		//interfazGestionEnvios = new GestionEnvios(dao, ventana);
 	}

@@ -29,8 +29,8 @@ public class GestionEntidades {
 	private static JFrame ventana;
 	private static GestionEntidadesController controller;
 	
-	public GestionEntidades(InsumoDao dao, JFrame ventana){
-		this.controller = new GestionEntidadesController(dao, ventana);
+	public GestionEntidades(JFrame ventana){
+		this.controller = new GestionEntidadesController(ventana);
 		this.ventana = ventana;
 	}
 	

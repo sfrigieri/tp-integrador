@@ -17,8 +17,8 @@ public class GestionEntidadesController {
 	private ABMCamion interfazCamion;
 	
 	
-	public GestionEntidadesController(InsumoDao dao, JFrame ventana) {
-		interfazInsumo = new ABMInsumo(dao, ventana);
+	public GestionEntidadesController(JFrame ventana) {
+		interfazInsumo = new ABMInsumo(ventana);
 	}
 	
 	
