@@ -196,7 +196,7 @@ public class ABMInsumo {
 		ventana.pack();
 		ventana.setSize(800, 600);
 		ventana.setLocationRelativeTo(null);
-		ventana.setTitle("Sistema de Gestión Logística");
+		ventana.setTitle("Sistema de Gestión de Entidades");
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
         ventana.setVisible(true);
