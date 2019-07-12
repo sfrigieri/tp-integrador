@@ -3,6 +3,7 @@ package isi.died.tp.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Date;
 
 public class PlantaAcopio extends Planta {
 	
@@ -14,6 +15,10 @@ public class PlantaAcopio extends Planta {
 		super(id, nombre);
 		listaDePedidos = new ArrayList<Pedido>();
 		listaDeInsumos  = new ArrayList<Insumo>();
+	}
+
+	public PlantaAcopio() {
+		super();
 	}
 	
 	@Override
@@ -57,12 +62,15 @@ public class PlantaAcopio extends Planta {
 		}
 
 	@Override
-	public void addPedido(Planta planta, int IdIns,double cant){
-		Insumo insumo = this.getInsumo(IdIns);
-		if(insumo != null && insumo.hayStock(cant)) {
-		insumo.actualizarStock(cant);
-		listaDePedidos.add(new Pedido(planta,insumo,cant));
+	public void addPedido(Pedido pedido) {
+		listaDePedidos.add(pedido);
 		}
+
+	@Override
+	public List<String> asCsvRow() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+	
 
 }

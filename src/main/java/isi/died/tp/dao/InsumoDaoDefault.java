@@ -1,5 +1,6 @@
 package isi.died.tp.dao;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class InsumoDaoDefault implements InsumoDao {
 		return maxID;
 	}
 	
+	
 	public void cargarListaInsumos() {
 		List<List<String>> insumos = dataSource.readFile("insumos.csv");
 		for(List<String> filaInsumo : insumos) {
@@ -44,6 +46,14 @@ public class InsumoDaoDefault implements InsumoDao {
 	}
 
 	@Override
+	public Insumo buscarInsumo(Integer id) {
+		for(Insumo actual : LISTA_INSUMOS)
+			if(actual.getId() == id)
+				return actual;
+		return null;
+	}
+	
+	@Override
 	public void agregarInsumo(Insumo insumo) {
 		insumo.setId(ULTIMO_ID++);
 		LISTA_INSUMOS.add(insumo);	
@@ -53,4 +63,46 @@ public class InsumoDaoDefault implements InsumoDao {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void editarInsumo(Integer id, Insumo insumo) {
+		Insumo old = null;
+		
+		old = buscarInsumo(id);
+		
+		if(old != null)
+			LISTA_INSUMOS.remove(old);
+		
+		LISTA_INSUMOS.add(insumo);
+		
+		this.actualizarArchivo();
+	}
+	
+	
+	@Override
+	public void eliminarInsumo(Insumo insumo) {
+		LISTA_INSUMOS.remove(insumo);
+		actualizarArchivo();
+		
+	}
+	
+	@Override
+	public List<Insumo> listaInsumos() {
+		return LISTA_INSUMOS;
+	}
+	
+
+	private void actualizarArchivo() {
+		File archivoInsumos = new File("insumos.csv");
+		archivoInsumos.delete();
+		for(Insumo actual: LISTA_INSUMOS) {
+			try {
+				dataSource.agregarFilaAlFinal("insumos.csv", actual);
+			} catch (IOException e) {
+				e.printStackTrace();
+				}
+		
+		}
+	}
+
 }

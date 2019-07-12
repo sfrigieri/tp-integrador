@@ -64,10 +64,20 @@ public class PlantaServiceDefault implements PlantaService {
 		for (i = 0; i <= cantStocks; i++) 
 			resultado[i][0] = 0;   
 		
-		
+		//Comenzando con el primer stock de la lista, 
 		for (i = 1; i <= cantStocks; i++) { 
-			for (p = 1; p <= capCamion; p++){
+			for (p = 1; p <= capCamion; p++){ 
+				//Si el peso del stock i no supere a la cap del camión
 				if (pesos.get(i-1) <= p) 
+					//El peso del stock i es IGUAL al peso ocupado hasta el momento por stocks previos seleccionados
+					// Siempre se busca maximizar la relacion Costo/Peso: 
+					//Para el mismo peso ocupado, al INCLUIR al stock i, puedo aumentar el costo resultante?
+					
+					//Entonces debo realizar una comparación con el costo total acumulado previamente (SIN el stock i)
+					//Procedo a descontar del peso disponible el peso del stock i y consultar si al incluirlo a la selección,
+					//su costo + el mejor costo posible utilizando el peso restante (p actual - peso i)
+					//supera al mejor costo obtenido previamente para el peso p actual.
+					//Si lo supera guardo el costo de esta nueva combinación, sino mantengo el mejor resultado previo.
 					resultado[i][p] = Math.max(costos.get(i-1) + resultado[i-1][p-pesos.get(i-1)],  resultado[i-1][p]); 
 				else
 					resultado[i][p] = resultado[i-1][p]; 

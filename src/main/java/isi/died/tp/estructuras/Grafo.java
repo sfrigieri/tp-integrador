@@ -13,6 +13,8 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+
+
 public class Grafo<T> {
 	protected List<Arista<T>> aristas;
 	protected List<Vertice<T>> vertices;
@@ -65,6 +67,19 @@ public class Grafo<T> {
 		return salida;
 	}
 
+	
+	public void eliminarNodo(T val) {
+		if(vertices.contains(new Vertice<T>(val))) {
+			aristas.removeIf(v -> v.getInicio().equals(new Vertice<T>(val)) || v.getFin().equals(new Vertice<T>(val)));
+			vertices.remove(new Vertice<T>(val));
+		}
+	}
+	
+	
+    public Boolean esVacio(){
+    	if(this.vertices!= null && !this.vertices.isEmpty()) return false;
+    	return true;
+    }
 
     public List<T> listaVertices(){
     	List<T> lista = new ArrayList<>();
@@ -83,6 +98,17 @@ public class Grafo<T> {
 		return salida;
 	}
 
+	public void reemplazarNodo(T anterior, T nuevo) {
+		if(vertices.contains(new Vertice<T>(anterior))) {
+			for(Vertice<T> v: vertices) {
+				if(v.equals(new Vertice<T>(anterior))) {
+					v.setValor(nuevo);
+				}
+			}
+		}
+		
+	}
+	
 	public void imprimirAristas(){
 		System.out.println(this.aristas.toString());
 	}
@@ -194,7 +220,11 @@ public class Grafo<T> {
 		return false;
 	}
 
-
+	public boolean esAdyacente(T n1, T n2) {
+		Vertice<T> origen = this.getNodo(n1);
+		Vertice<T> destino = this.getNodo(n2);
+		return this.esAdyacente(origen, destino);
+	}
 
 	public List<List<Vertice<T>>> caminos(T v1,T v2){
 		return this.caminos(new Vertice<T>(v1), new Vertice<T>(v2));

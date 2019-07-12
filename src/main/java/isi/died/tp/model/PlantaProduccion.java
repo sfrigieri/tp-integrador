@@ -8,7 +8,9 @@ public class PlantaProduccion extends Planta {
 
 	private List<StockProduccion> listaDeStock;
 	
-	
+	public PlantaProduccion() {
+		super();
+	}
 	
 	public PlantaProduccion(int id, String nombre) {
 		super(id, nombre);
@@ -92,5 +94,19 @@ public class PlantaProduccion extends Planta {
 		listaDeStock.removeIf(s -> s.getInsumo().equals(ins));
 		
 		}
+
+	public List<StockProduccion> getListaDeStock() {
+		return listaDeStock;
+	}
+
+	public void setListaDeStock(List<StockProduccion> listaDeStock) {
+		this.listaDeStock = listaDeStock;
+	}
+
+	@Override
+	public List<String> asCsvRow() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

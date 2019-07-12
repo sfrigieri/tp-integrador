@@ -2,7 +2,9 @@ package isi.died.tp.model;
 
 import java.util.List;
 
-public abstract class Planta {
+import isi.died.tp.dao.util.CsvRecord;
+
+public abstract class Planta implements CsvRecord {
 
 		protected int id;
 		protected String nombre;
@@ -12,6 +14,10 @@ public abstract class Planta {
 			super();
 			this.id = id;
 			this.nombre = nombre;
+		}
+		
+		protected Planta() {
+			super();
 		}
 
 		public String getNombre() {
@@ -49,7 +55,7 @@ public abstract class Planta {
 			
 			}
 		
-		public void addPedido(Planta planta, int IdIns,double cant){
+		public void addPedido(Pedido pedido){
 		
 		}
 		
@@ -95,7 +101,15 @@ public abstract class Planta {
 			return result;
 		}
 
-		
+		@Override
+		public void loadFromStringRow(List<String> datos) {
+			try {
+				this.id = Integer.valueOf(datos.get(0));
+				this.nombre = datos.get(1);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		
 		

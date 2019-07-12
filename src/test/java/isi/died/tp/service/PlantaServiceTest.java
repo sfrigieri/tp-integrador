@@ -13,7 +13,7 @@ import isi.died.tp.estructuras.Vertice;
 import isi.died.tp.model.*;
 
 public class PlantaServiceTest {
-	PlantaService gps;
+	PlantaService ps;
 	Camion camion;
 	List<StockAcopio> listaDisponibles; 
 	
@@ -28,7 +28,7 @@ public class PlantaServiceTest {
 	@Before
 	public void init() {
 	
-		gps = new PlantaServiceDefault();
+		ps = new PlantaServiceDefault();
 		camion = new Camion(1, 20, false, 2);
 		
 		listaDisponibles = new ArrayList<StockAcopio>();
@@ -78,14 +78,14 @@ public class PlantaServiceTest {
 	@Test
 	public void testMejorSeleccionEnvio() {
 		
-		List<StockAcopio> listaSeleccion = gps.generarMejorSeleccionEnvio(camion, listaDisponibles);
+		List<StockAcopio> listaSeleccion = ps.generarMejorSeleccionEnvio(camion, listaDisponibles);
 		assertTrue(listaSeleccion.size() == 2 && listaSeleccion.get(0).getInsumo().getCosto()+listaSeleccion.get(1).getInsumo().getCosto() == 50);
 		
 		listaDisponibles = new ArrayList<StockAcopio>();
 		listaDisponibles.add(new StockAcopio(1, 1, new Insumo(1, null, null, 10, 2, false), new PlantaProduccion(1, null)));
 		listaDisponibles.add(new StockAcopio(2, 1, new Insumo(2, null, null, 20, 1, false), new PlantaProduccion(2, null)));
 		listaDisponibles.add(new StockAcopio(3, 1, new Insumo(3, null, null, 30, 3, false), new PlantaProduccion(3, null)));
-		listaSeleccion = gps.generarMejorSeleccionEnvio(camion, listaDisponibles);
+		listaSeleccion = ps.generarMejorSeleccionEnvio(camion, listaDisponibles);
 		assertTrue(listaSeleccion.size() == 1 && listaSeleccion.get(0).getInsumo().getCosto() == 20);
 
 	}
@@ -102,8 +102,8 @@ public class PlantaServiceTest {
     		flujoMaximo = flujoMaximo + flujoActual;
 
         }
-        
+
 		assertTrue(flujoMaximo == 800);
-		
+	
 	}
 }
