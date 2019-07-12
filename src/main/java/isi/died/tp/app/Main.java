@@ -38,24 +38,22 @@ public class Main {
 	        }
 	    });
 	}
-
-	
 	
 	public static void mostrarInterfaz() {
 		
 		//config elementos panel
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
-		JLabel encabezado = new JLabel("Sistema de gestión logística");
-		JButton agregar = new JButton("Agregar"), modificar = new JButton("Modificar"), eliminar = new JButton("Eliminar"), camino = new JButton("Agregar Camino");
-		JComboBox<String> opcionSeleccionada = new JComboBox<String>();
+		JLabel encabezado1 = new JLabel("  Bienvenido al");
+		JLabel encabezado2 = new JLabel("Sistema de Gestión");
+		JButton gestionEntidades = new JButton("Gestión de Entidades"), gestionLogistica = new JButton("Gestión de Logística"), gestionEnvios = new JButton("Gestión General de Envíos");
 		JMenuBar barraMenu;
 		JMenu menu;
 		JMenuItem menuItem;
 		
 		//barra arriba
 		barraMenu = new JMenuBar();
-		menu = new JMenu("Sistema");
+		menu = new JMenu("Opciones");
 	    barraMenu.add(menu);
 	    menuItem = new JMenuItem("Información");
 	    menuItem.addActionListener(e -> info(ventana));
@@ -67,117 +65,47 @@ public class Main {
 	    ventana.setJMenuBar(barraMenu);
 		
 		//titulo
-		constraints.insets=new Insets(5, 5, 100, 5);
+		constraints.insets=new Insets(5, 5, 5, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
-		panel.add(encabezado,constraints);
-		
-		constraints.fill=GridBagConstraints.HORIZONTAL;
-		
-		//comboBox seleccion
-		constraints.insets=new Insets(0, 50, 0, 0);
-		constraints.anchor=GridBagConstraints.CENTER;
-		opcionSeleccionada.addItem("Seleccione");
-		opcionSeleccionada.addItem("Insumo");
-		opcionSeleccionada.addItem("Planta");
-		opcionSeleccionada.addItem("Camion");
-		opcionSeleccionada.addItem("Stock");
-		opcionSeleccionada.setSelectedItem("Seleccione");
-		constraints.insets.set(0, 25, 5, 5);
-		constraints.gridx = 6;
-		constraints.gridy = 4;
-		constraints.gridwidth=1;
-		panel.add(opcionSeleccionada, constraints);
+		encabezado1.setFont(new Font(encabezado1.getFont().getName(), encabezado1.getFont().getStyle(), 40));
+		panel.add(encabezado1,constraints);
+		constraints.gridy=1;
+		constraints.insets.set(5, 5, 100, 5);
+		encabezado2.setFont(new Font(encabezado1.getFont().getName(), encabezado1.getFont().getStyle(), 40));
+		panel.add(encabezado2,constraints);
 		
 		//botones ocultos
+		constraints.insets.set(0, 25, 20, 5);
+		constraints.gridwidth=1;
 		constraints.gridx=7;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		
-		constraints.gridy=2;
-		panel.add(agregar, constraints);
-		agregar.setEnabled(false);
-		
 		constraints.gridy=3;
-		panel.add(modificar, constraints);
-		modificar.setEnabled(false);
+		panel.add(gestionEntidades, constraints);
 		
 		constraints.gridy=4;
-		panel.add(eliminar, constraints);
-		eliminar.setEnabled(false);
+		panel.add(gestionLogistica, constraints);
 		
 		constraints.gridy=5;
-		panel.add(camino, constraints);
-		camino.setEnabled(false);
+		panel.add(gestionEnvios, constraints);
 		
-		//listener seleccion
-		opcionSeleccionada.addActionListener (new ActionListener () {
-		    public void actionPerformed(ActionEvent e) {
-		    	switch((String)opcionSeleccionada.getSelectedItem()){
-		    	case "Seleccione":
-		    		agregar.setEnabled(false);
-		        	modificar.setEnabled(false);
-		        	eliminar.setEnabled(false);
-		        	camino.setEnabled(false);
-		        	break;
-		    	case "Insumo":
-		        	agregar.setEnabled(true);
-		        	modificar.setEnabled(true);
-		        	eliminar.setEnabled(true);
-		    		camino.setEnabled(false);
-		        	break;
-		    	case "Planta":
-		    		agregar.setEnabled(true);
-		    		modificar.setEnabled(true);
-		    		eliminar.setEnabled(true);
-		    		camino.setEnabled(true);
-		    		break;
-		    	case "Camion":
-		        	agregar.setEnabled(true);
-		        	modificar.setEnabled(true);
-		        	eliminar.setEnabled(true);
-		        	camino.setEnabled(false);
-		    		break;
-		    	case "Stock":
-		    		agregar.setEnabled(true);
-		        	modificar.setEnabled(true);
-		        	eliminar.setEnabled(true);
-		        	camino.setEnabled(false);
-		    		break;
-		    	}
-		    }
-		});
-		
-		//listener agregarX
-		agregar.addActionListener(new ActionListener() {
+		//listener gestionEntidades
+		gestionEntidades.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch((String)opcionSeleccionada.getSelectedItem()){
-				case "Insumo":
-					controller.opcion(OpcionesMenu.AGREGAR_INSUMO, ventana);
-					break;
-				case "Planta":
-					controller.opcion(OpcionesMenu.AGREGAR_PLANTA, ventana);
-					break;
-				case "Camion":
-					controller.opcion(OpcionesMenu.AGREGAR_CAMION, ventana);
-					break;
-				case "Stock":
-					controller.opcion(OpcionesMenu.AGREGAR_STOCK, ventana);
-					break;
-				}
+				controller.opcion(OpcionesMenu.GESTION_ENTIDADES, ventana);
 			}
 		});
-		
 		
 		//manejo ventana
 		ventana.setContentPane(panel);
 		ventana.pack();
 		ventana.setSize(800, 600);
 		ventana.setLocationRelativeTo(null);
-		ventana.setTitle("Sistema de Gestión Logística");
+		ventana.setTitle("Sistema de Gestión");
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
         ventana.setVisible(true);

@@ -8,24 +8,24 @@ import isi.died.tp.view.ABMInsumo;
 import isi.died.tp.view.ABMPlantaAcopio;
 import isi.died.tp.view.ABMPlantaProduccion;
 import isi.died.tp.view.ABMStock;
+import isi.died.tp.view.GestionEntidades;
 
 public class MenuController {
 
-	private ABMInsumo interfazInsumo;
-	private ABMPlantaAcopio interfazPlantaAcopio;
-	private ABMPlantaProduccion interfazPlantaProduccion;
-	private ABMStock interfazStock;
-	private ABMCamion interfazCamion;
+	private GestionEntidades interfazGestionEntidades;
 	
-	public MenuController(JFrame ventana) {
-		interfazInsumo = new ABMInsumo(ventana);
+	public MenuController(InsumoDao dao, JFrame ventana) {
+		interfazGestionEntidades = new GestionEntidades(dao, ventana);
+		//interfazGestionLogistica = new GestionLogistica(dao, ventana);
+		//interfazGestionEnvios = new GestionEnvios(dao, ventana);
 	}
 	
 	
 	public void opcion(OpcionesMenu op, JFrame ventana) {
 		switch(op) {
-		case AGREGAR_INSUMO: interfazInsumo.agregarInsumo(); break;
-		case MODIFICAR_INSUMO: interfazInsumo.modificarInsumo(); break;
+		case GESTION_ENTIDADES: interfazGestionEntidades.mostrarMenu(); break;
+		//case GESTION_LOGISTICA: interfazGestionLogistica.mostrarMenu(); break;
+		//case GESTION_ENVIOS: interfazGestionEnvios.mostrarMenu(); break;
 		}
 	}
 }
