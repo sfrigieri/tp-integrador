@@ -1,6 +1,11 @@
 package isi.died.tp.model;
 
-public class Insumo implements Comparable<Insumo>{
+import java.util.ArrayList;
+import java.util.List;
+
+import isi.died.tp.dao.util.CsvRecord;
+
+public class Insumo implements Comparable<Insumo>, CsvRecord{
 
 	protected int id;
 	protected String descripcion;
@@ -19,7 +24,8 @@ public class Insumo implements Comparable<Insumo>{
 	public StockAcopio getStock() {
 		return this.stock;
 	}
-
+	
+	public Insumo() {}
 
 	public Insumo(int id, double costo) {
 		super();
@@ -62,7 +68,7 @@ public class Insumo implements Comparable<Insumo>{
 	}
 
 	public void actualizarStock(double cant) {
-	
+		
 		
 	}
 
@@ -129,8 +135,36 @@ public class Insumo implements Comparable<Insumo>{
 		return true;
 	}
 
+	@Override
+	public List<String> asCsvRow() {
+		//int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado
+		List<String> lista = new ArrayList<String>();
+		lista.add(this.id+"");
+		lista.add(this.descripcion.toString());
+		lista.add(this.unidadDeMedida.toString());
+		lista.add(Double.toString(this.costo));
+		lista.add(Double.toString(this.peso));
+		lista.add(Boolean.toString(this.esRefrigerado));
+		return lista;
+	}
 
+	@Override
+	public void loadFromStringRow(List<String> datos) {
+		try {
+			this.id = Integer.valueOf(datos.get(0));
+			this.descripcion = datos.get(1);
+			this.unidadDeMedida = Unidad.valueOf(datos.get(2));
+			this.costo = Double.valueOf(datos.get(3));
+			this.peso = Double.valueOf(datos.get(4));
+			this.esRefrigerado = Boolean.valueOf(datos.get(5)); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 
 
