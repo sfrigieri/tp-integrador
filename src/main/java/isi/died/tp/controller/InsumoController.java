@@ -1,28 +1,28 @@
 package isi.died.tp.controller;
 
-import isi.died.tp.dao.InsumoDao;
-import isi.died.tp.model.Insumo;
-import isi.died.tp.model.InsumoLiquido;
-import isi.died.tp.model.Unidad;
+
+import isi.died.tp.model.*;
+import isi.died.tp.service.*;
 
 public class InsumoController {
 	
-	private InsumoDao insumoDAO;
+	private InsumoService insumoService;
 	
-	public InsumoController(InsumoDao dao) {
-		this.insumoDAO = dao;
+	public InsumoController() {
+		this.insumoService = new InsumoServiceDefault();
 	}
 	
 	public Insumo agregarInsumo(int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado) {
 		Insumo insumo = new Insumo(id, descripcion, unidadDeMedida, costo, peso, esRefrigerado);
 
-		insumoDAO.agregarInsumo(insumo);
+		insumoService.agregarInsumo(insumo);
 		return insumo;
 	}
+	
 	public Insumo agregarInsumo(int id, String descripcion, double costo, boolean esRefrigerado, double dens, double litros) {
 		Insumo insumo = new InsumoLiquido(id, descripcion, costo, esRefrigerado, dens, litros);
 
-		insumoDAO.agregarInsumo(insumo);
+		insumoService.agregarInsumo(insumo);
 		return insumo;
 	}
 	

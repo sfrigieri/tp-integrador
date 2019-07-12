@@ -28,8 +28,8 @@ public class ABMInsumo {
 	private InsumoController controller;
 	private JFrame ventana;
 	
-	public ABMInsumo(InsumoDao dao, JFrame ventana){
-		this.controller = new InsumoController(dao);
+	public ABMInsumo(JFrame ventana){
+		this.controller = new InsumoController();
 		this.ventana = ventana;
 	}
 	

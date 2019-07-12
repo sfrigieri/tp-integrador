@@ -21,8 +21,7 @@ import javax.swing.WindowConstants;
 
 import isi.died.tp.controller.MenuController;
 import isi.died.tp.controller.OpcionesMenu;
-import isi.died.tp.dao.InsumoDao;
-import isi.died.tp.dao.InsumoDaoDefault;
+
 
 public class Main {
 	
@@ -32,8 +31,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		ventana = new JFrame();
-		InsumoDao dao = new InsumoDaoDefault();
-        controller = new MenuController(dao, ventana);
+        controller = new MenuController(ventana);
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
 	        	mostrarInterfaz();

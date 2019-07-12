@@ -16,6 +16,14 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 	protected boolean esRefrigerado;
 	
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
 
 	public void setStock(StockAcopio stock) {
 		this.stock = stock;
@@ -160,10 +168,6 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 

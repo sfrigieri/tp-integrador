@@ -4,8 +4,7 @@ import isi.died.tp.model.Insumo;
 
 public interface InsumoDao {
 
-	void agregarInsumo(Insumo insumo);
-	
+	public void agregarInsumo(Insumo insumo);
 	
 
 }

@@ -3,6 +3,7 @@ package isi.died.tp.dao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.model.Insumo;
 
@@ -15,10 +16,22 @@ public class InsumoDaoDefault implements InsumoDao {
 	
 	public InsumoDaoDefault() {
 		dataSource = new CsvSource();
-		if(LISTA_INSUMOS.isEmpty()) {
+		if(LISTA_INSUMOS.isEmpty())
 			this.cargarListaInsumos();
+		
+		ULTIMO_ID = this.maxID();
+	}
+	
+	private int maxID() {
+
+		int maxID = 0;
+		
+		for(Insumo ins: LISTA_INSUMOS) {
+			if(ins.getId()>maxID)
+				maxID = ins.getId();
 		}
-		ULTIMO_ID = LISTA_INSUMOS.size();
+		
+		return maxID;
 	}
 	
 	public void cargarListaInsumos() {

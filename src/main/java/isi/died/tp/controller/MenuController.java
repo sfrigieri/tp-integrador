@@ -17,8 +17,8 @@ public class MenuController {
 	private ABMStock interfazStock;
 	private ABMCamion interfazCamion;
 	
-	public MenuController(InsumoDao dao, JFrame ventana) {
-		interfazInsumo = new ABMInsumo(dao, ventana);
+	public MenuController(JFrame ventana) {
+		interfazInsumo = new ABMInsumo(ventana);
 	}
 	
 	
