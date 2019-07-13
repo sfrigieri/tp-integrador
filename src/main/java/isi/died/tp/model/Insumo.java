@@ -71,14 +71,6 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 	}
 	
 
-	public boolean hayStock(double cant) {
-		return false;
-	}
-
-	public void actualizarStock(double cant) {
-		
-		
-	}
 
 	public Double getCosto() {
 		return this.costo;

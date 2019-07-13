@@ -103,12 +103,7 @@ public abstract class Planta implements CsvRecord {
 
 		@Override
 		public void loadFromStringRow(List<String> datos) {
-			try {
-				this.id = Integer.valueOf(datos.get(0));
-				this.nombre = datos.get(1);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	
 		}
 		
 		
