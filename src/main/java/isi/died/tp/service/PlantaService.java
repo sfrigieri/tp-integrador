@@ -13,4 +13,14 @@ public interface PlantaService {
 
 	public int flujoMaximoRed(Vertice<Planta> origen);
 
+	public Planta agregarPlanta(Planta planta);
+
+	public List<Planta> listaPlantas();
+
+	public void editarPlanta(Integer id, Planta planta);
+
+	public void eliminarPlanta(Planta planta);
+
+	public Planta buscarPlanta(Integer id);
+
 }

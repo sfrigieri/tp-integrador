@@ -105,8 +105,10 @@ public class PlantaProduccion extends Planta {
 
 	@Override
 	public List<String> asCsvRow() {
-		
-		return null;
+		List<String> lista = new ArrayList<String>();
+		lista.add(this.id+"");
+		lista.add(this.nombre);
+		return lista;
 	}
 	
 	@Override

@@ -10,14 +10,42 @@ import isi.died.tp.estructuras.*;
 public class PlantaServiceDefault implements PlantaService {
 
 
-	private PlantaDao dao;
+	private PlantaDao plantaDao;
 
 
 	public PlantaServiceDefault() {
 		super();
-		this.dao = new PlantaDaoDefault();
+		this.plantaDao = new PlantaDaoDefault();
 	}
 
+	@Override
+	public Planta agregarPlanta(Planta planta) {
+		plantaDao.agregarPlanta(planta);
+		return planta;
+	}
+	
+	@Override
+	public List<Planta> listaPlantas() {
+		return plantaDao.listaPlantas();
+	}
+
+	@Override
+	public void editarPlanta(Integer id, Planta planta) {
+		plantaDao.editarPlanta(id, planta);
+
+	}
+
+	@Override
+	public void eliminarPlanta(Planta planta) {
+		plantaDao.eliminarPlanta(planta);
+
+	}
+
+	@Override
+	public Planta buscarPlanta(Integer id) {
+		return plantaDao.findById(id);
+	}
+	
 	@Override
     public int flujoMaximoRed(Vertice<Planta> origen){
        
@@ -25,12 +53,12 @@ public class PlantaServiceDefault implements PlantaService {
     	int flujoActual = Integer.MAX_VALUE;
     	
     	while(flujoActual > 0) {
-    		flujoActual = this.dao.buscarProximoFlujoDisponible(origen);
+    		flujoActual = this.plantaDao.buscarProximoFlujoDisponible(origen);
     		flujoMaximo = flujoMaximo + flujoActual;
 
         }
          
-    	dao.resetFlujo();
+    	plantaDao.resetFlujo();
     	
         return flujoMaximo;
     }
