@@ -11,11 +11,14 @@ public class PlantaServiceDefault implements PlantaService {
 
 
 	private PlantaDao plantaDao;
+	private InsumoService is;
+	private StockService ss;
 
-
-	public PlantaServiceDefault() {
+	public PlantaServiceDefault(InsumoService is, StockService ss) {
 		super();
 		this.plantaDao = new PlantaDaoDefault();
+		this.is = is;
+		this.ss = ss;
 	}
 
 	@Override
