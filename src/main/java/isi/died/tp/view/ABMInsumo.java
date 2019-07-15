@@ -1,5 +1,6 @@
 package isi.died.tp.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,8 +9,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,13 +20,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import isi.died.tp.controller.InsumoController;
+import isi.died.tp.model.Insumo;
 import isi.died.tp.model.Unidad;
-
-
 
 public class ABMInsumo {
 
@@ -40,10 +49,10 @@ public class ABMInsumo {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel errorDescripcion = new JLabel(), errorCosto = new JLabel(),
-				errorPeso = new JLabel(), errorRefrigerado = new JLabel(), errorDensidad = new JLabel(),
+				errorPesoCantidad = new JLabel(), errorDensidad = new JLabel(),
 				encabezado = new JLabel("Agregar Nuevo Insumo"), pesoCantidad = new JLabel("Peso: ");
 		JTextField tDescripcion = new JTextField(20), tCosto = new JTextField(20),
-					tPeso = new JTextField(20), tDensidad = new JTextField(20);
+					tPesoCantidad = new JTextField(20), tDensidad = new JTextField(20);
 		JButton aceptar = new JButton("Aceptar"), cancelar = new JButton("Cancelar");
 		JComboBox<Unidad> lUnidad = new JComboBox<Unidad>();
 		final ButtonGroup checkboxRefrigerado = new ButtonGroup(), 
@@ -117,7 +126,7 @@ public class ABMInsumo {
 		panel.add(tCosto, constraints);
 		
 		constraints.gridy=4;
-		panel.add(tPeso, constraints);
+		panel.add(tPesoCantidad, constraints);
 		
 		constraints.gridy=5;
 		panel.add(tDensidad, constraints);
@@ -163,7 +172,7 @@ public class ABMInsumo {
 		panel.add(cancelar, constraints);
 						
 		constraints.gridx=2;
-		aceptar.addActionListener(e -> {
+		aceptar.addActionListener(a -> {
 			String descripcion;
 			Double costo = null, peso = null;
 			Boolean refrigerado = false;
@@ -172,7 +181,7 @@ public class ABMInsumo {
 					
 			errorDescripcion.setText("");
 			errorCosto.setText("");
-			errorPeso.setText("");
+			errorPesoCantidad.setText("");
 			errorDensidad.setText("");
 			try {
 				if(tDescripcion.getText().isEmpty()) {
@@ -187,15 +196,15 @@ public class ABMInsumo {
 				}else {
 					costo = Double.parseDouble(tCosto.getText());
 				}
-				if(tPeso.getText().isEmpty()) {
+				if(tPesoCantidad.getText().isEmpty()) {
 					if (!esLiquido.isSelected()) {
-						errorPeso.setText("Debe ingresar un peso");
+						errorPesoCantidad.setText("Debe ingresar un peso");
 					} else {
-						errorPeso.setText("Debe ingresar una cantidad");
+						errorPesoCantidad.setText("Debe ingresar una cantidad");
 					}
 					return;
 				}else{
-					peso = Double.parseDouble(tPeso.getText());
+					peso = Double.parseDouble(tPesoCantidad.getText());
 				}
 				if(esLiquido.isSelected() && tDensidad.getText().isEmpty()) {
 					errorDensidad.setText("Debe ingresar una densidad");
@@ -249,9 +258,9 @@ public class ABMInsumo {
 		panel.add(errorCosto,constraints);
 				
 		constraints.gridy=4;
-		errorPeso.setPreferredSize(new Dimension(230, 16));
-		errorPeso.setForeground(Color.red);
-		panel.add(errorPeso,constraints);
+		errorPesoCantidad.setPreferredSize(new Dimension(230, 16));
+		errorPesoCantidad.setForeground(Color.red);
+		panel.add(errorPesoCantidad,constraints);
 		
 		constraints.gridy=5;
 		errorDensidad.setPreferredSize(new Dimension(230, 16));
@@ -268,8 +277,93 @@ public class ABMInsumo {
 	}
 
 	public void modificarInsumo() {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	public void eliminarInsumo() {
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		JLabel encabezado = new JLabel("Eliminar Insumo");
+		JButton eliminar = new JButton("Eliminar"), cancelar = new JButton("Cancelar");
+		JTable tablaInsumos = new JTable(0,5);
+		List<Insumo> listaInsumos = new ArrayList<Insumo>();
+		listaInsumos.addAll(controller.listaInsumos());
+		
+		
+		//tabla
+		constraints.insets=new Insets(5, 5, 40, 5);
+		tablaInsumos.setFillsViewportHeight(true);
+		tablaInsumos.setBorder(new LineBorder(new Color(0, 0, 0)));
+		tablaInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		JScrollPane scroll = new JScrollPane(tablaInsumos,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setPreferredSize(new Dimension(500, 197));
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		tablaInsumos.setDefaultRenderer(String.class, centerRenderer);
+		tablaInsumos.setDefaultRenderer(Integer.class, centerRenderer);
+		
+		for (int i=0; i<5; i++)
+			tablaInsumos.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		tablaInsumos.getColumnModel().getColumn(0).setPreferredWidth(18);
+		tablaInsumos.getColumnModel().getColumn(1).setPreferredWidth(180);
+		tablaInsumos.getColumnModel().getColumn(0).setHeaderValue("Id");
+		tablaInsumos.getColumnModel().getColumn(1).setHeaderValue("Descripción");
+		tablaInsumos.getColumnModel().getColumn(2).setHeaderValue("Atributo1");
+		tablaInsumos.getColumnModel().getColumn(3).setHeaderValue("Atributo2");
+		tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Atributo3");
+		
+		constraints.gridx=1;
+		constraints.gridy=1;
+		constraints.gridheight=1;
+		constraints.gridwidth=3;
+		constraints.weightx=1;
+		panel.add(scroll, constraints);
+		
+		DefaultTableModel model = (DefaultTableModel) tablaInsumos.getModel();
+		for (Insumo insumo : listaInsumos) {
+			model.addRow(new Object[]{Integer.toString(insumo.getId()), "Column 2", "Column 3"});
+		}
+
+		//titulo
+		constraints.gridx=0;
+		constraints.gridy=0;
+		constraints.gridheight=1;
+		constraints.gridwidth=8;
+		constraints.anchor=GridBagConstraints.NORTH;
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		panel.add(encabezado,constraints);
+		
+		//botones
+		constraints.gridy=14;
+		constraints.fill=GridBagConstraints.NONE;
+		constraints.anchor=GridBagConstraints.EAST;
+		
+		constraints.gridx=0;
+		constraints.insets=new Insets(5, 5, 5, 230);
+		cancelar.addActionListener(a -> GestionEntidades.mostrarMenu());
+		panel.add(cancelar, constraints);
+		
+		constraints.anchor=GridBagConstraints.WEST;
+		constraints.insets=new Insets(5, 230, 5, 5);
+		constraints.gridx=2;
+		eliminar.addActionListener(a -> {
+			int numFila = tablaInsumos.getSelectedRow();
+			int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
+			if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+				controller.eliminarInsumo(id);
+				this.eliminarInsumo();
+			}
+		});
+		panel.add(eliminar,constraints);
+		
+		ventana.setContentPane(panel);
+		ventana.pack();
+		ventana.setSize(800, 600);
+		ventana.setLocationRelativeTo(null);
+		ventana.setTitle("Sistema de Gestión de Entidades");
+		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		ventana.setVisible(true);
 	}
 	
 }

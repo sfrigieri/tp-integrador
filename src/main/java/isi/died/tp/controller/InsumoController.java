@@ -1,6 +1,8 @@
 package isi.died.tp.controller;
 
 
+import java.util.List;
+
 import isi.died.tp.model.*;
 import isi.died.tp.service.*;
 
@@ -26,6 +28,17 @@ public class InsumoController {
 		return insumo;
 	}
 	
+	public List<Insumo> listaInsumos() {
+		return insumoService.listaInsumos();
+	}
 	
+	public void eliminarInsumo (int id) {
+		Insumo insumo = buscarInsumo(id);
+		insumoService.eliminarInsumo(insumo);
+	}
+	
+	public Insumo buscarInsumo (int id) {
+		return insumoService.buscarInsumo(id);
+	}
 
 }

@@ -1,12 +1,20 @@
 package isi.died.tp.estructuras;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import isi.died.tp.dao.util.CsvRecord;
 import isi.died.tp.model.Planta;
 
-public class Ruta extends Arista<Planta> {
+public class Ruta extends Arista<Planta> implements CsvRecord {
 
+	public int idRuta;
 	private double duracionViajeMin;
 	private int pesoMaxTon;
 	private int pesoEnCursoTon;
+	private int idPlantaInicio;
+	private int idPlantaFin;
+	private int distancia;
 	
 	public Ruta(Vertice<Planta> ini, Vertice<Planta> fin, int distanciaKm, double duracionViaje, int pesoMax) {
 		super(ini, fin, distanciaKm);
@@ -14,6 +22,16 @@ public class Ruta extends Arista<Planta> {
 		this.pesoMaxTon = pesoMax;
 		this.pesoEnCursoTon = 0;
 	}
+	
+	public Ruta(int id, Vertice<Planta> ini, Vertice<Planta> fin, int distanciaKm, double duracionViaje, int pesoMax) {
+		super(ini, fin, distanciaKm);
+		this.duracionViajeMin = duracionViaje;
+		this.pesoMaxTon = pesoMax;
+		this.pesoEnCursoTon = 0;
+		idRuta = id;
+	}
+
+	public Ruta() {}
 
 	@Override
 	public double getDuracionViajeMin() {
@@ -44,6 +62,13 @@ public class Ruta extends Arista<Planta> {
 	@Override
 	public void setPesoEnCurso(int pesoEnCursoTon) {
 		this.pesoEnCursoTon = pesoEnCursoTon;
+	}
+	
+	public int getId() {
+		return this.idRuta;
+	}
+	public void setId(int id) {
+		idRuta = id;
 	}
 
 
@@ -77,6 +102,34 @@ public class Ruta extends Arista<Planta> {
 		if (Double.doubleToLongBits(pesoMaxTon) != Double.doubleToLongBits(other.pesoMaxTon))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public List<String> asCsvRow() {
+		List<String> lista = new ArrayList<String>();
+		lista.add(this.idRuta+"");
+		lista.add(Integer.toString(this.idPlantaInicio));
+		lista.add(Integer.toString(this.idPlantaFin));
+		lista.add(Integer.toString(this.distancia));
+		lista.add(Double.toString(this.duracionViajeMin));
+		lista.add(Integer.toString(this.pesoMaxTon));
+		lista.add(Integer.toString(this.pesoEnCursoTon));
+		return lista;
+	}
+
+	@Override
+	public void loadFromStringRow(List<String> datos) {
+		try {
+			this.idRuta = Integer.valueOf(datos.get(0));
+			this.idPlantaInicio = Integer.valueOf(datos.get(1));
+			this.idPlantaFin = Integer.valueOf(datos.get(2));
+			this.distancia = Integer.valueOf(datos.get(3));
+			this.duracionViajeMin = Double.valueOf(datos.get(4));
+			this.pesoMaxTon = Integer.valueOf(datos.get(5)); 
+			this.pesoEnCursoTon = Integer.valueOf(datos.get(6));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

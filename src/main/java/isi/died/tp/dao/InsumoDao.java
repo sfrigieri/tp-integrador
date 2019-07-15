@@ -14,7 +14,7 @@ public interface InsumoDao {
 
 	public void eliminarInsumo(Insumo insumo);
 
-	Insumo buscarInsumo(Integer id);
+	public Insumo buscarInsumo(Integer id);
 	
 
 }

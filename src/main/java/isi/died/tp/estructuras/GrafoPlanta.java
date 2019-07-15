@@ -122,7 +122,7 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 	public void conectar(Vertice<Planta> nodo1,Vertice<Planta> nodo2, int distanciaKm, double duracionViaje, int pesoMax){
 		this.aristas.add(new Ruta(nodo1, nodo2, distanciaKm, duracionViaje, pesoMax));
-		
+		//acomodar el 0 del new ruta
 	}
 	
 	public void resetFlujo() {

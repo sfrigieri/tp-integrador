@@ -21,10 +21,7 @@ import javax.swing.WindowConstants;
 
 import isi.died.tp.app.Main;
 import isi.died.tp.controller.GestionEntidadesController;
-import isi.died.tp.controller.InsumoController;
-import isi.died.tp.controller.MenuController;
 import isi.died.tp.controller.OpcionesMenu;
-import isi.died.tp.dao.InsumoDao;
 
 public class GestionEntidades {
 	private static JFrame ventana;
@@ -40,7 +37,7 @@ public class GestionEntidades {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Gestión de Entidades");
-		JButton agregar = new JButton("Agregar"), modificar = new JButton("Modificar"), eliminar = new JButton("Eliminar"), camino = new JButton("Agregar Camino"),
+		JButton agregar = new JButton("Agregar"), modificar = new JButton("Modificar"), eliminar = new JButton("Eliminar"),
 				volver = new JButton("Volver");
 		JComboBox<String> opcionSeleccionada = new JComboBox<String>();
 			
@@ -64,10 +61,11 @@ public class GestionEntidades {
 		opcionSeleccionada.addItem("Planta");
 		opcionSeleccionada.addItem("Camion");
 		opcionSeleccionada.addItem("Stock");
+		opcionSeleccionada.addItem("Ruta");
 		opcionSeleccionada.setSelectedItem("Seleccione");
 		constraints.insets.set(0, 25, 5, 5);
 		constraints.gridx = 6;
-		constraints.gridy = 4;
+		constraints.gridy = 3;
 		constraints.gridwidth=1;
 		panel.add(opcionSeleccionada, constraints);
 				
@@ -86,12 +84,9 @@ public class GestionEntidades {
 		constraints.gridy=4;
 		panel.add(eliminar, constraints);
 		eliminar.setEnabled(false);
-				
-		constraints.gridy=5;
-		panel.add(camino, constraints);
-		camino.setEnabled(false);
 		
 		//boton volver
+		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.SOUTH;
 		constraints.insets.set(50, 10, 5, 5);
 		constraints.gridx = 6;
@@ -103,80 +98,60 @@ public class GestionEntidades {
 		volver.addActionListener(a -> Main.mostrarInterfaz());
 				
 		//listener seleccion
-		opcionSeleccionada.addActionListener (new ActionListener () {
-			public void actionPerformed(ActionEvent e) {
-				switch((String)opcionSeleccionada.getSelectedItem()){
-				case "Seleccione":
-					agregar.setEnabled(false);
-					modificar.setEnabled(false);
-				    eliminar.setEnabled(false);
-				    camino.setEnabled(false);
-				    break;
-				case "Insumo":
-					agregar.setEnabled(true);
-				    modificar.setEnabled(true);
-				    eliminar.setEnabled(true);
-				    camino.setEnabled(false);
-				    break;
-				case "Planta":
-				    agregar.setEnabled(true);
-				    modificar.setEnabled(true);
-				    eliminar.setEnabled(true);
-				    camino.setEnabled(true);
-				    break;
-				case "Camion":
-				    agregar.setEnabled(true);
-				    modificar.setEnabled(true);
-				    eliminar.setEnabled(true);
-				    camino.setEnabled(false);
-				    break;
-				case "Stock":
-				    agregar.setEnabled(true);
-				    modificar.setEnabled(true);
-				    eliminar.setEnabled(true);
-				    camino.setEnabled(false);
-				    break;
-				}
+		opcionSeleccionada.addActionListener (a -> {
+			switch((String)opcionSeleccionada.getSelectedItem()){
+			case "Seleccione":
+				agregar.setEnabled(false);
+				modificar.setEnabled(false);
+				eliminar.setEnabled(false);
+				break;
+			default:
+				agregar.setEnabled(true);
+				modificar.setEnabled(true);
+				eliminar.setEnabled(true);
+				break;
 			}
 		});
 				
 		//listener agregarX
-		agregar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switch((String)opcionSeleccionada.getSelectedItem()){
-				case "Insumo":
-					controller.opcion(OpcionesMenu.AGREGAR_INSUMO, ventana);
-					break;
-				case "Planta":
-					controller.opcion(OpcionesMenu.AGREGAR_PLANTA, ventana);
-					break;
-				case "Camion":
-					controller.opcion(OpcionesMenu.AGREGAR_CAMION, ventana);
-					break;
-				case "Stock":
-					controller.opcion(OpcionesMenu.AGREGAR_STOCK, ventana);
-					break;
-				}
+		agregar.addActionListener(a -> {
+			switch((String)opcionSeleccionada.getSelectedItem()){
+			case "Insumo":
+				controller.opcion(OpcionesMenu.AGREGAR_INSUMO, ventana);
+				break;
+			case "Planta":
+				controller.opcion(OpcionesMenu.AGREGAR_PLANTA, ventana);
+				break;
+			case "Camion":
+				controller.opcion(OpcionesMenu.AGREGAR_CAMION, ventana);
+				break;
+			case "Stock":
+				controller.opcion(OpcionesMenu.AGREGAR_STOCK, ventana);
+				break;
+			case "Ruta":
+				controller.opcion(OpcionesMenu.AGREGAR_RUTA, ventana);
+				break;
 			}
 		});
 				
 		//listener modificarX
-		modificar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switch((String)opcionSeleccionada.getSelectedItem()){
-				case "Insumo":
-					controller.opcion(OpcionesMenu.MODIFICAR_INSUMO, ventana);
-					break;
-				case "Planta":
-					controller.opcion(OpcionesMenu.MODIFICAR_PLANTA, ventana);
-					break;
-				case "Camion":
-					controller.opcion(OpcionesMenu.MODIFICAR_CAMION, ventana);
-					break;
-				case "Stock":
-					controller.opcion(OpcionesMenu.MODIFICAR_STOCK, ventana);
-					break;
-				}
+		modificar.addActionListener(a -> {
+			switch((String)opcionSeleccionada.getSelectedItem()){
+			case "Insumo":
+				controller.opcion(OpcionesMenu.MODIFICAR_INSUMO, ventana);
+				break;
+			case "Planta":
+				controller.opcion(OpcionesMenu.MODIFICAR_PLANTA, ventana);
+				break;
+			case "Camion":
+				controller.opcion(OpcionesMenu.MODIFICAR_CAMION, ventana);
+				break;
+			case "Stock":
+				controller.opcion(OpcionesMenu.MODIFICAR_STOCK, ventana);
+				break;
+			case "Ruta":
+				controller.opcion(OpcionesMenu.MODIFICAR_RUTA, ventana);
+				break;
 			}
 		});
 				
@@ -196,16 +171,8 @@ public class GestionEntidades {
 				case "Stock":
 					controller.opcion(OpcionesMenu.ELIMINAR_STOCK, ventana);
 					break;
-				}
-			}
-		});
-				
-		//listener caminoPlanta
-		camino.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switch((String)opcionSeleccionada.getSelectedItem()){
-				case "Planta":
-					controller.opcion(OpcionesMenu.AGREGAR_CAMINO_PLANTA, ventana);
+				case "Ruta":
+					controller.opcion(OpcionesMenu.ELIMINAR_RUTA, ventana);
 					break;
 				}
 			}
@@ -216,7 +183,7 @@ public class GestionEntidades {
 		ventana.pack();
 		ventana.setSize(800, 600);
 		ventana.setLocationRelativeTo(null);
-		ventana.setTitle("Sistema de Gestión");
+		ventana.setTitle("Sistema de Gestión de Entidades");
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
 	}
