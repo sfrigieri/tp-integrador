@@ -6,13 +6,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.ItemSelectable;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import isi.died.tp.controller.RutaController;
-import isi.died.tp.estructuras.Vertice;
 import isi.died.tp.service.*;
 import isi.died.tp.model.*;
 
@@ -127,7 +121,7 @@ public class ABMRuta {
 					pesoMax = Integer.parseInt(tPesoMaximo.getText());
 				}
 						
-				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar el nuevo insumo con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar la nueva ruta con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
 					controller.agregarRuta(0, inicio, fin, distancia, duracion, pesoMax);
 				}					
 						

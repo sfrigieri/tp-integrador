@@ -79,6 +79,19 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 	public double getPeso() {
 		return peso;
 	}
+	
+	public String getDescripcion() {
+		return descripcion;
+	}
+	
+	public boolean getEsRefrigerado() {
+		return this.esRefrigerado;
+	}
+	
+	public Unidad getUnidad() {
+		return this.unidadDeMedida;
+	}
+
 
 	public void setPeso(double peso) {
 		this.peso = peso;
@@ -161,8 +174,5 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 			e.printStackTrace();
 		}
 	}
-
-
-
 
 }

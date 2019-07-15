@@ -41,4 +41,8 @@ public class InsumoController {
 		return insumoService.buscarInsumo(id);
 	}
 
+	public void editarInsumo(int id, Insumo insumo) {
+		insumoService.editarInsumo(id, insumo);
+	}
+
 }

@@ -14,6 +14,10 @@ public class InsumoLiquido extends Insumo{
 		this.densidad = dens;
 	}
 	
+	public double getDensidad() {
+		return this.densidad;
+	}
+	
 	@Override
 	public List<String> asCsvRow() {
 		//int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado

@@ -28,7 +28,7 @@ public class PlantaServiceTest {
 	@Before
 	public void init() {
 	
-		ps = new PlantaServiceDefault();
+		ps = new PlantaServiceDefault(new InsumoServiceDefault(), new StockServiceDefault());
 		camion = new Camion(1, 20, false, 2);
 		
 		listaDisponibles = new ArrayList<StockAcopio>();
