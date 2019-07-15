@@ -3,6 +3,7 @@ package isi.died.tp.controller;
 import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.estructuras.Vertice;
 import isi.died.tp.model.Planta;
+import isi.died.tp.service.PlantaService;
 import isi.died.tp.service.RutaService;
 import isi.died.tp.service.RutaServiceDefault;
 
@@ -10,8 +11,8 @@ public class RutaController {
 
 private RutaService rutaService;
 	
-	public RutaController() {
-		this.rutaService = new RutaServiceDefault();
+	public RutaController(PlantaService ps) {
+		this.rutaService = new RutaServiceDefault(ps);
 	}
 	
 	public Ruta agregarRuta(int idRuta, Planta plantaOrigen, Planta plantaFin, int distancia, double duracion, int pesoMax) {

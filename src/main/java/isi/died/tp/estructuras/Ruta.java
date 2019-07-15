@@ -12,8 +12,6 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	private double duracionViajeMin;
 	private int pesoMaxTon;
 	private int pesoEnCursoTon;
-	private int idPlantaInicio;
-	private int idPlantaFin;
 	private int distancia;
 	
 	public Ruta(Vertice<Planta> ini, Vertice<Planta> fin, int distanciaKm, double duracionViaje, int pesoMax) {
@@ -108,8 +106,8 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	public List<String> asCsvRow() {
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.idRuta+"");
-		lista.add(Integer.toString(this.idPlantaInicio));
-		lista.add(Integer.toString(this.idPlantaFin));
+		lista.add(Integer.toString(this.getInicio().getValor().getId()));
+		lista.add(Integer.toString(this.getFin().getValor().getId()));
 		lista.add(Integer.toString(this.distancia));
 		lista.add(Double.toString(this.duracionViajeMin));
 		lista.add(Integer.toString(this.pesoMaxTon));
@@ -121,8 +119,6 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	public void loadFromStringRow(List<String> datos) {
 		try {
 			this.idRuta = Integer.valueOf(datos.get(0));
-			this.idPlantaInicio = Integer.valueOf(datos.get(1));
-			this.idPlantaFin = Integer.valueOf(datos.get(2));
 			this.distancia = Integer.valueOf(datos.get(3));
 			this.duracionViajeMin = Double.valueOf(datos.get(4));
 			this.pesoMaxTon = Integer.valueOf(datos.get(5)); 

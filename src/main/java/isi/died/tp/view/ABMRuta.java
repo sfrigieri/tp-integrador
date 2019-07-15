@@ -23,18 +23,16 @@ import javax.swing.WindowConstants;
 
 import isi.died.tp.controller.RutaController;
 import isi.died.tp.estructuras.Vertice;
-import isi.died.tp.model.Unidad;
-import isi.died.tp.model.Planta;
-import isi.died.tp.model.PlantaAcopio;
-import isi.died.tp.model.PlantaProduccion;
+import isi.died.tp.service.*;
+import isi.died.tp.model.*;
 
 public class ABMRuta {
 
 	private RutaController controller;
 	private JFrame ventana;
 	
-	public ABMRuta(JFrame ventana){
-		this.controller = new RutaController();
+	public ABMRuta(JFrame ventana, PlantaService ps){
+		this.controller = new RutaController(ps);
 		this.ventana = ventana;
 	}
 	

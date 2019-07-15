@@ -10,9 +10,9 @@ public class RutaServiceDefault implements RutaService {
 
 	private RutaDao rutaDao;
 
-	public RutaServiceDefault() {
+	public RutaServiceDefault(PlantaService ps) {
 		super();
-		this.rutaDao = new RutaDaoDefault();
+		this.rutaDao = new RutaDaoDefault(ps);
 	}
 	
 	@Override

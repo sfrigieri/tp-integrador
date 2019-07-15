@@ -6,16 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import isi.died.tp.dao.util.CsvSource;
-import isi.died.tp.estructuras.Ruta;
+import isi.died.tp.estructuras.*;
+import isi.died.tp.service.PlantaService;
 
 public class RutaDaoDefault implements RutaDao {
 	private static List<Ruta> LISTA_RUTAS  = new ArrayList<Ruta>();
 	private static Integer ULTIMO_ID;
+	private PlantaService ps;
 	
 	private CsvSource dataSource;
 	
-	public RutaDaoDefault() {
+	public RutaDaoDefault(PlantaService plantaService) {
 		dataSource = new CsvSource();
+		ps = plantaService;
 		if(LISTA_RUTAS.isEmpty())
 			this.cargarListaRutas();
 		
@@ -40,6 +43,8 @@ public class RutaDaoDefault implements RutaDao {
 		for(List<String> filaRuta : rutas) {
 			Ruta aux = new Ruta();
 			aux.loadFromStringRow(filaRuta);
+			aux.setInicio(new Vertice<>(ps.buscarPlanta(Integer.valueOf(filaRuta.get(1)))));
+			aux.setFin(new Vertice<>(ps.buscarPlanta(Integer.valueOf(filaRuta.get(2)))));
 			LISTA_RUTAS.add(aux);
 		}
 	}
