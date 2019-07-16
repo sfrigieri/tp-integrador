@@ -3,10 +3,10 @@ package isi.died.tp.estructuras;
 public class Arista<T> {
 	private Vertice<T> inicio;
 	private Vertice<T> fin;
-	private Number valor;
+	private Integer valor;
 
 	public Arista(){
-		valor=1.0;
+		valor=1;
 	} 
 	
 	public Arista(Vertice<T> ini,Vertice<T> fin){
@@ -15,7 +15,7 @@ public class Arista<T> {
 		this.fin = fin;
 	}
 
-	public Arista(Vertice<T> ini,Vertice<T> fin,Number val){
+	public Arista(Vertice<T> ini,Vertice<T> fin,Integer val){
 		this(ini,fin);
 		this.valor= val;
 	}
@@ -36,11 +36,11 @@ public class Arista<T> {
 		this.fin = fin;
 	}
 
-	public Number getValor() {
+	public Integer getValor() {
 		return valor;
 	}
 
-	public void setValor(Number valor) {
+	public void setValor(Integer valor) {
 		this.valor = valor;
 	}
 	

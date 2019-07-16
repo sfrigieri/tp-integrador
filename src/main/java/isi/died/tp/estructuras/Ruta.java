@@ -8,11 +8,10 @@ import isi.died.tp.model.Planta;
 
 public class Ruta extends Arista<Planta> implements CsvRecord {
 
-	public int idRuta;
+	public int id;
 	private double duracionViajeMin;
 	private int pesoMaxTon;
 	private int pesoEnCursoTon;
-	private int distancia;
 	
 	public Ruta(Vertice<Planta> ini, Vertice<Planta> fin, int distanciaKm, double duracionViaje, int pesoMax) {
 		super(ini, fin, distanciaKm);
@@ -26,7 +25,7 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 		this.duracionViajeMin = duracionViaje;
 		this.pesoMaxTon = pesoMax;
 		this.pesoEnCursoTon = 0;
-		idRuta = id;
+		this.id = id;
 	}
 
 	public Ruta() {}
@@ -63,10 +62,10 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	}
 	
 	public int getId() {
-		return this.idRuta;
+		return this.id;
 	}
 	public void setId(int id) {
-		idRuta = id;
+		this.id = id;
 	}
 
 
@@ -105,10 +104,10 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	@Override
 	public List<String> asCsvRow() {
 		List<String> lista = new ArrayList<String>();
-		lista.add(this.idRuta+"");
+		lista.add(this.id+"");
 		lista.add(Integer.toString(this.getInicio().getValor().getId()));
 		lista.add(Integer.toString(this.getFin().getValor().getId()));
-		lista.add(Integer.toString(this.distancia));
+		lista.add(Integer.toString(this.getValor()));
 		lista.add(Double.toString(this.duracionViajeMin));
 		lista.add(Integer.toString(this.pesoMaxTon));
 		lista.add(Integer.toString(this.pesoEnCursoTon));
@@ -118,8 +117,8 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	@Override
 	public void loadFromStringRow(List<String> datos) {
 		try {
-			this.idRuta = Integer.valueOf(datos.get(0));
-			this.distancia = Integer.valueOf(datos.get(3));
+			this.id = Integer.valueOf(datos.get(0));
+			this.setValor( Integer.valueOf(datos.get(3)));
 			this.duracionViajeMin = Double.valueOf(datos.get(4));
 			this.pesoMaxTon = Integer.valueOf(datos.get(5)); 
 			this.pesoEnCursoTon = Integer.valueOf(datos.get(6));
