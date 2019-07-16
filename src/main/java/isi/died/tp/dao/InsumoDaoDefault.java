@@ -7,10 +7,12 @@ import java.util.List;
 
 import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.model.Insumo;
+import isi.died.tp.model.InsumoLiquido;
 
 public class InsumoDaoDefault implements InsumoDao {
 
 	private static List<Insumo> LISTA_INSUMOS  = new ArrayList<Insumo>();
+	private static List<InsumoLiquido> LISTA_INSUMOS_LIQUIDOS  = new ArrayList<InsumoLiquido>();
 	private static Integer ULTIMO_ID;
 	
 	private CsvSource dataSource;
@@ -19,7 +21,8 @@ public class InsumoDaoDefault implements InsumoDao {
 		dataSource = new CsvSource();
 		if(LISTA_INSUMOS.isEmpty())
 			this.cargarListaInsumos();
-		
+		if (LISTA_INSUMOS_LIQUIDOS.isEmpty())
+			this.cargarListaInsumosLiquidos();
 		ULTIMO_ID = this.maxID();
 	}
 	
@@ -31,10 +34,13 @@ public class InsumoDaoDefault implements InsumoDao {
 			if(ins.getId()>maxID)
 				maxID = ins.getId();
 		}
+		for(InsumoLiquido ins: LISTA_INSUMOS_LIQUIDOS) {
+			if(ins.getId()>maxID)
+				maxID = ins.getId();
+		}
 		
 		return maxID;
 	}
-	
 	
 	public void cargarListaInsumos() {
 		List<List<String>> insumos = dataSource.readFile("insumos.csv");
@@ -44,10 +50,22 @@ public class InsumoDaoDefault implements InsumoDao {
 			LISTA_INSUMOS.add(aux);
 		}
 	}
+	public void cargarListaInsumosLiquidos() {
+		List<List<String>> insumosLiquidos = dataSource.readFile("insumosLiquidos.csv");
+		for(List<String> filaInsumo : insumosLiquidos) {
+			InsumoLiquido aux = new InsumoLiquido();
+			aux.loadFromStringRow(filaInsumo);
+			LISTA_INSUMOS_LIQUIDOS.add(aux);
+		}
+	}
+
 
 	@Override
 	public Insumo buscarInsumo(Integer id) {
 		for(Insumo actual : LISTA_INSUMOS)
+			if(actual.getId() == id)
+				return actual;
+		for(InsumoLiquido actual : LISTA_INSUMOS_LIQUIDOS)
 			if(actual.getId() == id)
 				return actual;
 		return null;
@@ -55,12 +73,21 @@ public class InsumoDaoDefault implements InsumoDao {
 	
 	@Override
 	public void agregarInsumo(Insumo insumo) {
-		insumo.setId(ULTIMO_ID++);
-		LISTA_INSUMOS.add(insumo);	
-		try {
-			dataSource.agregarFilaAlFinal("insumos.csv", insumo);
-		} catch (IOException e) {
-			e.printStackTrace();
+		insumo.setId(++ULTIMO_ID);
+		if (insumo instanceof InsumoLiquido) {
+			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
+			try {
+				dataSource.agregarFilaAlFinal("insumosLiquidos.csv", insumo);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else {
+			LISTA_INSUMOS.add(insumo);	
+			try {
+				dataSource.agregarFilaAlFinal("insumos.csv", insumo);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -70,19 +97,36 @@ public class InsumoDaoDefault implements InsumoDao {
 		
 		old = buscarInsumo(id);
 		
-		if(old != null)
-			LISTA_INSUMOS.remove(old);
-		
-		LISTA_INSUMOS.add(insumo);
+		if (old instanceof InsumoLiquido) {
+			if(old != null) 
+				LISTA_INSUMOS_LIQUIDOS.remove(old);
+		} else {
+			if(old != null) 
+				LISTA_INSUMOS.remove(old);
+		}
+			
+		if (insumo instanceof InsumoLiquido)
+			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
+		else
+			LISTA_INSUMOS.add(insumo);
 		
 		this.actualizarArchivo();
+		this.actualizarArchivoLiquido();
+		
+		
 	}
 	
 	
 	@Override
 	public void eliminarInsumo(Insumo insumo) {
-		LISTA_INSUMOS.remove(insumo);
-		actualizarArchivo();
+		if (insumo instanceof InsumoLiquido) {
+			LISTA_INSUMOS_LIQUIDOS.remove(insumo);
+			actualizarArchivoLiquido();
+		} else {
+			LISTA_INSUMOS.remove(insumo);
+			actualizarArchivo();
+		}
+		
 		
 	}
 	
@@ -90,19 +134,44 @@ public class InsumoDaoDefault implements InsumoDao {
 	public List<Insumo> listaInsumos() {
 		return LISTA_INSUMOS;
 	}
+	@Override
+	public List<InsumoLiquido> listaInsumosLiquidos() {
+		return LISTA_INSUMOS_LIQUIDOS;
+	}
 	
-
 	private void actualizarArchivo() {
 		File archivoInsumos = new File("insumos.csv");
 		archivoInsumos.delete();
-		for(Insumo actual: LISTA_INSUMOS) {
-			try {
-				dataSource.agregarFilaAlFinal("insumos.csv", actual);
-			} catch (IOException e) {
-				e.printStackTrace();
-				}
-		
+		try {
+			archivoInsumos.createNewFile();
+			for(Insumo actual: LISTA_INSUMOS) {
+				try {
+					dataSource.agregarFilaAlFinal("insumos.csv", actual);
+				} catch (IOException e) {
+					e.printStackTrace();
+					}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+		
 	}
 
+	private void actualizarArchivoLiquido() {
+		File archivoInsumos = new File("insumosLiquidos.csv");
+		archivoInsumos.delete();
+		try {
+			archivoInsumos.createNewFile();
+			for(Insumo actual: LISTA_INSUMOS_LIQUIDOS) {
+				try {
+					dataSource.agregarFilaAlFinal("insumosLiquidos.csv", actual);
+				} catch (IOException e) {
+					e.printStackTrace();
+					}
+			
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
 }

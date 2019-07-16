@@ -4,6 +4,7 @@ import java.util.List;
 
 import isi.died.tp.dao.*;
 import isi.died.tp.model.Insumo;
+import isi.died.tp.model.InsumoLiquido;
 
 public class InsumoServiceDefault implements InsumoService {
 
@@ -23,6 +24,11 @@ public class InsumoServiceDefault implements InsumoService {
 	@Override
 	public List<Insumo> listaInsumos() {
 		return insumoDao.listaInsumos();
+	}
+	
+	@Override
+	public List<InsumoLiquido> listaInsumosLiquidos(){
+		return insumoDao.listaInsumosLiquidos();
 	}
 
 	@Override

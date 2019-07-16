@@ -31,6 +31,9 @@ public class InsumoController {
 	public List<Insumo> listaInsumos() {
 		return insumoService.listaInsumos();
 	}
+	public List<InsumoLiquido> listaInsumosLiquidos() {
+		return insumoService.listaInsumosLiquidos();
+	}
 	
 	public void eliminarInsumo (int id) {
 		Insumo insumo = buscarInsumo(id);

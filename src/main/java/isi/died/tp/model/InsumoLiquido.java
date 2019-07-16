@@ -14,6 +14,8 @@ public class InsumoLiquido extends Insumo{
 		this.densidad = dens;
 	}
 	
+	public InsumoLiquido() {}
+
 	public double getDensidad() {
 		return this.densidad;
 	}
