@@ -7,19 +7,45 @@ import java.util.Date;
 
 public class PlantaAcopio extends Planta {
 	
-	private List<Pedido> listaDePedidos;
+	private List<StockAcopio> listaDeStocks;
 	private List<Insumo> listaDeInsumos;
-	
+	Boolean esOrigen;
 	
 	public PlantaAcopio(int id, String nombre) {
 		super(id, nombre);
-		listaDePedidos = new ArrayList<Pedido>();
+		listaDeStocks = new ArrayList<StockAcopio>();
 		listaDeInsumos  = new ArrayList<Insumo>();
+		this.esOrigen = null;
 	}
+	
+	public PlantaAcopio(int id, String nombre, Boolean esOrigen) {
+		super(id, nombre);
+		listaDeStocks = new ArrayList<StockAcopio>();
+		listaDeInsumos  = new ArrayList<Insumo>();
+		this.esOrigen = esOrigen;
+	}
+	
+	public Boolean esOrigen() {
+		return this.esOrigen;
+	}
+	
+	public void setEsOrigen(Boolean valor) {
+		this.esOrigen = valor;
+	}
+	
 
 	public PlantaAcopio() {
 		super();
 	}
+	
+	
+	@Override
+	public void removeStock(Insumo ins) {
+		for(Insumo i : listaDeInsumos)
+			if(i.equals(ins))
+				i.removeStock();
+		
+		}
 	
 	@Override
 	public Double costoTotal() {
@@ -47,9 +73,9 @@ public class PlantaAcopio extends Planta {
 		}
 	
 	@Override
-	public Insumo getInsumo(int IdIns) {
+	public Insumo getInsumo(int idIns) {
 		for(Insumo insumo : this.listaDeInsumos) {
-			if(insumo.equals(IdIns)) return insumo;				
+			if(insumo.getId() == idIns) return insumo;				
 			}
 		return null;
 		
@@ -62,9 +88,14 @@ public class PlantaAcopio extends Planta {
 		}
 
 	@Override
-	public void addPedido(Pedido pedido) {
-		listaDePedidos.add(pedido);
+	public void addStock(Stock stock) {
+		listaDeStocks.add((StockAcopio) stock);
+		
+		if(this.esOrigen != null && this.esOrigen) {
+			Insumo ins = this.getInsumo(stock.getInsumo().getId());
+			if(ins != null) ins.setStock((StockAcopio) stock);
 		}
+	}
 
 	@Override
 	public List<String> asCsvRow() {

@@ -64,6 +64,11 @@ public class PlantaProduccion extends Planta {
 		}
 	
 	@Override
+	public void addStock(Stock s) {
+			listaDeStock.add((StockProduccion) s);
+		}
+	
+	@Override
 	public Stock getStock(Insumo ins) {
 		for(Stock stock : this.listaDeStock) {
 			if(stock.getInsumo().equals(ins)) return stock;				

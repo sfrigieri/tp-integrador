@@ -175,4 +175,9 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 		}
 	}
 
+	public void removeStock() {
+		this.stock = null;
+		
+	}
+
 }

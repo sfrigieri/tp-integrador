@@ -1,6 +1,8 @@
 package isi.died.tp.model;
 
-public abstract class Stock {
+import isi.died.tp.dao.util.CsvRecord;
+
+public abstract class Stock implements CsvRecord {
 
 	protected int id;
 	protected int cantidad;
@@ -30,6 +32,10 @@ public abstract class Stock {
 	}
 	
 	
+	protected Stock() {
+
+	}
+
 	public int getId() {
 		return id;
 	}

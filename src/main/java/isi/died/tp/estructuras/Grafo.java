@@ -33,14 +33,14 @@ public class Grafo<T> {
 	}
 
 	public void conectar(T n1,T n2){
-		this.conectar(getNodo(n1), getNodo(n2), 1.0);
+		this.conectar(getNodo(n1), getNodo(n2), 1);
 	}
 
-	public void conectar(T n1,T n2,Number valor){
+	public void conectar(T n1,T n2,Integer valor){
 		this.conectar(getNodo(n1), getNodo(n2), valor);
 	}
 
-	private void conectar(Vertice<T> nodo1,Vertice<T> nodo2,Number valor){
+	private void conectar(Vertice<T> nodo1,Vertice<T> nodo2,Integer valor){
 		this.aristas.add(new Arista<T>(nodo1,nodo2,valor));
 	}
 

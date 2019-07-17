@@ -1,5 +1,7 @@
 package isi.died.tp.model;
 
+import java.util.List;
+
 public class StockProduccion extends Stock {
 
 	private int puntoPedido;
@@ -18,6 +20,11 @@ public class StockProduccion extends Stock {
 
 
 
+	public StockProduccion() {
+		super();
+	}
+
+
 	@Override
 	public Integer getCantidad() {
 		return this.cantidad;
@@ -31,6 +38,19 @@ public class StockProduccion extends Stock {
 	@Override
 	public Integer getPuntoPedido() {
 		return this.puntoPedido;
+	}
+
+
+	public void loadFromStringRow(List<String> filaStock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<String> asCsvRow() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

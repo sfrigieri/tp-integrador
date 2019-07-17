@@ -5,6 +5,7 @@ import java.util.List;
 import isi.died.tp.estructuras.Vertice;
 import isi.died.tp.model.Camion;
 import isi.died.tp.model.Planta;
+import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.model.StockAcopio;
 
 public interface PlantaService {
@@ -22,5 +23,9 @@ public interface PlantaService {
 	public void eliminarPlanta(Planta planta);
 
 	public Planta buscarPlanta(Integer id);
+
+	public List<PlantaProduccion> listaPlantasProduccion();
+
+	public List<StockAcopio> generarStockFaltante();
 
 }

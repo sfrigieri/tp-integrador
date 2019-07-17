@@ -31,6 +31,40 @@ public class PlantaServiceDefault implements PlantaService {
 	public List<Planta> listaPlantas() {
 		return plantaDao.listaPlantas();
 	}
+	
+	@Override
+	public List<StockAcopio> generarStockFaltante() {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+		
+		for(PlantaProduccion p : this.listaPlantasProduccion())
+			lista.addAll(this.generarStockFaltante(p));
+		
+		return lista;
+	}
+	
+	@Override
+	public List<PlantaProduccion> listaPlantasProduccion() {
+		List<PlantaProduccion> lista = new ArrayList<PlantaProduccion>();
+
+		for(Planta p : plantaDao.listaPlantas())
+			if(p instanceof PlantaProduccion)
+				lista.add((PlantaProduccion) p);
+		
+		return lista;
+	}
+	
+	
+	private List<StockAcopio> generarStockFaltante(PlantaProduccion p) {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+
+		for(Insumo i : is.listaInsumos()) {
+			int cant = p.cantidadNecesariaInsumo(i);
+			if(cant != 0)	
+				lista.add(new StockAcopio(-1,cant,i,p));
+		
+		}
+		return lista;
+	}
 
 	@Override
 	public void editarPlanta(Integer id, Planta planta) {
