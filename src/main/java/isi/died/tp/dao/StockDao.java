@@ -18,9 +18,9 @@ public interface StockDao {
 
 	public void agregarStock(Stock stock);
 
-	public Stock buscarStockAcopio(Integer id);
+	public StockAcopio buscarStockAcopio(Integer id);
 
-	public Stock buscarStockProduccion(Integer id);
+	public StockProduccion buscarStockProduccion(Integer id);
 
 	public Stock buscarStock(Integer id);
 

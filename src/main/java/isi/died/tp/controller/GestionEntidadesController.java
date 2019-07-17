@@ -31,9 +31,9 @@ public class GestionEntidadesController {
 		interfazInsumo = new ABMInsumo(ventana);
 		
 		plantaService = new PlantaServiceDefault(null,null);
-		stockService = new StockServiceDefault(plantaService);
 		insumoService = new InsumoServiceDefault();
-		
+		stockService = new StockServiceDefault(plantaService, insumoService);
+
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		//insumoService.setPlantaService(plantaService);

@@ -36,6 +36,22 @@ public class StockProduccion extends Stock {
 	}
 	
 	@Override
+	public void setInsumo(Insumo ins) {
+		this.ins = ins;
+		
+	}
+	
+	@Override
+	public void setPlanta(Planta planta) {
+		this.planta = planta;
+	}
+	
+	@Override
+	public Planta getPlanta() {
+		return this.planta;
+	}
+
+	@Override
 	public Integer getPuntoPedido() {
 		return this.puntoPedido;
 	}

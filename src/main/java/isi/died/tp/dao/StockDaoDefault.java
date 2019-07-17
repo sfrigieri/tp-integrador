@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import isi.died.tp.dao.util.CsvSource;
+import isi.died.tp.estructuras.Vertice;
 import isi.died.tp.model.*;
 import isi.died.tp.service.*;
 
@@ -16,11 +17,13 @@ public class StockDaoDefault implements StockDao {
 	private static Integer ULTIMO_ID_PROD;
 	private static Integer ULTIMO_ID_ACOP;
 	private PlantaService ps;
-
+	private InsumoService is;
+	
 	private CsvSource dataSource;
 	
-	public StockDaoDefault(PlantaService ps) {
+	public StockDaoDefault(PlantaService ps, InsumoService is) {
 		this.ps = ps;
+		this.is = is;
 		dataSource = new CsvSource();
 		if(LISTA_STOCKS_ACOPIO.isEmpty())
 			this.cargarListaStocksAcopio();
@@ -60,14 +63,18 @@ public class StockDaoDefault implements StockDao {
 		for(List<String> filaStock : stocks) {
 			StockAcopio aux = new StockAcopio();
 			aux.loadFromStringRow(filaStock);
+			aux.setInsumo(is.buscarInsumo(Integer.valueOf(filaStock.get(2))));
+			aux.setPlanta(ps.buscarPlanta(Integer.valueOf(filaStock.get(3))));
 			LISTA_STOCKS_ACOPIO.add(aux);
 		}
 	}
 	public void cargarListaStocksProduccion() {
-		List<List<String>> stocksProduccions = dataSource.readFile("stocksProduccion.csv");
-		for(List<String> filaStock : stocksProduccions) {
+		List<List<String>> stocksProduccion = dataSource.readFile("stocksProduccion.csv");
+		for(List<String> filaStock : stocksProduccion) {
 			StockProduccion aux = new StockProduccion();
 			aux.loadFromStringRow(filaStock);
+			aux.setInsumo(is.buscarInsumo(Integer.valueOf(filaStock.get(2))));
+			aux.setPlanta(ps.buscarPlanta(Integer.valueOf(filaStock.get(3))));
 			LISTA_STOCKS_PRODUCCION.add(aux);
 		}
 	}
@@ -85,7 +92,7 @@ public class StockDaoDefault implements StockDao {
 	}
 	
 	@Override
-	public Stock buscarStockProduccion(Integer id) {
+	public StockProduccion buscarStockProduccion(Integer id) {
 		for(StockProduccion actual : LISTA_STOCKS_PRODUCCION)
 			if(actual.getId() == id)
 				return actual;
@@ -94,8 +101,8 @@ public class StockDaoDefault implements StockDao {
 	
 	
 	@Override
-	public Stock buscarStockAcopio(Integer id) {
-		for(Stock actual : LISTA_STOCKS_ACOPIO)
+	public StockAcopio buscarStockAcopio(Integer id) {
+		for(StockAcopio actual : LISTA_STOCKS_ACOPIO)
 			if(actual.getId() == id)
 				return actual;
 		return null;
@@ -145,6 +152,8 @@ public class StockDaoDefault implements StockDao {
 			LISTA_STOCKS_ACOPIO.add((StockAcopio)stock);
 			this.actualizarArchivoAcopio();
 		}
+		
+		//Cada tipo de planta implementa su método addStock, no es necesario diferenciar.
 		ps.buscarPlanta(stock.getPlanta().getId()).addStock(stock);
 				
 		

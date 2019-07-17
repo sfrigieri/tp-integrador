@@ -53,6 +53,11 @@ public abstract class Stock implements CsvRecord {
 		return null;
 	}
 	
+	public void setInsumo(Insumo buscarInsumo) {
+		
+		
+	}
+	
 	public Integer getPuntoPedido() {
 		return null;
 	}

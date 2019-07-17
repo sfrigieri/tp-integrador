@@ -1,5 +1,6 @@
 package isi.died.tp.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StockAcopio extends Stock {
@@ -21,6 +22,11 @@ public class StockAcopio extends Stock {
 		super();
 	}
 
+	@Override
+	public void setInsumo(Insumo ins) {
+		this.ins = ins;
+		
+	}
 
 	@Override
 	public Integer getCantidad() {
@@ -43,8 +49,13 @@ public class StockAcopio extends Stock {
 	}
 
 
-	public void loadFromStringRow(List<String> filaStock) {
-		// TODO Auto-generated method stub
+	public void loadFromStringRow(List<String> datos) {
+		try {
+			this.id = Integer.valueOf(datos.get(0));
+			this.setCantidad( Integer.valueOf(datos.get(1)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -52,8 +63,15 @@ public class StockAcopio extends Stock {
 
 	@Override
 	public List<String> asCsvRow() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> lista = new ArrayList<String>();
+		lista.add(this.getId()+"");
+		lista.add(Integer.toString(this.getCantidad()));
+		lista.add(Integer.toString(this.getInsumo().getId()));
+		lista.add(Integer.toString(this.getPlanta().getId()));
+		return lista;
 	}
+
+
+
 
 }
