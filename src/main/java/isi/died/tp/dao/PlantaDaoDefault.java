@@ -135,7 +135,8 @@ public class PlantaDaoDefault implements PlantaDao {
 
 	@Override
 	public void resetPageRanks() {
-		this.resetPageRanks();
+		for(Planta p : this.listaPlantas())
+			p.setPageRank(1.0);
 	}
 
 	
