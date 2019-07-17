@@ -22,6 +22,18 @@ public class PlantaServiceDefault implements PlantaService {
 	}
 
 	@Override
+	public void setInsumoService(InsumoService is) {
+		this.is = is;
+		
+	}
+
+	@Override
+	public void setStockService(StockService ss) {
+		this.ss = ss;
+		
+	}
+	
+	@Override
 	public Planta agregarPlanta(Planta planta) {
 		plantaDao.agregarPlanta(planta);
 		return planta;
@@ -165,4 +177,6 @@ public class PlantaServiceDefault implements PlantaService {
 		
 		return listaResultante;
 	}
+
+
 }

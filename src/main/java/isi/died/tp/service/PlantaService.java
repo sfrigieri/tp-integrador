@@ -28,4 +28,8 @@ public interface PlantaService {
 
 	public List<StockAcopio> generarStockFaltante();
 
+	public void setInsumoService(InsumoService insumoService);
+
+	public void setStockService(StockService stockService);
+
 }

@@ -29,9 +29,15 @@ public class GestionEntidadesController {
 	
 	public GestionEntidadesController(JFrame ventana) {
 		interfazInsumo = new ABMInsumo(ventana);
-		stockService = new StockServiceDefault();
+		
+		plantaService = new PlantaServiceDefault(null,null);
+		stockService = new StockServiceDefault(plantaService);
 		insumoService = new InsumoServiceDefault();
-		plantaService = new PlantaServiceDefault(insumoService, stockService);
+		
+		plantaService.setInsumoService(insumoService);
+		plantaService.setStockService(stockService);
+		//insumoService.setPlantaService(plantaService);
+		
 		interfazRuta = new ABMRuta(ventana,plantaService);
 	}
 	
