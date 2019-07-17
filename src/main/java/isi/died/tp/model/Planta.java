@@ -19,6 +19,14 @@ public abstract class Planta implements CsvRecord {
 	protected Planta() {
 		super();
 	}
+	
+	public Boolean esOrigen() {
+		return false;
+	}
+	
+	public void setEsOrigen(Boolean valor) {
+		
+	}
 
 	public String getNombre() {
 		return this.nombre;

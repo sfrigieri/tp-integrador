@@ -58,6 +58,11 @@ public abstract class Stock implements CsvRecord {
 		
 	}
 	
+	public void setPuntoPedido(Integer puntoPedido) {
+
+		
+	}
+	
 	public Integer getPuntoPedido() {
 		return null;
 	}

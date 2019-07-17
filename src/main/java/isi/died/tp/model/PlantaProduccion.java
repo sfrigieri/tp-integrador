@@ -26,6 +26,7 @@ public class PlantaProduccion extends Planta {
 		return false;
 	}
 	
+	
 	@Override
 	public Integer cantidadNecesariaInsumo(Insumo i) {
 		Stock stock = this.getStock(i);

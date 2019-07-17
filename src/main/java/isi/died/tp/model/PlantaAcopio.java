@@ -24,18 +24,22 @@ public class PlantaAcopio extends Planta {
 		listaDeInsumos  = new ArrayList<Insumo>();
 		this.esOrigen = esOrigen;
 	}
+
+
+	public PlantaAcopio() {
+		super();
+	}
 	
+	
+	
+	@Override
 	public Boolean esOrigen() {
 		return this.esOrigen;
 	}
 	
+	@Override
 	public void setEsOrigen(Boolean valor) {
 		this.esOrigen = valor;
-	}
-	
-
-	public PlantaAcopio() {
-		super();
 	}
 	
 	

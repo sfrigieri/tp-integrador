@@ -14,6 +14,11 @@ public class PlantaServiceDefault implements PlantaService {
 	private InsumoService is;
 	private StockService ss;
 
+	
+	public PlantaServiceDefault() {
+		super();
+	}
+	
 	public PlantaServiceDefault(InsumoService is, StockService ss) {
 		super();
 		this.plantaDao = new PlantaDaoDefault();
@@ -55,6 +60,31 @@ public class PlantaServiceDefault implements PlantaService {
 	}
 	
 	@Override
+	public List<StockAcopio> generarStockFaltanteDisponible() {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+		List<StockAcopio> listaAux;
+		
+		for(Insumo i : is.listaInsumos()) {
+			listaAux = generarStockFaltante(i);
+			Integer cantDisponible = i.getStock().getCantidad();
+			
+			if(cantDisponible != null) {
+				
+				for(StockAcopio s : listaAux) {
+					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
+						lista.add(s);
+						cantDisponible = cantDisponible - s.getCantidad();
+					}
+				}
+			}
+		
+		}
+		
+		return lista;
+	}
+	
+	
+	@Override
 	public List<PlantaProduccion> listaPlantasProduccion() {
 		List<PlantaProduccion> lista = new ArrayList<PlantaProduccion>();
 
@@ -75,8 +105,24 @@ public class PlantaServiceDefault implements PlantaService {
 				lista.add(new StockAcopio(-1,cant,i,p));
 		
 		}
+		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
 		return lista;
 	}
+	
+	private List<StockAcopio> generarStockFaltante(Insumo ins) {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+
+		for(PlantaProduccion p : this.listaPlantasProduccion()){
+			int cant = p.cantidadNecesariaInsumo(ins);
+			if(cant != 0)	
+				lista.add(new StockAcopio(-1,cant,ins,p));
+		
+		}
+		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
+		return lista;
+	}
+	
+	
 
 	@Override
 	public void editarPlanta(Integer id, Planta planta) {

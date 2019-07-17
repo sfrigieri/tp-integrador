@@ -9,8 +9,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import isi.died.tp.model.Insumo;
-import isi.died.tp.model.Planta;
+import isi.died.tp.model.*;
 
 public class GrafoPlanta extends Grafo<Planta> {
 
@@ -55,29 +54,32 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 	public Planta buscarPlanta(Insumo i){
 
-		//Asumiendo PlantaAcopio como Fuente y PlantaFinal como Sumidero
-		Planta inicial = this.vertices
-				.stream()
-				.filter( v -> this.gradoEntrada(v)==0)
-				.findFirst().get().getValor();
-
-		//Retorno Dikstra modificado para recibir un TreeMap con valores ordenados naturalmente.
-		TreeMap<Integer,Planta> plantasPorDistancia = this.caminosMinimoDikstra(inicial);
-
+		PlantaAcopio inicial = null;
 		Planta plantaPrioritaria = null;
-		int cantMax = 0;
 
-		while (!plantasPorDistancia.isEmpty()){ 
-
-			Planta actual = plantasPorDistancia.pollFirstEntry().getValue();
-			int cantNecesaria = actual.cantidadNecesariaInsumo(i);
-
-			if(cantNecesaria > cantMax) {
-				cantMax = cantNecesaria;
-				plantaPrioritaria = actual;
-			}	
+		for(Vertice<Planta> p : this.vertices) {
+			if(p.getValor() instanceof PlantaAcopio && p.getValor().esOrigen())
+				inicial = (PlantaAcopio) p.getValor();
 		}
 
+		//Retorno Dikstra modificado para recibir un TreeMap con valores ordenados naturalmente.
+		if(inicial != null) {
+			TreeMap<Integer,Planta> plantasPorDistancia = this.caminosMinimoDikstra(inicial);
+
+
+			int cantMax = 0;
+
+			while (!plantasPorDistancia.isEmpty()){ 
+
+				Planta actual = plantasPorDistancia.pollFirstEntry().getValue();
+				int cantNecesaria = actual.cantidadNecesariaInsumo(i);
+
+				if(cantNecesaria > cantMax) {
+					cantMax = cantNecesaria;
+					plantaPrioritaria = actual;
+				}	
+			}
+		}
 		return plantaPrioritaria;
 
 	}
@@ -124,31 +126,31 @@ public class GrafoPlanta extends Grafo<Planta> {
 		this.aristas.add(new Ruta(nodo1, nodo2, distanciaKm, duracionViaje, pesoMax));
 		//acomodar el 0 del new ruta
 	}
-	
+
 	public void resetFlujo() {
 		for (Arista<Planta> ruta : this.aristas)
 			ruta.setPesoEnCurso(0);
 	}
-	
-	
-	
+
+
+
 	public int buscarProximoFlujoDisponible(Vertice<Planta> vertice) {
 		//Búsqueda en anchura para encontrar algún camino con flujo disponible y utilizarlo
 		//Se retorna el flujo máximo posible a utilizar, previamente habiendo actualizado el flujo en cada arista.
 		//Si ya no hay más flujo disponible, retornará cero.
 
-		
+
 		//Recorrido en anchura pero guardando el recorrido previo para luego actualizar el flujo
 		Set<Vertice<Planta>> visitados = new HashSet<Vertice<Planta>>();
 		Queue<PorVisitar> aVisitarCola = new LinkedList<PorVisitar>();
-		
+
 		aVisitarCola.add(new PorVisitar(vertice, null, null, Integer.MAX_VALUE));
-		
+
 		while(!aVisitarCola.isEmpty()) {
 
 			PorVisitar aVisitar = aVisitarCola.poll();
 			Vertice<Planta> visitar = aVisitar.getVertice();
-			
+
 			if(this.getAdyacentes(visitar).size() == 0) {
 				//Si llegué al sumidero, maxflow tendrá el valor de flujo máximo posible por ese camino
 				int flujoActual = aVisitar.getFlujoEnCurso();
@@ -159,7 +161,7 @@ public class GrafoPlanta extends Grafo<Planta> {
 					aVisitar.getRuta().setPesoEnCurso(aVisitar.getRuta().getPesoEnCurso() + flujoActual);
 					aVisitar = aVisitar.getAnterior();
 				}
-				
+
 				return flujoActual;
 			}
 

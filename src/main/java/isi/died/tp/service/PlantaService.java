@@ -32,4 +32,6 @@ public interface PlantaService {
 
 	public void setStockService(StockService stockService);
 
+	public List<StockAcopio> generarStockFaltanteDisponible();
+
 }
