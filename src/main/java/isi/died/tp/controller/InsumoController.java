@@ -35,17 +35,27 @@ public class InsumoController {
 		return insumoService.listaInsumosLiquidos();
 	}
 	
-	public void eliminarInsumo (int id) {
-		Insumo insumo = buscarInsumo(id);
+	public void eliminarInsumoNoLiquido (int id) {
+		Insumo insumo = buscarInsumoNoLiquido(id);
+		insumoService.eliminarInsumo(insumo);
+	}
+	public void eliminarInsumoLiquido (int id) {
+		Insumo insumo = buscarInsumoLiquido(id);
 		insumoService.eliminarInsumo(insumo);
 	}
 	
-	public Insumo buscarInsumo (int id) {
-		return insumoService.buscarInsumo(id);
+	public Insumo buscarInsumoNoLiquido (int id) {
+		return insumoService.buscarInsumoNoLiquido(id);
+	}
+	public Insumo buscarInsumoLiquido (int id) {
+		return insumoService.buscarInsumoLiquido(id);
 	}
 
-	public void editarInsumo(int id, Insumo insumo) {
-		insumoService.editarInsumo(id, insumo);
+	public void editarInsumoNoLiquido(int id, Insumo insumo) {
+		insumoService.editarInsumoNoLiquido(id, insumo);
+	}
+	public void editarInsumoLiquido(int id, Insumo insumo) {
+		insumoService.editarInsumoLiquido(id, insumo);
 	}
 
 }

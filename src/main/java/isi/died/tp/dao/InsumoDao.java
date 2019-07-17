@@ -13,11 +13,12 @@ public interface InsumoDao {
 	
 	public List<InsumoLiquido> listaInsumosLiquidos();
 
-	public void editarInsumo(Integer id, Insumo insumo);
+	public void editarInsumoNoLiquido(Integer id, Insumo insumo);
+	public void editarInsumoLiquido(Integer id, Insumo insumo);
 
 	public void eliminarInsumo(Insumo insumo);
 
-	public Insumo buscarInsumo(Integer id);
+	public Insumo buscarInsumoNoLiquido(Integer id);
+	public Insumo buscarInsumoLiquido(Integer id);
 	
-
 }

@@ -32,19 +32,27 @@ public class InsumoServiceDefault implements InsumoService {
 	}
 
 	@Override
-	public void editarInsumo(Integer id, Insumo insumo) {
-		insumoDao.editarInsumo(id, insumo);
-
+	public void editarInsumoNoLiquido(Integer id, Insumo insumo) {
+		insumoDao.editarInsumoNoLiquido(id, insumo);
+	}
+	
+	@Override
+	public void editarInsumoLiquido(Integer id, Insumo insumo) {
+		insumoDao.editarInsumoLiquido(id, insumo);
 	}
 
 	@Override
 	public void eliminarInsumo(Insumo insumo) {
 		insumoDao.eliminarInsumo(insumo);
-
 	}
 
 	@Override
-	public Insumo buscarInsumo(Integer id) {
-		return insumoDao.buscarInsumo(id);
+	public Insumo buscarInsumoNoLiquido(Integer id) {
+		return insumoDao.buscarInsumoNoLiquido(id);
+	}
+	
+	@Override
+	public Insumo buscarInsumoLiquido(Integer id) {
+		return insumoDao.buscarInsumoLiquido(id);
 	}
 }

@@ -13,7 +13,8 @@ public class InsumoDaoDefault implements InsumoDao {
 
 	private static List<Insumo> LISTA_INSUMOS  = new ArrayList<Insumo>();
 	private static List<InsumoLiquido> LISTA_INSUMOS_LIQUIDOS  = new ArrayList<InsumoLiquido>();
-	private static Integer ULTIMO_ID;
+	private static Integer ULTIMO_ID_NO_LIQUIDOS;
+	private static Integer ULTIMO_ID_LIQUIDOS;
 	
 	private CsvSource dataSource;
 	
@@ -23,22 +24,25 @@ public class InsumoDaoDefault implements InsumoDao {
 			this.cargarListaInsumos();
 		if (LISTA_INSUMOS_LIQUIDOS.isEmpty())
 			this.cargarListaInsumosLiquidos();
-		ULTIMO_ID = this.maxID();
+		ULTIMO_ID_NO_LIQUIDOS = this.maxIDNoLiquidos();
+		ULTIMO_ID_LIQUIDOS = this.maxIDLiquidos();
 	}
 	
-	private int maxID() {
-
+	private int maxIDNoLiquidos() {
 		int maxID = 0;
-		
 		for(Insumo ins: LISTA_INSUMOS) {
 			if(ins.getId()>maxID)
 				maxID = ins.getId();
 		}
+		return maxID;
+	}
+	
+	private int maxIDLiquidos() {
+		int maxID = 0;
 		for(InsumoLiquido ins: LISTA_INSUMOS_LIQUIDOS) {
 			if(ins.getId()>maxID)
 				maxID = ins.getId();
 		}
-		
 		return maxID;
 	}
 	
@@ -61,10 +65,14 @@ public class InsumoDaoDefault implements InsumoDao {
 
 
 	@Override
-	public Insumo buscarInsumo(Integer id) {
+	public Insumo buscarInsumoNoLiquido(Integer id) {
 		for(Insumo actual : LISTA_INSUMOS)
 			if(actual.getId() == id)
 				return actual;
+		return null;
+	}
+	@Override
+	public InsumoLiquido buscarInsumoLiquido(Integer id) {
 		for(InsumoLiquido actual : LISTA_INSUMOS_LIQUIDOS)
 			if(actual.getId() == id)
 				return actual;
@@ -73,8 +81,8 @@ public class InsumoDaoDefault implements InsumoDao {
 	
 	@Override
 	public void agregarInsumo(Insumo insumo) {
-		insumo.setId(++ULTIMO_ID);
 		if (insumo instanceof InsumoLiquido) {
+			insumo.setId(++ULTIMO_ID_LIQUIDOS);
 			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
 			try {
 				dataSource.agregarFilaAlFinal("insumosLiquidos.csv", insumo);
@@ -82,6 +90,7 @@ public class InsumoDaoDefault implements InsumoDao {
 				e.printStackTrace();
 			}
 		}else {
+			insumo.setId(++ULTIMO_ID_NO_LIQUIDOS);
 			LISTA_INSUMOS.add(insumo);	
 			try {
 				dataSource.agregarFilaAlFinal("insumos.csv", insumo);
@@ -92,30 +101,38 @@ public class InsumoDaoDefault implements InsumoDao {
 	}
 	
 	@Override
-	public void editarInsumo(Integer id, Insumo insumo) {
+	public void editarInsumoNoLiquido(Integer id, Insumo insumo) {
 		Insumo old = null;
+		old = buscarInsumoNoLiquido(id);
 		
-		old = buscarInsumo(id);
-		
-		if (old instanceof InsumoLiquido) {
-			if(old != null) 
-				LISTA_INSUMOS_LIQUIDOS.remove(old);
-		} else {
-			if(old != null) 
-				LISTA_INSUMOS.remove(old);
-		}
+		if(old != null) 
+			LISTA_INSUMOS.remove(old);
 			
-		if (insumo instanceof InsumoLiquido)
+		if(insumo instanceof InsumoLiquido)
+			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
+		else
+			LISTA_INSUMOS.add(insumo);
+		
+		this.actualizarArchivoLiquido();
+		this.actualizarArchivo();
+	}
+	
+	@Override
+	public void editarInsumoLiquido(Integer id, Insumo insumo) {
+		Insumo old = null;
+		old = buscarInsumoLiquido(id);
+		
+		if(old != null) 
+			LISTA_INSUMOS_LIQUIDOS.remove(old);
+		
+		if(insumo instanceof InsumoLiquido)
 			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
 		else
 			LISTA_INSUMOS.add(insumo);
 		
 		this.actualizarArchivo();
 		this.actualizarArchivoLiquido();
-		
-		
 	}
-	
 	
 	@Override
 	public void eliminarInsumo(Insumo insumo) {

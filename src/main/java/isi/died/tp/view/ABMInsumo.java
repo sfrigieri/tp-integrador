@@ -237,7 +237,7 @@ public class ABMInsumo {
 					}
 				}
 			}
-					
+			
 		});
 		panel.add(aceptar, constraints);
 				
@@ -318,16 +318,24 @@ public class ABMInsumo {
 		constraints.gridx=0;
 		aceptar.addActionListener(a -> {
 			String stringInsumo = (String)seleccionarInsumo.getSelectedItem();
-			String arr[] = stringInsumo.split(":");
+			String arr[] = stringInsumo.split(": ");
 			Integer id = Integer.valueOf(arr[0]);
+			InsumoLiquido auxInsumoLiq = (InsumoLiquido)controller.buscarInsumoLiquido(id);
+			Insumo auxInsumoNoLiq = controller.buscarInsumoNoLiquido(id);
 			
-			
-			if (controller.buscarInsumo(id) instanceof InsumoLiquido) {
-				InsumoLiquido insumo = (InsumoLiquido)controller.buscarInsumo(id);
-				this.modificarInsumo(insumo);
+			if (auxInsumoLiq == null) { //existe insumo con ese id en no liquidos
+				this.modificarInsumo(auxInsumoNoLiq);
 			} else {
-				Insumo insumo = controller.buscarInsumo(id);
-				this.modificarInsumo(insumo);
+				if (auxInsumoNoLiq == null) { //existe insumo con ese id en liquidos
+					this.modificarInsumo(auxInsumoLiq);
+				} else { //existe insumo con ese id en ambas
+					if (arr[1].equals(auxInsumoLiq.getDescripcion())) { //la descripcion coincide con la del liquido
+						this.modificarInsumo(auxInsumoLiq);
+					} else {
+						this.modificarInsumo(auxInsumoNoLiq);
+					}
+					
+				}
 			}
 		});
 		panel.add(aceptar,constraints);
@@ -535,13 +543,16 @@ public class ABMInsumo {
 				valorRefrigeracion = esRefrigerado.isSelected();
 						
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar los cambios?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+					Insumo insumoNuevo;
 					if (esLiquido.isSelected()) {
-						InsumoLiquido insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,valorRefrigeracion,valorDensidad,valorPeso);
-						controller.editarInsumo(insumo.getId(), insumoNuevo);
+						insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,valorRefrigeracion,valorDensidad,valorPeso);
 					} else {
-						Insumo insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,valorPeso,valorRefrigeracion);
-						controller.editarInsumo(insumo.getId(), insumoNuevo);
+						insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,valorPeso,valorRefrigeracion);
 					}
+					if (insumo instanceof InsumoLiquido)
+						controller.editarInsumoLiquido(insumo.getId(), insumoNuevo);
+					else
+						controller.editarInsumoNoLiquido(insumo.getId(), insumoNuevo);
 				}					
 						
 			}catch(NumberFormatException nfex) {
@@ -724,7 +735,10 @@ public class ABMInsumo {
 			int numFila = tablaInsumos.getSelectedRow();
 			int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
 			if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-				controller.eliminarInsumo(id);
+				if (cambiarTipoInsumo.getText() == "No Líquidos")
+					controller.eliminarInsumoNoLiquido(id);
+				else
+					controller.eliminarInsumoLiquido(id);
 				this.eliminarInsumo();
 			}
 		});
