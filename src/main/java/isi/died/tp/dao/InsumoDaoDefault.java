@@ -108,10 +108,12 @@ public class InsumoDaoDefault implements InsumoDao {
 		if(old != null) 
 			LISTA_INSUMOS.remove(old);
 			
-		if(insumo instanceof InsumoLiquido)
+		if(insumo instanceof InsumoLiquido) {
+			insumo.setId(++ULTIMO_ID_LIQUIDOS);
 			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
-		else
+		} else {
 			LISTA_INSUMOS.add(insumo);
+		}
 		
 		this.actualizarArchivoLiquido();
 		this.actualizarArchivo();
@@ -125,10 +127,12 @@ public class InsumoDaoDefault implements InsumoDao {
 		if(old != null) 
 			LISTA_INSUMOS_LIQUIDOS.remove(old);
 		
-		if(insumo instanceof InsumoLiquido)
+		if(insumo instanceof InsumoLiquido) {
 			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
-		else
+		} else {
+			insumo.setId(++ULTIMO_ID_LIQUIDOS);
 			LISTA_INSUMOS.add(insumo);
+		}
 		
 		this.actualizarArchivo();
 		this.actualizarArchivoLiquido();
