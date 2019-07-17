@@ -111,6 +111,35 @@ public class PlantaDaoDefault implements PlantaDao {
 	}
 	
 	@Override
+	public double generarNuevoPageRank(Planta p) {
+		
+		double sum = 0;
+		int referencias;
+		List<Vertice<Planta>> predecesores;
+		
+		predecesores = GRAFO_PLANTA.getPredecesores(new Vertice<Planta>(p));
+		
+		for(Vertice<Planta> pPred : predecesores) {
+			referencias = GRAFO_PLANTA.gradoSalida(pPred);
+			
+			if(referencias != 0)
+				sum+= pPred.getValor().getPageRank()/referencias;
+		}
+		
+		//Factor amortigüación: 0.5
+		return (1-0.5) + 0.5*sum;
+	}
+
+
+
+
+	@Override
+	public void resetPageRanks() {
+		this.resetPageRanks();
+	}
+
+	
+	@Override
 	public List<Planta> listaPlantas() {
 		return GRAFO_PLANTA.listaVertices();
 	}

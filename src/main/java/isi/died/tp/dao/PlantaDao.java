@@ -29,6 +29,10 @@ public interface PlantaDao {
 
 	public void eliminarPlanta(Planta planta);
 
+	public double generarNuevoPageRank(Planta p);
+
+	public void resetPageRanks();
+
 
 
 }

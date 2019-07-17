@@ -28,6 +28,7 @@ public class PlantaAcopio extends Planta {
 
 	public PlantaAcopio() {
 		super();
+		this.pageRank = 1.0;
 	}
 	
 	

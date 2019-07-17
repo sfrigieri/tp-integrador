@@ -12,7 +12,7 @@ public interface PlantaService {
 
 	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> listaDisponibles);
 
-	public int flujoMaximoRed(Vertice<Planta> origen);
+	public int flujoMaximoRed(Planta origen);
 
 	public Planta agregarPlanta(Planta planta);
 
@@ -33,5 +33,9 @@ public interface PlantaService {
 	public void setStockService(StockService stockService);
 
 	public List<StockAcopio> generarStockFaltanteDisponible();
+
+	public void generarPageRanks();
+
+	public void resetPageRanks();
 
 }

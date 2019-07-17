@@ -112,6 +112,17 @@ public class Grafo<T> {
 	public void imprimirAristas(){
 		System.out.println(this.aristas.toString());
 	}
+	
+	public List<Vertice<T>> getPredecesores(Vertice<T> v){
+		List<Vertice<T>> predecesores = new ArrayList<Vertice<T>>();
+		
+		for(Arista<T> arista: this.aristas) {
+			if(arista.getFin().equals(this.getNodo(v.getValor())))
+				predecesores.add(arista.getInicio());
+		}
+		
+		return predecesores;
+	}
 
 	public Integer gradoEntrada(Vertice<T> vertice){
 		Integer res =0;

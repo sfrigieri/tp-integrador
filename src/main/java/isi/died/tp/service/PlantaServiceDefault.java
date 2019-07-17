@@ -14,11 +14,11 @@ public class PlantaServiceDefault implements PlantaService {
 	private InsumoService is;
 	private StockService ss;
 
-	
+
 	public PlantaServiceDefault() {
 		super();
 	}
-	
+
 	public PlantaServiceDefault(InsumoService is, StockService ss) {
 		super();
 		this.plantaDao = new PlantaDaoDefault();
@@ -29,47 +29,47 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public void setInsumoService(InsumoService is) {
 		this.is = is;
-		
+
 	}
 
 	@Override
 	public void setStockService(StockService ss) {
 		this.ss = ss;
-		
+
 	}
-	
+
 	@Override
 	public Planta agregarPlanta(Planta planta) {
 		plantaDao.agregarPlanta(planta);
 		return planta;
 	}
-	
+
 	@Override
 	public List<Planta> listaPlantas() {
 		return plantaDao.listaPlantas();
 	}
-	
+
 	@Override
 	public List<StockAcopio> generarStockFaltante() {
 		List<StockAcopio> lista = new ArrayList<StockAcopio>();
-		
+
 		for(PlantaProduccion p : this.listaPlantasProduccion())
 			lista.addAll(this.generarStockFaltante(p));
-		
+
 		return lista;
 	}
-	
+
 	@Override
 	public List<StockAcopio> generarStockFaltanteDisponible() {
 		List<StockAcopio> lista = new ArrayList<StockAcopio>();
 		List<StockAcopio> listaAux;
-		
+
 		for(Insumo i : is.listaInsumos()) {
 			listaAux = generarStockFaltante(i);
 			Integer cantDisponible = i.getStock().getCantidad();
-			
+
 			if(cantDisponible != null) {
-				
+
 				for(StockAcopio s : listaAux) {
 					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
 						lista.add(s);
@@ -77,13 +77,13 @@ public class PlantaServiceDefault implements PlantaService {
 					}
 				}
 			}
-		
+
 		}
-		
+
 		return lista;
 	}
-	
-	
+
+
 	@Override
 	public List<PlantaProduccion> listaPlantasProduccion() {
 		List<PlantaProduccion> lista = new ArrayList<PlantaProduccion>();
@@ -91,38 +91,38 @@ public class PlantaServiceDefault implements PlantaService {
 		for(Planta p : plantaDao.listaPlantas())
 			if(p instanceof PlantaProduccion)
 				lista.add((PlantaProduccion) p);
-		
+
 		return lista;
 	}
-	
-	
+
+
 	private List<StockAcopio> generarStockFaltante(PlantaProduccion p) {
 		List<StockAcopio> lista = new ArrayList<StockAcopio>();
 
 		for(Insumo i : is.listaInsumos()) {
 			int cant = p.cantidadNecesariaInsumo(i);
-			if(cant != 0)	
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
 				lista.add(new StockAcopio(-1,cant,i,p));
-		
+
 		}
 		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
 		return lista;
 	}
-	
+
 	private List<StockAcopio> generarStockFaltante(Insumo ins) {
 		List<StockAcopio> lista = new ArrayList<StockAcopio>();
 
 		for(PlantaProduccion p : this.listaPlantasProduccion()){
 			int cant = p.cantidadNecesariaInsumo(ins);
-			if(cant != 0)	
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
 				lista.add(new StockAcopio(-1,cant,ins,p));
-		
+
 		}
 		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
 		return lista;
 	}
-	
-	
+
+
 
 	@Override
 	public void editarPlanta(Integer id, Planta planta) {
@@ -140,42 +140,75 @@ public class PlantaServiceDefault implements PlantaService {
 	public Planta buscarPlanta(Integer id) {
 		return plantaDao.findById(id);
 	}
+
+	@Override
+	public void generarPageRanks() {
+
+	
+		List<Planta> plantas = plantaDao.listaPlantas();
+		double difPromedio;	
+		
+		do {
+			List<Double> nuevosPageRanks = new ArrayList<Double>();
+			difPromedio = 0;	
+			
+			for(Planta p: plantas) {
+				nuevosPageRanks.add(plantaDao.generarNuevoPageRank(p));
+			}
+
+			if(nuevosPageRanks.size() != 0)
+				for(int i = 0; i < plantas.size(); i++) {
+					plantas.get(i).setPageRank(nuevosPageRanks.get(i));
+					difPromedio += Math.abs(nuevosPageRanks.get(i) - plantas.get(i).getPageRank());
+					//System.out.println(plantas.get(i).getNombre()+" Page Rank: "+plantas.get(i).getPageRank());
+				}
+
+			difPromedio = difPromedio / nuevosPageRanks.size();
+
+		} while(difPromedio > 0.00001);
+		
+	}
 	
 	@Override
-    public int flujoMaximoRed(Vertice<Planta> origen){
-       
-    	int flujoMaximo = 0;
-    	int flujoActual = Integer.MAX_VALUE;
-    	
-    	while(flujoActual > 0) {
-    		flujoActual = this.plantaDao.buscarProximoFlujoDisponible(origen);
-    		flujoMaximo = flujoMaximo + flujoActual;
+	public void resetPageRanks() {
+		plantaDao.resetPageRanks();
+	}
 
-        }
-         
-    	plantaDao.resetFlujo();
-    	
-        return flujoMaximo;
-    }
+	@Override
+	public int flujoMaximoRed(Planta origen){
+
+		int flujoMaximo = 0;
+		int flujoActual = Integer.MAX_VALUE;
+
+		while(flujoActual > 0) {
+			flujoActual = this.plantaDao.buscarProximoFlujoDisponible(new Vertice<Planta>(origen));
+			flujoMaximo = flujoMaximo + flujoActual;
+
+		}
+
+		plantaDao.resetFlujo();
+
+		return flujoMaximo;
+	}
 
 	@Override
 	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> listaDisponibles) {
-		
+
 		List<Integer> costos = new ArrayList<Integer>();
 		List<Integer> pesos = new ArrayList<Integer>();
 		int capCamion = (int) camion.getCapacidad();
-		
+
 		int cantStocks = listaDisponibles.size();
 
 		//Recibo arraylist con StockAcopio,  respetando posiciones creo array pesos y array costos.
 		for(StockAcopio stock : listaDisponibles) {
 			costos.add((int) (stock.getCantidad()*stock.getInsumo().getCosto()));
 		}
-	
+
 		for(StockAcopio stock : listaDisponibles) {
 			pesos.add((int) (stock.getCantidad()*stock.getInsumo().getPeso()));
 		}
-		
+
 
 		int i, p; 
 		int[][] resultado = new int[cantStocks+1][capCamion+1]; 
@@ -186,7 +219,7 @@ public class PlantaServiceDefault implements PlantaService {
 
 		for (i = 0; i <= cantStocks; i++) 
 			resultado[i][0] = 0;   
-		
+
 		//Comenzando con el primer stock de la lista, 
 		for (i = 1; i <= cantStocks; i++) { 
 			for (p = 1; p <= capCamion; p++){ 
@@ -195,7 +228,7 @@ public class PlantaServiceDefault implements PlantaService {
 					//El peso del stock i es IGUAL al peso ocupado hasta el momento por stocks previos seleccionados
 					// Siempre se busca maximizar la relacion Costo/Peso: 
 					//Para el mismo peso ocupado, al INCLUIR al stock i, puedo aumentar el costo resultante?
-					
+
 					//Entonces debo realizar una comparación con el costo total acumulado previamente (SIN el stock i)
 					//Procedo a descontar del peso disponible el peso del stock i y consultar si al incluirlo a la selección,
 					//su costo + el mejor costo posible utilizando el peso restante (p actual - peso i)
@@ -210,7 +243,7 @@ public class PlantaServiceDefault implements PlantaService {
 		//Busco stocks que pertenecen a la selección final
 		int temp = capCamion;
 		List<StockAcopio> listaResultante = new ArrayList<StockAcopio>();
-		
+
 		for (i = cantStocks; i > 0 && temp > 0; i--)  {
 			//Si el costo i es diferente a i-1 para la misma capacidad, entonces el stock i pertenece a la selección.
 			if (resultado[i][temp] != resultado[i - 1][temp]) {
@@ -220,7 +253,7 @@ public class PlantaServiceDefault implements PlantaService {
 				listaResultante.add(listaDisponibles.get(i-1));
 			}
 		}
-		
+
 		return listaResultante;
 	}
 

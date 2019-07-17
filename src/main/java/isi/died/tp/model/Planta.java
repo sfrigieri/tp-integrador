@@ -8,16 +8,26 @@ public abstract class Planta implements CsvRecord {
 
 	protected int id;
 	protected String nombre;
-
+	protected Double pageRank;
 
 	protected Planta(int id, String nombre) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
+		this.pageRank = 1.0;
 	}
 
 	protected Planta() {
 		super();
+		this.pageRank = 1.0;
+	}
+	
+	public void setPageRank(Double pr) {
+		this.pageRank = pr;
+	}
+	
+	public Double getPageRank() {
+		return this.pageRank;
 	}
 	
 	public Boolean esOrigen() {
