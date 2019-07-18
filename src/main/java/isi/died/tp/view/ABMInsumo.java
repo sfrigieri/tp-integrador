@@ -300,8 +300,10 @@ public class ABMInsumo {
 		constraints.gridy=1;
 		panel.add(seleccionarInsumo, constraints);
 		
-		for (Insumo ins : listaInsumos)
+		for (Insumo ins : controller.listaInsumos())
 			seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": " + ins.getDescripcion());
+		for (Insumo ins : controller.listaInsumosLiquidos())
+			seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": " + ins.getDescripcion() + " (L)");
 		
 		//botones
 		constraints.gridy=2;
@@ -322,6 +324,8 @@ public class ABMInsumo {
 			Integer id = Integer.valueOf(arr[0]);
 			InsumoLiquido auxInsumoLiq = (InsumoLiquido)controller.buscarInsumoLiquido(id);
 			Insumo auxInsumoNoLiq = controller.buscarInsumoNoLiquido(id);
+			String segParte[] = arr[1].split(" ");
+			String ultimaPalabra = segParte[segParte.length-1];
 			
 			if (auxInsumoLiq == null) { //existe insumo con ese id en no liquidos
 				this.modificarInsumo(auxInsumoNoLiq);
@@ -329,7 +333,7 @@ public class ABMInsumo {
 				if (auxInsumoNoLiq == null) { //existe insumo con ese id en liquidos
 					this.modificarInsumo(auxInsumoLiq);
 				} else { //existe insumo con ese id en ambas
-					if (arr[1].equals(auxInsumoLiq.getDescripcion())) { //la descripcion coincide con la del liquido
+					if (ultimaPalabra.equals("(L)")){ //la descripcion coincide con la del liquido
 						this.modificarInsumo(auxInsumoLiq);
 					} else {
 						this.modificarInsumo(auxInsumoNoLiq);
