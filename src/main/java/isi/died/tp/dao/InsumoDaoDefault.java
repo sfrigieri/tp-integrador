@@ -101,40 +101,32 @@ public class InsumoDaoDefault implements InsumoDao {
 	}
 	
 	@Override
-	public void editarInsumoNoLiquido(Integer id, Insumo insumo) {
-		Insumo old = null;
-		old = buscarInsumoNoLiquido(id);
+	public void editarInsumoNoLiquido(Insumo insumo) {
+		Insumo old;
+		old = buscarInsumoNoLiquido(insumo.getId());
+
+		if(old != null)
+			LISTA_INSUMOS.remove(old); 
 		
-		if(old != null) 
-			LISTA_INSUMOS.remove(old);
-			
-		if(insumo instanceof InsumoLiquido) {
-			insumo.setId(++ULTIMO_ID_LIQUIDOS);
-			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
-		} else {
-			LISTA_INSUMOS.add(insumo);
-		}
+		//No es necesario asignar un id nuevo, 
+		//creo otro objeto con los nuevos datos pero mantengo el id
+		LISTA_INSUMOS.add(insumo);
 		
-		this.actualizarArchivoLiquido();
 		this.actualizarArchivo();
 	}
 	
 	@Override
-	public void editarInsumoLiquido(Integer id, Insumo insumo) {
-		Insumo old = null;
-		old = buscarInsumoLiquido(id);
+	public void editarInsumoLiquido(Insumo insumo) {
+		InsumoLiquido old;
+		old = buscarInsumoLiquido(insumo.getId());
+
+		if(old != null)
+			LISTA_INSUMOS_LIQUIDOS.remove(old); 
 		
-		if(old != null) 
-			LISTA_INSUMOS_LIQUIDOS.remove(old);
+		//No es necesario asignar un id nuevo, 
+		//creo otro objeto con los nuevos datos pero mantengo el id
+		LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido) insumo);
 		
-		if(insumo instanceof InsumoLiquido) {
-			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
-		} else {
-			insumo.setId(++ULTIMO_ID_LIQUIDOS);
-			LISTA_INSUMOS.add(insumo);
-		}
-		
-		this.actualizarArchivo();
 		this.actualizarArchivoLiquido();
 	}
 	

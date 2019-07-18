@@ -14,18 +14,14 @@ public class InsumoController {
 		this.insumoService =  insumoService;
 	}
 	
-	public Insumo agregarInsumo(int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado) {
+	public void agregarInsumo(int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado) {
 		Insumo insumo = new Insumo(id, descripcion, unidadDeMedida, costo, peso, esRefrigerado);
-
 		insumoService.agregarInsumo(insumo);
-		return insumo;
 	}
 	
-	public Insumo agregarInsumo(int id, String descripcion, double costo, boolean esRefrigerado, double dens, double litros) {
+	public void agregarInsumo(int id, String descripcion, double costo, boolean esRefrigerado, double dens, double litros) {
 		Insumo insumo = new InsumoLiquido(id, descripcion, costo, esRefrigerado, dens, litros);
-
 		insumoService.agregarInsumo(insumo);
-		return insumo;
 	}
 	
 	public List<Insumo> listaInsumos() {
@@ -51,11 +47,11 @@ public class InsumoController {
 		return insumoService.buscarInsumoLiquido(id);
 	}
 
-	public void editarInsumoNoLiquido(int id, Insumo insumo) {
-		insumoService.editarInsumoNoLiquido(id, insumo);
+	public void editarInsumoNoLiquido(Insumo insumo) {
+		insumoService.editarInsumoNoLiquido(insumo);
 	}
-	public void editarInsumoLiquido(int id, Insumo insumo) {
-		insumoService.editarInsumoLiquido(id, insumo);
+	public void editarInsumoLiquido(Insumo insumo) {
+		insumoService.editarInsumoLiquido(insumo);
 	}
 
 }

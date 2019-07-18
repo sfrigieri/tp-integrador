@@ -214,7 +214,7 @@ public class ABMInsumo {
 				valorRefrigeracion = esRefrigerado.isSelected();
 						
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar el nuevo insumo con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-					if (esLiquido.isSelected()) {
+					if (esLiquido.isSelected()) {							//Sería valorLitros en lugar de valorPeso
 						controller.agregarInsumo(0, valorDescripcion, valorCosto, valorRefrigeracion, valorDensidad, valorPeso);
 					} else {
 						controller.agregarInsumo(0, valorDescripcion, valorUnidad, valorCosto, valorPeso, valorRefrigeracion);
@@ -555,9 +555,9 @@ public class ABMInsumo {
 						insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,valorPeso,valorRefrigeracion);
 					}
 					if (insumo instanceof InsumoLiquido)
-						controller.editarInsumoLiquido(insumo.getId(), insumoNuevo);
+						controller.editarInsumoLiquido(insumoNuevo);
 					else
-						controller.editarInsumoNoLiquido(insumo.getId(), insumoNuevo);
+						controller.editarInsumoNoLiquido(insumoNuevo);
 				}					
 						
 			}catch(NumberFormatException nfex) {

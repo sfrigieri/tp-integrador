@@ -7,13 +7,13 @@ import isi.died.tp.model.InsumoLiquido;
 
 public interface InsumoService {
 
-	public Insumo agregarInsumo(Insumo insumo);
+	public void agregarInsumo(Insumo insumo);
 
 	public List<Insumo> listaInsumos();
 	public List<InsumoLiquido> listaInsumosLiquidos();
 
-	public void editarInsumoNoLiquido(Integer id, Insumo insumo);
-	public void editarInsumoLiquido(Integer id, Insumo insumo);
+	public void editarInsumoNoLiquido(Insumo insumo);
+	public void editarInsumoLiquido(Insumo insumo);
 
 	public void eliminarInsumo(Insumo insumo);
 
