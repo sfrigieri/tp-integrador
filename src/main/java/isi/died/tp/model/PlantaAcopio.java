@@ -31,7 +31,11 @@ public class PlantaAcopio extends Planta {
 		this.pageRank = 1.0;
 	}
 	
-	
+	@Override
+	public void addInsumos(List<Insumo> lista) {
+		this.listaDeInsumos.addAll(lista);
+
+	}
 	
 	@Override
 	public Boolean esOrigen() {

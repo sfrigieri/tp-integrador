@@ -20,7 +20,7 @@ public class GestionEntidadesController {
 	public GestionEntidadesController(JFrame ventana) {
 			
 		plantaService = new PlantaServiceDefault();
-		insumoService = new InsumoServiceDefault();
+		insumoService = new InsumoServiceDefault(plantaService);
 		rutaService = new RutaServiceDefault(plantaService);
 		stockService = new StockServiceDefault(plantaService, insumoService);
 

@@ -5,9 +5,12 @@ import java.util.List;
 import isi.died.tp.estructuras.Arista;
 import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.estructuras.Vertice;
+import isi.died.tp.model.Insumo;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
+import isi.died.tp.model.StockProduccion;
+import isi.died.tp.service.RutaService;
 
 public interface PlantaDao {
 
@@ -38,5 +41,12 @@ public interface PlantaDao {
 	public void setRutas(List<Arista<Planta>> lista);
 
 	public List<Arista<Planta>> listaRutas();
+
+	public void addInsumos(List<Insumo> lista);
+
+	public PlantaAcopio buscarAcopioInicial();
+
+	public void setRutaService(RutaService rs);
+
 
 }

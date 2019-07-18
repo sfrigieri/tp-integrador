@@ -214,7 +214,7 @@ public class ABMInsumo {
 				valorRefrigeracion = esRefrigerado.isSelected();
 						
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar el nuevo insumo con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-					if (esLiquido.isSelected()) {							//Sería valorLitros en lugar de valorPeso
+					if (esLiquido.isSelected()) { //Sería valorLitros en lugar de valorPeso, el peso se calcula internamente
 						controller.agregarInsumo(0, valorDescripcion, valorCosto, valorRefrigeracion, valorDensidad, valorPeso);
 					} else {
 						controller.agregarInsumo(0, valorDescripcion, valorUnidad, valorCosto, valorPeso, valorRefrigeracion);
@@ -621,7 +621,7 @@ public class ABMInsumo {
 		JButton eliminar = new JButton("Eliminar"), cancelar = new JButton("Cancelar"), cambiarTipoInsumo = new JButton("No Líquidos");
 		JTable tablaInsumos = new JTable(0,6);
 		List<Insumo> listaInsumosNoLiquidos = new ArrayList<Insumo>();
-		List<InsumoLiquido> listaInsumosLiquidos = new ArrayList<InsumoLiquido>();
+		List<Insumo> listaInsumosLiquidos = new ArrayList<Insumo>();
 		listaInsumosNoLiquidos.addAll(controller.listaInsumos());
 		listaInsumosLiquidos.addAll(controller.listaInsumosLiquidos());
 		

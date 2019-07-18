@@ -22,7 +22,8 @@ public class InsumoLiquido extends Insumo{
 	
 	@Override
 	public List<String> asCsvRow() {
-		//int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado
+		//No es necesario guardar id Stock, porque cada Stock guarda el idinsumo, y una vez cargados
+		//los stocks en memoria se llama a InsumoService para asignar a cada insumo su stock correspondiente.
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.id+"");
 		lista.add(this.descripcion.toString());

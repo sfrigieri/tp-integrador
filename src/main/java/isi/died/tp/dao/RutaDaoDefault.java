@@ -59,7 +59,9 @@ public class RutaDaoDefault implements RutaDao {
 			aux.setFin(new Vertice<Planta>(p2));
 			LISTA_RUTAS.add(aux);
 		}
-		
+		//Cuando paso la lista, la otra lista tendrá una referencia a cada uno de los objetos.
+		//Aunque elimine, modifique, etc objetos en esta lista, la otra seguirá apuntando a esos objetos
+		//por lo que es necesario volver a actualizar la lista Completa.
 		ps.setRutas(LISTA_RUTAS);
 	}
 
@@ -125,6 +127,8 @@ public class RutaDaoDefault implements RutaDao {
 		}
 	}
 
+	//Si se elimina una planta, en el Grafo se eliminarán las rutas incidentes,
+	//por lo que es necesario actualizar desde PlantaService la LISTA_RUTAS en RutaService
 	@Override
 	public void setRutas(List<Arista<Planta>> listaRutas) {
 		LISTA_RUTAS.clear();

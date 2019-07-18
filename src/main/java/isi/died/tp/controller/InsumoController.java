@@ -27,7 +27,7 @@ public class InsumoController {
 	public List<Insumo> listaInsumos() {
 		return insumoService.listaInsumos();
 	}
-	public List<InsumoLiquido> listaInsumosLiquidos() {
+	public List<Insumo> listaInsumosLiquidos() {
 		return insumoService.listaInsumosLiquidos();
 	}
 	

@@ -33,11 +33,12 @@ public class PlantaServiceDefault implements PlantaService {
 	}
 
 	@Override
-	public void setRutaService(RutaService ss) {
+	public void setRutaService(RutaService rs) {
 		this.rs = rs;
-
+		plantaDao.setRutaService(rs);
 	}
 	
+	//Al cargar las rutas, en RutaService se pasa la lista correspondiente al Grafo
 	@Override
 	public void setRutas(List<Ruta> lista) {
 		List<Arista<Planta>> listaAux = new ArrayList<Arista<Planta>>();
@@ -45,6 +46,23 @@ public class PlantaServiceDefault implements PlantaService {
 			listaAux.add(ruta);
 		
 		plantaDao.setRutas(listaAux);
+		
+	}
+	
+	@Override
+	public void setStocksProduccion(List<StockProduccion> lista) {
+		for(StockProduccion s: lista) {
+			for(Planta p : this.listaPlantasProduccion()) {
+				if(p.equals(s.getPlanta()))
+					p.addStock(s);
+			}
+		}
+		
+	}
+	
+	@Override
+	public void addInsumos(List<Insumo> lista) {
+		plantaDao.addInsumos(lista);
 		
 	}
 	
@@ -273,6 +291,10 @@ public class PlantaServiceDefault implements PlantaService {
 
 		return listaResultante;
 	}
+
+
+
+
 
 
 

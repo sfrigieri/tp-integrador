@@ -73,6 +73,8 @@ public class StockDaoDefault implements StockDao {
 				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));
 			LISTA_STOCKS_ACOPIO.add(aux);
 		}
+		
+		is.setStocksAcopio(LISTA_STOCKS_ACOPIO);
 	}
 	public void cargarListaStocksProduccion() {
 		List<List<String>> stocksProduccion = dataSource.readFile("stocksProduccion.csv");
@@ -89,6 +91,8 @@ public class StockDaoDefault implements StockDao {
 				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));
 			LISTA_STOCKS_PRODUCCION.add(aux);
 		}
+		
+		ps.setStocksProduccion(LISTA_STOCKS_PRODUCCION);
 	}
 
 

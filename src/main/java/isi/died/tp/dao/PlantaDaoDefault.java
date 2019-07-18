@@ -8,13 +8,15 @@ import java.util.List;
 import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.estructuras.*;
 import isi.died.tp.model.*;
+import isi.died.tp.service.RutaService;
 
 public class PlantaDaoDefault implements PlantaDao {
 
 	private static Integer ULTIMO_ID_PROD;
 	private static Integer ULTIMO_ID_ACOP;
 	private static GrafoPlanta GRAFO_PLANTA  = new GrafoPlanta();
-
+	private RutaService rs;
+	
 	private CsvSource dataSource;
 
 	public PlantaDaoDefault() {
@@ -95,7 +97,12 @@ public class PlantaDaoDefault implements PlantaDao {
 		return maxID;
 	}
 	
-	
+
+	@Override
+	public void setRutaService(RutaService rs) {
+		this.rs = rs;
+		
+	}
 	
 	@Override
 	public void agregarPlanta(Planta planta) {
@@ -142,12 +149,58 @@ public class PlantaDaoDefault implements PlantaDao {
 	
 	@Override
 	public void eliminarPlanta(Planta planta) {
+		//Grafo Planta elimina el nodo y sus rutas incidentes
 		GRAFO_PLANTA.eliminarNodo(planta);
+		//Entonces es necesario actualizar desde PlantaService la LISTA_RUTAS en RutaService
+		rs.setRutas(GRAFO_PLANTA.getRutas());
+		
 		if(planta instanceof PlantaAcopio)
 			this.actualizarArchivoPlantasAcopio();
 		else
 			this.actualizarArchivoPlantasProduccion();
 		
+	}
+	
+	@Override
+	public List<Planta> listaPlantas() {
+		return GRAFO_PLANTA.listaVertices();
+	}
+
+
+	@Override
+	public List<PlantaAcopio> listaPlantasAcopio() {
+		List<PlantaAcopio> plantas = new ArrayList<PlantaAcopio>();
+		for(Planta actual : GRAFO_PLANTA.listaVertices()) {
+			if(actual instanceof PlantaAcopio) plantas.add((PlantaAcopio) actual); 
+		}
+		return plantas;
+	}
+	
+	
+	@Override
+	public List<PlantaProduccion> listaPlantasProduccion() {
+		List<PlantaProduccion> plantas = new ArrayList<PlantaProduccion>();
+		for(Planta actual : GRAFO_PLANTA.listaVertices()) {
+			if(actual instanceof PlantaProduccion) plantas.add((PlantaProduccion) actual); 
+		}
+		return plantas;
+	}
+
+	@Override
+	public void addInsumos(List<Insumo> lista) {
+		PlantaAcopio plantaOrigen = this.buscarAcopioInicial();
+		if(plantaOrigen != null)
+			plantaOrigen.addInsumos(lista);
+		
+	}
+
+	@Override
+	public PlantaAcopio buscarAcopioInicial() {
+		for(PlantaAcopio p : this.listaPlantasAcopio()) {
+			if(p.esOrigen())
+				return p;
+		}
+		return null;
 	}
 	
 	@Override
@@ -190,13 +243,6 @@ public class PlantaDaoDefault implements PlantaDao {
 	}
 
 	
-	@Override
-	public List<Planta> listaPlantas() {
-		return GRAFO_PLANTA.listaVertices();
-	}
-
-
-
 	
 	private void actualizarArchivoPlantasAcopio() {
 		File archivoPlantasAcopio = new File("plantasAcopio.csv");
@@ -211,15 +257,7 @@ public class PlantaDaoDefault implements PlantaDao {
 		}
 	}
 	
-	@Override
-	public List<PlantaAcopio> listaPlantasAcopio() {
-		List<PlantaAcopio> plantas = new ArrayList<PlantaAcopio>();
-		for(Planta actual : GRAFO_PLANTA.listaVertices()) {
-			if(actual instanceof PlantaAcopio) plantas.add((PlantaAcopio) actual); 
-		}
-		return plantas;
-	}
-	
+
 	
 	private void actualizarArchivoPlantasProduccion() {
 		File archivoPlantasProduccion = new File("plantasProduccion.csv");
@@ -233,17 +271,7 @@ public class PlantaDaoDefault implements PlantaDao {
 		
 		}
 	}
-	
-	@Override
-	public List<PlantaProduccion> listaPlantasProduccion() {
-		List<PlantaProduccion> plantas = new ArrayList<PlantaProduccion>();
-		for(Planta actual : GRAFO_PLANTA.listaVertices()) {
-			if(actual instanceof PlantaProduccion) plantas.add((PlantaProduccion) actual); 
-		}
-		return plantas;
-	}
 
-	
 
 	
 	

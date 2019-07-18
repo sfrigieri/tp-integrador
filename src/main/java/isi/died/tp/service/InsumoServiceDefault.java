@@ -4,15 +4,17 @@ import java.util.List;
 
 import isi.died.tp.dao.*;
 import isi.died.tp.model.Insumo;
-import isi.died.tp.model.InsumoLiquido;
+import isi.died.tp.model.StockAcopio;
 
 public class InsumoServiceDefault implements InsumoService {
 
 	private InsumoDao insumoDao;
-
-	public InsumoServiceDefault() {
+	private PlantaService ps;
+	
+	public InsumoServiceDefault(PlantaService plantaService) {
 		super();
-		this.insumoDao = new InsumoDaoDefault();
+		this.insumoDao = new InsumoDaoDefault(plantaService);
+		this.ps = plantaService;
 	}
 	
 	@Override
@@ -26,7 +28,7 @@ public class InsumoServiceDefault implements InsumoService {
 	}
 	
 	@Override
-	public List<InsumoLiquido> listaInsumosLiquidos(){
+	public List<Insumo> listaInsumosLiquidos(){
 		return insumoDao.listaInsumosLiquidos();
 	}
 
@@ -53,5 +55,11 @@ public class InsumoServiceDefault implements InsumoService {
 	@Override
 	public Insumo buscarInsumoLiquido(Integer id) {
 		return insumoDao.buscarInsumoLiquido(id);
+	}
+
+	@Override
+	public void setStocksAcopio(List<StockAcopio> lista) {
+		insumoDao.setStocksAcopio(lista);
+		
 	}
 }

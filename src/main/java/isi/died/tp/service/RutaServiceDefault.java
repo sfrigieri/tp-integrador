@@ -15,6 +15,7 @@ public class RutaServiceDefault implements RutaService {
 	public RutaServiceDefault(PlantaService ps) {
 		super();
 		this.rutaDao = new RutaDaoDefault(ps);
+		ps.setRutaService(this);
 	}
 	
 	@Override
@@ -45,6 +46,8 @@ public class RutaServiceDefault implements RutaService {
 		return rutaDao.buscarRuta(id);
 	}
 
+	//Si se elimina una planta, en el Grafo se eliminarán las rutas incidentes,
+	//por lo que es necesario actualizar desde PlantaService la LISTA_RUTAS en RutaService
 	@Override
 	public void setRutas(List<Arista<Planta>> listaRutas) {
 		rutaDao.setRutas(listaRutas);

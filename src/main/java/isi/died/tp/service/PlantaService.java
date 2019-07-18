@@ -41,4 +41,8 @@ public interface PlantaService {
 
 	public void setRutaService(RutaService ss);
 
+	public void addInsumos(List<Insumo> lista);
+
+	public void setStocksProduccion(List<StockProduccion> lista);
+
 }

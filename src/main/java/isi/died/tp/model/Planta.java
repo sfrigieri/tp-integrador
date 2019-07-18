@@ -21,21 +21,21 @@ public abstract class Planta implements CsvRecord {
 		super();
 		this.pageRank = 1.0;
 	}
-	
+
 	public void setPageRank(Double pr) {
 		this.pageRank = pr;
 	}
-	
+
 	public Double getPageRank() {
 		return this.pageRank;
 	}
-	
+
 	public Boolean esOrigen() {
 		return false;
 	}
-	
+
 	public void setEsOrigen(Boolean valor) {
-		
+
 	}
 
 	public String getNombre() {
@@ -112,6 +112,11 @@ public abstract class Planta implements CsvRecord {
 
 	}
 
+	public void addInsumos(List<Insumo> lista) {
+
+
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -125,6 +130,8 @@ public abstract class Planta implements CsvRecord {
 	public void loadFromStringRow(List<String> datos) {
 
 	}
+
+
 
 
 
