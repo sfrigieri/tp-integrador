@@ -21,6 +21,7 @@ public class GestionEntidadesController {
 			
 		plantaService = new PlantaServiceDefault();
 		insumoService = new InsumoServiceDefault(plantaService);
+		//Luego, internamente, se asigna rutaService llamando a PlantaService:setRutaService(rs)
 		rutaService = new RutaServiceDefault(plantaService);
 		stockService = new StockServiceDefault(plantaService, insumoService);
 
@@ -28,7 +29,6 @@ public class GestionEntidadesController {
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		plantaService.setRutaService(rutaService);
-		//insumoService.setPlantaService(plantaService);
 		
 		interfazRuta = new ABMRuta(ventana,plantaService);
 	}
