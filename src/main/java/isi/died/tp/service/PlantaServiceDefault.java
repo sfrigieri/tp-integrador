@@ -13,7 +13,7 @@ public class PlantaServiceDefault implements PlantaService {
 	private PlantaDao plantaDao;
 	private InsumoService is;
 	private StockService ss;
-
+	private RutaService rs;
 
 	public PlantaServiceDefault() {
 		super();
@@ -32,6 +32,12 @@ public class PlantaServiceDefault implements PlantaService {
 
 	}
 
+	@Override
+	public void setRutaService(RutaService ss) {
+		this.rs = rs;
+
+	}
+	
 	@Override
 	public void setRutas(List<Ruta> lista) {
 		List<Arista<Planta>> listaAux = new ArrayList<Arista<Planta>>();
@@ -137,6 +143,7 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public void eliminarPlanta(Planta planta) {
 		plantaDao.eliminarPlanta(planta);
+		rs.setRutas(plantaDao.listaRutas());
 
 	}
 

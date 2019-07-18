@@ -131,6 +131,11 @@ public class GrafoPlanta extends Grafo<Planta> {
 		this.aristas = lista;
 		
 	}
+	
+	public List<Arista<Planta>> getRutas() {
+		return this.aristas;
+
+	}
 
 	public void resetFlujo() {
 		for (Arista<Planta> ruta : this.aristas)
@@ -230,6 +235,9 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 
 	}
+
+
+
 
 
 }

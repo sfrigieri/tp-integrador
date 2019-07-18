@@ -37,4 +37,6 @@ public interface PlantaDao {
 
 	public void setRutas(List<Arista<Planta>> lista);
 
+	public List<Arista<Planta>> listaRutas();
+
 }

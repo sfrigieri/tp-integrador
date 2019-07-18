@@ -48,6 +48,13 @@ public class PlantaDaoDefault implements PlantaDao {
 	}
 	
 	@Override
+	public List<Arista<Planta>> listaRutas() {
+		return GRAFO_PLANTA.getRutas();
+	}
+
+	
+	
+	@Override
 	public PlantaProduccion buscarPlantaProduccion(Integer id) {
 		for(Planta actual : GRAFO_PLANTA.listaVertices())
 			if(actual instanceof PlantaProduccion && actual.getId() == id)
@@ -236,6 +243,7 @@ public class PlantaDaoDefault implements PlantaDao {
 		return plantas;
 	}
 
+	
 
 	
 	

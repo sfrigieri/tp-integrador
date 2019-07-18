@@ -4,7 +4,9 @@ import java.util.List;
 
 import isi.died.tp.dao.RutaDao;
 import isi.died.tp.dao.RutaDaoDefault;
+import isi.died.tp.estructuras.Arista;
 import isi.died.tp.estructuras.Ruta;
+import isi.died.tp.model.Planta;
 
 public class RutaServiceDefault implements RutaService {
 
@@ -27,8 +29,8 @@ public class RutaServiceDefault implements RutaService {
 	}
 
 	@Override
-	public void editarRuta(Integer id, Ruta ruta) {
-		rutaDao.editarRuta(id, ruta);
+	public void editarRuta(Ruta ruta) {
+		rutaDao.editarRuta(ruta);
 
 	}
 
@@ -41,5 +43,11 @@ public class RutaServiceDefault implements RutaService {
 	@Override
 	public Ruta buscarRuta(Integer id) {
 		return rutaDao.buscarRuta(id);
+	}
+
+	@Override
+	public void setRutas(List<Arista<Planta>> listaRutas) {
+		rutaDao.setRutas(listaRutas);
+		
 	}
 }

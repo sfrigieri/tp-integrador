@@ -39,4 +39,6 @@ public interface PlantaService {
 
 	public void setRutas(List<Ruta> lista);
 
+	public void setRutaService(RutaService ss);
+
 }

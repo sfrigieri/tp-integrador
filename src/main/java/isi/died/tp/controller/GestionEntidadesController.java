@@ -2,19 +2,8 @@ package isi.died.tp.controller;
 
 import javax.swing.JFrame;
 
-import isi.died.tp.dao.InsumoDao;
-import isi.died.tp.service.InsumoService;
-import isi.died.tp.service.InsumoServiceDefault;
-import isi.died.tp.service.PlantaService;
-import isi.died.tp.service.PlantaServiceDefault;
-import isi.died.tp.service.StockService;
-import isi.died.tp.service.StockServiceDefault;
-import isi.died.tp.view.ABMCamion;
-import isi.died.tp.view.ABMInsumo;
-import isi.died.tp.view.ABMPlantaAcopio;
-import isi.died.tp.view.ABMPlantaProduccion;
-import isi.died.tp.view.ABMRuta;
-import isi.died.tp.view.ABMStock;
+import isi.died.tp.service.*;
+import isi.died.tp.view.*;
 
 public class GestionEntidadesController {
 	private ABMInsumo interfazInsumo;
@@ -26,16 +15,19 @@ public class GestionEntidadesController {
 	private PlantaService plantaService;
 	private StockService stockService;
 	private InsumoService insumoService;
+	private RutaService rutaService;
 	
 	public GestionEntidadesController(JFrame ventana) {
 			
 		plantaService = new PlantaServiceDefault();
 		insumoService = new InsumoServiceDefault();
+		rutaService = new RutaServiceDefault(plantaService);
 		stockService = new StockServiceDefault(plantaService, insumoService);
 
 		interfazInsumo = new ABMInsumo(ventana, insumoService);
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
+		plantaService.setRutaService(rutaService);
 		//insumoService.setPlantaService(plantaService);
 		
 		interfazRuta = new ABMRuta(ventana,plantaService);

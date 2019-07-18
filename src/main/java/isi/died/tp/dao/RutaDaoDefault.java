@@ -55,8 +55,8 @@ public class RutaDaoDefault implements RutaDao {
 				p2 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(4)));
 			else
 				p2 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(4)));
-			aux.setInicio(new Vertice<>(p1));
-			aux.setFin(new Vertice<>(p2));
+			aux.setInicio(new Vertice<Planta>(p1));
+			aux.setFin(new Vertice<Planta>(p2));
 			LISTA_RUTAS.add(aux);
 		}
 		
@@ -73,26 +73,28 @@ public class RutaDaoDefault implements RutaDao {
 	
 	@Override
 	public void agregarRuta(Ruta ruta) {
-		ruta.setId(ULTIMO_ID++);
+		ruta.setId(++ULTIMO_ID);
 		LISTA_RUTAS.add(ruta);	
 		try {
 			dataSource.agregarFilaAlFinal("rutas.csv", ruta);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		ps.setRutas(LISTA_RUTAS);
 	}
 	
 	@Override
-	public void editarRuta(Integer id, Ruta ruta) {
+	public void editarRuta(Ruta ruta) {
 		Ruta old = null;
 		
-		old = buscarRuta(id);
+		old = buscarRuta(ruta.getId());
 		
 		if(old != null)
 			LISTA_RUTAS.remove(old);
 		
 		LISTA_RUTAS.add(ruta);
-		
+		ps.setRutas(LISTA_RUTAS);
 		this.actualizarArchivo();
 	}
 	
@@ -100,7 +102,8 @@ public class RutaDaoDefault implements RutaDao {
 	@Override
 	public void eliminarRuta(Ruta ruta) {
 		LISTA_RUTAS.remove(ruta);
-		actualizarArchivo();
+		ps.setRutas(LISTA_RUTAS);
+		this.actualizarArchivo();
 		
 	}
 	
@@ -120,5 +123,16 @@ public class RutaDaoDefault implements RutaDao {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public void setRutas(List<Arista<Planta>> listaRutas) {
+		LISTA_RUTAS.clear();
+		
+		for(Arista<Planta> ruta : listaRutas)
+			LISTA_RUTAS.add((Ruta) ruta);
+
+		this.actualizarArchivo();
+		
 	}
 }
