@@ -322,25 +322,14 @@ public class ABMInsumo {
 		aceptar.addActionListener(a -> {
 			String stringInsumo = (String)seleccionarInsumo.getSelectedItem();
 			String arr[] = stringInsumo.split(": ");
-			Integer id = Integer.valueOf(arr[0]);
-			InsumoLiquido auxInsumoLiq = (InsumoLiquido)controller.buscarInsumoLiquido(id);
-			Insumo auxInsumoNoLiq = controller.buscarInsumoNoLiquido(id);
+			Integer idSeleccionado = Integer.valueOf(arr[0]);
 			String segParte[] = arr[1].split(" ");
 			String ultimaPalabra = segParte[segParte.length-1];
 			
-			if (auxInsumoLiq == null) { //existe insumo con ese id en no liquidos
-				this.modificarInsumo(auxInsumoNoLiq);
+			if (ultimaPalabra.equals("(L)")) {
+				this.modificarInsumo((InsumoLiquido)controller.buscarInsumoLiquido(idSeleccionado));
 			} else {
-				if (auxInsumoNoLiq == null) { //existe insumo con ese id en liquidos
-					this.modificarInsumo(auxInsumoLiq);
-				} else { //existe insumo con ese id en ambas
-					if (ultimaPalabra.equals("(L)")){ //la descripcion coincide con la del liquido
-						this.modificarInsumo(auxInsumoLiq);
-					} else {
-						this.modificarInsumo(auxInsumoNoLiq);
-					}
-					
-				}
+				this.modificarInsumo(controller.buscarInsumoNoLiquido(idSeleccionado));
 			}
 		});
 		panel.add(aceptar,constraints);
@@ -467,12 +456,12 @@ public class ABMInsumo {
 		ItemListener esLiquidoListener = new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				int estado = itemEvent.getStateChange();
-				if (estado == ItemEvent.SELECTED) { //si es liquido-- 	 descrip, unidad(LITRO) , double costo, boolean esRef, double dens, double litros
+				if (estado == ItemEvent.SELECTED) { //si es liquido-
 					unidad.setSelectedItem(Unidad.LITRO);
 					unidad.setEnabled(false);
 					labelPesoCantidad.setText("Cantidad: ");
 					densidad.setEnabled(true);
-				} else {							//si no es liquido-- descrip, unidadDeMedida, double costo, boolean esRefrigerado,double peso
+				} else {							//si no es liquido-
 					unidad.setEnabled(true);
 					unidad.setSelectedItem(insumo.getUnidad());
 					labelPesoCantidad.setText("Peso: ");
@@ -554,10 +543,22 @@ public class ABMInsumo {
 					} else {
 						insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,valorPeso,valorRefrigeracion);
 					}
-					if (insumo instanceof InsumoLiquido)
-						controller.editarInsumoLiquido(insumoNuevo);
-					else
-						controller.editarInsumoNoLiquido(insumoNuevo);
+					
+					if (insumo instanceof InsumoLiquido) {
+						if (insumoNuevo instanceof InsumoLiquido) {
+							controller.editarInsumoLiquido(insumoNuevo);
+						} else {
+							controller.eliminarInsumoLiquido(insumo.getId());
+							controller.agregarInsumo(0, valorDescripcion, valorUnidad, valorCosto, valorPeso, valorRefrigeracion);
+						}
+					} else {
+						if (insumoNuevo instanceof InsumoLiquido) {
+							controller.eliminarInsumoLiquido(insumo.getId());
+							controller.agregarInsumo(0, valorDescripcion, valorCosto, valorRefrigeracion, valorDensidad, valorPeso);
+						} else {
+							controller.editarInsumoNoLiquido(insumoNuevo);
+						}
+					}
 				}					
 						
 			}catch(NumberFormatException nfex) {
