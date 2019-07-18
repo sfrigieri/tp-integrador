@@ -62,7 +62,7 @@ public class StockProduccion extends Stock {
 		try {
 			this.id = Integer.valueOf(datos.get(0));
 			this.setCantidad( Integer.valueOf(datos.get(1)));
-			this.setPuntoPedido(Integer.valueOf(datos.get(4)));
+			this.setPuntoPedido(Integer.valueOf(datos.get(6)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -80,7 +80,13 @@ public class StockProduccion extends Stock {
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.getId()+"");
 		lista.add(Integer.toString(this.getCantidad()));
+		if(this.getInsumo() instanceof InsumoLiquido)
+			lista.add("L");
+		else lista.add("G");
 		lista.add(Integer.toString(this.getInsumo().getId()));
+		if(this.getPlanta() instanceof PlantaProduccion)
+			lista.add("P");
+		else lista.add("A");
 		lista.add(Integer.toString(this.getPlanta().getId()));
 		lista.add(Integer.toString(this.getPuntoPedido()));
 		return lista;

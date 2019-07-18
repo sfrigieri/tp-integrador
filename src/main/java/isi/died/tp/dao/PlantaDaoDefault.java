@@ -11,7 +11,8 @@ import isi.died.tp.model.*;
 
 public class PlantaDaoDefault implements PlantaDao {
 
-	private static Integer ULTIMO_ID;
+	private static Integer ULTIMO_ID_PROD;
+	private static Integer ULTIMO_ID_ACOP;
 	private static GrafoPlanta GRAFO_PLANTA  = new GrafoPlanta();
 
 	private CsvSource dataSource;
@@ -20,7 +21,8 @@ public class PlantaDaoDefault implements PlantaDao {
 		dataSource = new CsvSource();
 		if(GRAFO_PLANTA.esVacio())
 			cargarGrafo();
-		ULTIMO_ID = maxID();
+		ULTIMO_ID_PROD = this.maxIdProd();
+		ULTIMO_ID_ACOP = this.maxIdAcop();
 	}
 	
 	private void cargarGrafo() {
@@ -36,58 +38,99 @@ public class PlantaDaoDefault implements PlantaDao {
 			actual.loadFromStringRow(fila);
 			GRAFO_PLANTA.addNodo(actual);
 		}
-		List<List<String>> rutas = dataSource.readFile("aristas.csv");
-		for(List<String> filaRuta: rutas) {
-			Planta p1 = this.findById(Integer.valueOf(filaRuta.get(0)));
-			Planta p2 = this.findById(Integer.valueOf(filaRuta.get(2)));
-			GRAFO_PLANTA.conectar(p1, p2);
-		}
+
  	}
 
-	private Integer maxID() {
-		List<Planta> vertices = GRAFO_PLANTA.listaVertices();
-		int max = 0;
+	@Override
+	public void setRutas(List<Arista<Planta>> lista) {
+		GRAFO_PLANTA.setRutas(lista);
 		
-		for(Planta actual: vertices) {
-			if(actual.getId()>max)
-				max = actual.getId();
+	}
+	
+	@Override
+	public PlantaProduccion buscarPlantaProduccion(Integer id) {
+		for(Planta actual : GRAFO_PLANTA.listaVertices())
+			if(actual instanceof PlantaProduccion && actual.getId() == id)
+				return (PlantaProduccion) actual;
+		return null;
+	}
+	
+	
+	@Override
+	public PlantaAcopio buscarPlantaAcopio(Integer id) {
+		for(Planta actual : GRAFO_PLANTA.listaVertices())
+			if(actual instanceof PlantaAcopio && actual.getId() == id)
+				return (PlantaAcopio) actual;
+		return null;
+	}
+	
+	private int maxIdProd() {
+
+		int maxID = 0;
+		
+		for(Planta p : GRAFO_PLANTA.listaVertices()) {
+			if(p instanceof PlantaProduccion && p.getId()>maxID)
+				maxID = p.getId();
 		}
 		
-		return max;
+		return maxID;
+	}
+
+	private int maxIdAcop() {
+
+		int maxID = 0;
+		
+		for(Planta p : GRAFO_PLANTA.listaVertices()) {
+			if(p instanceof PlantaAcopio && p.getId()>maxID)
+				maxID = p.getId();
+		}
+		
+		return maxID;
 	}
 	
 	
 	
 	@Override
 	public void agregarPlanta(Planta planta) {
-		planta.setId(ULTIMO_ID++);
+	
 		GRAFO_PLANTA.addNodo(planta);
-		if(planta instanceof PlantaAcopio)
+		if(planta instanceof PlantaAcopio) {
+			planta.setId(++ULTIMO_ID_ACOP);
 			try {
 				dataSource.agregarFilaAlFinal("plantasAcopio.csv", planta);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		else
+		} 
+		else {
+			planta.setId(++ULTIMO_ID_PROD);
 			try {
 				dataSource.agregarFilaAlFinal("plantasProduccion.csv", planta);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
 	}
 	
 	@Override
-	public void editarPlanta(Integer id, Planta planta) {
+	public void editarPlanta(Planta planta) {
 		Planta old = null;
 		
-		old = this.findById(id);
-		GRAFO_PLANTA.reemplazarNodo(old, planta);
-		
-		if(planta instanceof PlantaAcopio)
-			this.actualizarArchivoPlantasAcopio();
-		else
+		if(planta instanceof PlantaProduccion) {
+			old = buscarPlantaProduccion(planta.getId());
+			if (old != null)
+				GRAFO_PLANTA.reemplazarNodo(old, planta);
 			this.actualizarArchivoPlantasProduccion();
+		}
+		else {
+			old = buscarPlantaAcopio(planta.getId());
+			if (old != null)
+				GRAFO_PLANTA.reemplazarNodo(old, planta);
+			this.actualizarArchivoPlantasAcopio();
+		}
 	}
+	
+	
 	
 	
 	@Override
@@ -145,20 +188,8 @@ public class PlantaDaoDefault implements PlantaDao {
 		return GRAFO_PLANTA.listaVertices();
 	}
 
-	@Override
-	public Planta findById(Integer id) {
-		for(Planta p : GRAFO_PLANTA.listaVertices())
-			if(p.getId() == id)
-				return p;
-		return null;
-	}
 
 
-	@Override
-	public boolean existeArista(Integer idOrigen, Integer idDestino) {
-		return GRAFO_PLANTA.esAdyacente(this.findById(idOrigen),this.findById(idDestino) );
-		
-	}
 	
 	private void actualizarArchivoPlantasAcopio() {
 		File archivoPlantasAcopio = new File("plantasAcopio.csv");
@@ -204,6 +235,7 @@ public class PlantaDaoDefault implements PlantaDao {
 		}
 		return plantas;
 	}
+
 
 	
 	

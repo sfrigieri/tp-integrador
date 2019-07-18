@@ -66,7 +66,13 @@ public class StockAcopio extends Stock {
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.getId()+"");
 		lista.add(Integer.toString(this.getCantidad()));
+		if(this.getInsumo() instanceof InsumoLiquido)
+			lista.add("L");
+		else lista.add("G");
 		lista.add(Integer.toString(this.getInsumo().getId()));
+		if(this.getPlanta() instanceof PlantaProduccion)
+			lista.add("P");
+		else lista.add("A");
 		lista.add(Integer.toString(this.getPlanta().getId()));
 		return lista;
 	}

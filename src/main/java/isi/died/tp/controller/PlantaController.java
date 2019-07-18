@@ -11,9 +11,9 @@ public class PlantaController {
 	private InsumoService is;
 	private StockService ss;
 	
-	public PlantaController(InsumoService is, StockService ss) {
+	public PlantaController(PlantaService ps, InsumoService is, StockService ss) {
 		super();
-		this.ps = new PlantaServiceDefault(is, ss);
+		this.ps = ps;
 		this.is = is;
 		this.ss = ss;
 	}
@@ -35,11 +35,6 @@ public class PlantaController {
 		return ps.listaPlantas();
 	}
 
-	
-	public void editarPlanta(Integer id, Planta planta) {
-		ps.editarPlanta(id, planta);
-
-	}
 
 	
 	public void eliminarPlanta(Planta planta) {
@@ -48,7 +43,5 @@ public class PlantaController {
 	}
 
 	
-	public Planta buscarPlanta(Integer id) {
-		return ps.buscarPlanta(id);
-	}
+
 }

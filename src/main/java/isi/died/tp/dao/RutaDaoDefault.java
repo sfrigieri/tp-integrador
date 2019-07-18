@@ -7,6 +7,7 @@ import java.util.List;
 
 import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.estructuras.*;
+import isi.died.tp.model.Planta;
 import isi.died.tp.service.PlantaService;
 
 public class RutaDaoDefault implements RutaDao {
@@ -39,14 +40,27 @@ public class RutaDaoDefault implements RutaDao {
 	
 	
 	public void cargarListaRutas() {
+		
 		List<List<String>> rutas = dataSource.readFile("rutas.csv");
 		for(List<String> filaRuta : rutas) {
 			Ruta aux = new Ruta();
 			aux.loadFromStringRow(filaRuta);
-			aux.setInicio(new Vertice<>(ps.buscarPlanta(Integer.valueOf(filaRuta.get(1)))));
-			aux.setFin(new Vertice<>(ps.buscarPlanta(Integer.valueOf(filaRuta.get(2)))));
+			Planta p1, p2;
+			if(filaRuta.get(1) == "P")
+				p1 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(2)));
+			else
+				p1 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(2)));
+			
+			if(filaRuta.get(3) == "P")
+				p2 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(4)));
+			else
+				p2 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(4)));
+			aux.setInicio(new Vertice<>(p1));
+			aux.setFin(new Vertice<>(p2));
 			LISTA_RUTAS.add(aux);
 		}
+		
+		ps.setRutas(LISTA_RUTAS);
 	}
 
 	@Override

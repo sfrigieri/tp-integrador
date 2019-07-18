@@ -63,8 +63,14 @@ public class StockDaoDefault implements StockDao {
 		for(List<String> filaStock : stocks) {
 			StockAcopio aux = new StockAcopio();
 			aux.loadFromStringRow(filaStock);
-			aux.setInsumo(is.buscarInsumo(Integer.valueOf(filaStock.get(2))));
-			aux.setPlanta(ps.buscarPlanta(Integer.valueOf(filaStock.get(3))));
+			if(filaStock.get(2) == "L")
+				aux.setInsumo(is.buscarInsumoLiquido(Integer.valueOf(filaStock.get(3))));
+			else
+				aux.setInsumo(is.buscarInsumoNoLiquido(Integer.valueOf(filaStock.get(3))));
+			if(filaStock.get(4) == "P")
+				aux.setPlanta(ps.buscarPlantaProduccion(Integer.valueOf(filaStock.get(5))));
+			else
+				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));
 			LISTA_STOCKS_ACOPIO.add(aux);
 		}
 	}
@@ -73,23 +79,19 @@ public class StockDaoDefault implements StockDao {
 		for(List<String> filaStock : stocksProduccion) {
 			StockProduccion aux = new StockProduccion();
 			aux.loadFromStringRow(filaStock);
-			aux.setInsumo(is.buscarInsumo(Integer.valueOf(filaStock.get(2))));
-			aux.setPlanta(ps.buscarPlanta(Integer.valueOf(filaStock.get(3))));
+			if(filaStock.get(2) == "L")
+				aux.setInsumo(is.buscarInsumoLiquido(Integer.valueOf(filaStock.get(3))));
+			else
+				aux.setInsumo(is.buscarInsumoNoLiquido(Integer.valueOf(filaStock.get(3))));
+			if(filaStock.get(4) == "P")
+				aux.setPlanta(ps.buscarPlantaProduccion(Integer.valueOf(filaStock.get(5))));
+			else
+				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));
 			LISTA_STOCKS_PRODUCCION.add(aux);
 		}
 	}
 
 
-	@Override
-	public Stock buscarStock(Integer id) {
-		for(Stock actual : LISTA_STOCKS_ACOPIO)
-			if(actual.getId() == id)
-				return actual;
-		for(StockProduccion actual : LISTA_STOCKS_PRODUCCION)
-			if(actual.getId() == id)
-				return actual;
-		return null;
-	}
 	
 	@Override
 	public StockProduccion buscarStockProduccion(Integer id) {
@@ -128,34 +130,36 @@ public class StockDaoDefault implements StockDao {
 			}
 		}
 		
-		ps.buscarPlanta(stock.getPlanta().getId()).addStock(stock);
+		if(stock.getPlanta() instanceof PlantaProduccion) 
+			ps.buscarPlantaProduccion(stock.getPlanta().getId()).addStock(stock);
+		else
+			ps.buscarPlantaAcopio(stock.getPlanta().getId()).addStock(stock);
+		
 	}
 	
 	@Override
 	public void editarStock(Integer id, Stock stock) {
 		Stock old = null;
 		
-		old = buscarStock(id);
-		
-		if (old != null && old instanceof StockProduccion) {
-			LISTA_STOCKS_PRODUCCION.remove(old);
-		} else {
-			if(old != null) 
-				LISTA_STOCKS_ACOPIO.remove(old);
-		}
-			
-		if (stock instanceof StockProduccion) {
+		if(stock instanceof StockProduccion) {
+			old = buscarStockProduccion(id);
+			if (old != null)
+				LISTA_STOCKS_PRODUCCION.remove(old);
 			LISTA_STOCKS_PRODUCCION.add((StockProduccion)stock);
 			this.actualizarArchivoProduccion();
 		}
 		else {
+			old = buscarStockAcopio(id);
+			if (old != null)
+				LISTA_STOCKS_ACOPIO.remove(old);
 			LISTA_STOCKS_ACOPIO.add((StockAcopio)stock);
 			this.actualizarArchivoAcopio();
 		}
 		
-		//Cada tipo de planta implementa su método addStock, no es necesario diferenciar.
-		ps.buscarPlanta(stock.getPlanta().getId()).addStock(stock);
-				
+		if(stock.getPlanta() instanceof PlantaProduccion) 
+			ps.buscarPlantaProduccion(stock.getPlanta().getId()).addStock(stock);
+		else
+			ps.buscarPlantaAcopio(stock.getPlanta().getId()).addStock(stock);
 		
 	}
 	
@@ -170,7 +174,10 @@ public class StockDaoDefault implements StockDao {
 			actualizarArchivoAcopio();
 		}
 		
-		ps.buscarPlanta(stock.getPlanta().getId()).removeStock(stock.getInsumo());
+		if(stock.getPlanta() instanceof PlantaProduccion) 
+			ps.buscarPlantaProduccion(stock.getPlanta().getId()).removeStock(stock.getInsumo());
+		else
+			ps.buscarPlantaAcopio(stock.getPlanta().getId()).removeStock(stock.getInsumo());
 		
 	}
 	

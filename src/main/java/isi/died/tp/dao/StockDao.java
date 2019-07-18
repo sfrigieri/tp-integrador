@@ -22,6 +22,5 @@ public interface StockDao {
 
 	public StockProduccion buscarStockProduccion(Integer id);
 
-	public Stock buscarStock(Integer id);
 
 }

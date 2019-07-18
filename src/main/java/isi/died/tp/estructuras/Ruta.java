@@ -5,6 +5,7 @@ import java.util.List;
 
 import isi.died.tp.dao.util.CsvRecord;
 import isi.died.tp.model.Planta;
+import isi.died.tp.model.PlantaProduccion;
 
 public class Ruta extends Arista<Planta> implements CsvRecord {
 
@@ -105,12 +106,17 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	public List<String> asCsvRow() {
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.id+"");
+		if(this.getInicio().getValor() instanceof PlantaProduccion)
+			lista.add("P");
+		else lista.add("A");
 		lista.add(Integer.toString(this.getInicio().getValor().getId()));
+		if(this.getFin().getValor() instanceof PlantaProduccion)
+			lista.add("P");
+		else lista.add("A");
 		lista.add(Integer.toString(this.getFin().getValor().getId()));
 		lista.add(Integer.toString(this.getValor()));
 		lista.add(Double.toString(this.duracionViajeMin));
 		lista.add(Integer.toString(this.pesoMaxTon));
-		lista.add(Integer.toString(this.pesoEnCursoTon));
 		return lista;
 	}
 
@@ -118,10 +124,9 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 	public void loadFromStringRow(List<String> datos) {
 		try {
 			this.id = Integer.valueOf(datos.get(0));
-			this.setValor( Integer.valueOf(datos.get(3)));
-			this.duracionViajeMin = Double.valueOf(datos.get(4));
-			this.pesoMaxTon = Integer.valueOf(datos.get(5)); 
-			this.pesoEnCursoTon = Integer.valueOf(datos.get(6));
+			this.setValor( Integer.valueOf(datos.get(5)));
+			this.duracionViajeMin = Double.valueOf(datos.get(6));
+			this.pesoMaxTon = Integer.valueOf(datos.get(7)); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

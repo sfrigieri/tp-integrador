@@ -10,8 +10,8 @@ public class InsumoController {
 	
 	private InsumoService insumoService;
 	
-	public InsumoController() {
-		this.insumoService = new InsumoServiceDefault();
+	public InsumoController(InsumoService insumoService) {
+		this.insumoService =  insumoService;
 	}
 	
 	public Insumo agregarInsumo(int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado) {

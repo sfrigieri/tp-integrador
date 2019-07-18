@@ -32,14 +32,15 @@ import isi.died.tp.controller.InsumoController;
 import isi.died.tp.model.Insumo;
 import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.Unidad;
+import isi.died.tp.service.InsumoService;
 
 public class ABMInsumo {
 
 	private InsumoController controller;
 	private JFrame ventana;
 	
-	public ABMInsumo(JFrame ventana){
-		this.controller = new InsumoController();
+	public ABMInsumo(JFrame ventana,InsumoService insumoService){
+		this.controller = new InsumoController(insumoService);
 		this.ventana = ventana;
 	}
 	

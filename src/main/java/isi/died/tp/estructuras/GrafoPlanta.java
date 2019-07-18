@@ -126,6 +126,11 @@ public class GrafoPlanta extends Grafo<Planta> {
 		this.aristas.add(new Ruta(nodo1, nodo2, distanciaKm, duracionViaje, pesoMax));
 		//acomodar el 0 del new ruta
 	}
+	
+	public void setRutas(List<Arista<Planta>> lista) {
+		this.aristas = lista;
+		
+	}
 
 	public void resetFlujo() {
 		for (Arista<Planta> ruta : this.aristas)
@@ -225,5 +230,6 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 
 	}
+
 
 }

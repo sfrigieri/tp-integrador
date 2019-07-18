@@ -51,8 +51,4 @@ public class StockServiceDefault implements StockService {
 		return this.stockDao.buscarStockProduccion(id);
 	}
 
-	@Override
-	public Stock buscarStock(Integer id){
-		return this.stockDao.buscarStock(id);
-	}
 }

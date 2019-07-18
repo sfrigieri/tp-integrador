@@ -22,6 +22,4 @@ public interface StockService {
 
 	public StockProduccion buscarStockProduccion(Integer id);
 
-	public Stock buscarStock(Integer id);
-
 }

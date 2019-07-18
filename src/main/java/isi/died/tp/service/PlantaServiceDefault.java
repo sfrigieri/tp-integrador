@@ -17,13 +17,7 @@ public class PlantaServiceDefault implements PlantaService {
 
 	public PlantaServiceDefault() {
 		super();
-	}
-
-	public PlantaServiceDefault(InsumoService is, StockService ss) {
-		super();
 		this.plantaDao = new PlantaDaoDefault();
-		this.is = is;
-		this.ss = ss;
 	}
 
 	@Override
@@ -38,6 +32,16 @@ public class PlantaServiceDefault implements PlantaService {
 
 	}
 
+	@Override
+	public void setRutas(List<Ruta> lista) {
+		List<Arista<Planta>> listaAux = new ArrayList<Arista<Planta>>();
+		for(Arista<Planta> ruta : lista)
+			listaAux.add(ruta);
+		
+		plantaDao.setRutas(listaAux);
+		
+	}
+	
 	@Override
 	public Planta agregarPlanta(Planta planta) {
 		plantaDao.agregarPlanta(planta);
@@ -125,8 +129,8 @@ public class PlantaServiceDefault implements PlantaService {
 
 
 	@Override
-	public void editarPlanta(Integer id, Planta planta) {
-		plantaDao.editarPlanta(id, planta);
+	public void editarPlanta(Planta planta) {
+		plantaDao.editarPlanta(planta);
 
 	}
 
@@ -137,10 +141,16 @@ public class PlantaServiceDefault implements PlantaService {
 	}
 
 	@Override
-	public Planta buscarPlanta(Integer id) {
-		return plantaDao.findById(id);
+	public PlantaProduccion buscarPlantaProduccion(Integer id) {
+		return plantaDao.buscarPlantaProduccion(id);
 	}
 
+	@Override
+	public PlantaAcopio buscarPlantaAcopio(Integer id) {
+		return plantaDao.buscarPlantaAcopio(id);
+	}
+
+	
 	@Override
 	public void generarPageRanks() {
 
@@ -256,6 +266,7 @@ public class PlantaServiceDefault implements PlantaService {
 
 		return listaResultante;
 	}
+
 
 
 }

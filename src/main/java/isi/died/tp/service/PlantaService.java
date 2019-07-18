@@ -2,11 +2,8 @@ package isi.died.tp.service;
 
 import java.util.List;
 
-import isi.died.tp.estructuras.Vertice;
-import isi.died.tp.model.Camion;
-import isi.died.tp.model.Planta;
-import isi.died.tp.model.PlantaProduccion;
-import isi.died.tp.model.StockAcopio;
+import isi.died.tp.estructuras.Ruta;
+import isi.died.tp.model.*;
 
 public interface PlantaService {
 
@@ -18,11 +15,13 @@ public interface PlantaService {
 
 	public List<Planta> listaPlantas();
 
-	public void editarPlanta(Integer id, Planta planta);
+	public void editarPlanta(Planta planta);
 
 	public void eliminarPlanta(Planta planta);
 
-	public Planta buscarPlanta(Integer id);
+	public PlantaProduccion buscarPlantaProduccion(Integer id);
+	
+	public PlantaAcopio buscarPlantaAcopio(Integer id);
 
 	public List<PlantaProduccion> listaPlantasProduccion();
 
@@ -37,5 +36,7 @@ public interface PlantaService {
 	public void generarPageRanks();
 
 	public void resetPageRanks();
+
+	public void setRutas(List<Ruta> lista);
 
 }

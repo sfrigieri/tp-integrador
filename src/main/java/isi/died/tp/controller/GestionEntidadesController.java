@@ -28,12 +28,12 @@ public class GestionEntidadesController {
 	private InsumoService insumoService;
 	
 	public GestionEntidadesController(JFrame ventana) {
-		interfazInsumo = new ABMInsumo(ventana);
-		
-		plantaService = new PlantaServiceDefault(null,null);
+			
+		plantaService = new PlantaServiceDefault();
 		insumoService = new InsumoServiceDefault();
 		stockService = new StockServiceDefault(plantaService, insumoService);
 
+		interfazInsumo = new ABMInsumo(ventana, insumoService);
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		//insumoService.setPlantaService(plantaService);

@@ -2,6 +2,8 @@ package isi.died.tp.dao;
 
 import java.util.List;
 
+import isi.died.tp.estructuras.Arista;
+import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.estructuras.Vertice;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
@@ -13,10 +15,6 @@ public interface PlantaDao {
 
 	public List<Planta> listaPlantas();
 
-	public Planta findById(Integer id);
-
-	public boolean existeArista(Integer idOrigen, Integer idDestino);
-
 	public void agregarPlanta(Planta planta);
 
 	public void resetFlujo();
@@ -25,7 +23,7 @@ public interface PlantaDao {
 
 	public List<PlantaProduccion> listaPlantasProduccion();
 
-	public void editarPlanta(Integer id, Planta planta);
+	public void editarPlanta(Planta planta);
 
 	public void eliminarPlanta(Planta planta);
 
@@ -33,6 +31,10 @@ public interface PlantaDao {
 
 	public void resetPageRanks();
 
+	public PlantaProduccion buscarPlantaProduccion(Integer id);
 
+	public PlantaAcopio buscarPlantaAcopio(Integer id);
+
+	public void setRutas(List<Arista<Planta>> lista);
 
 }
