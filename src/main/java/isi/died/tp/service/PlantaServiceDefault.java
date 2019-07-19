@@ -77,6 +77,7 @@ public class PlantaServiceDefault implements PlantaService {
 		return plantaDao.listaPlantas();
 	}
 
+	//Item 3.a "EL sistema debe mostrar una lista de los insumos faltantes y cantidad"
 	@Override
 	public List<StockAcopio> generarStockFaltante() {
 		List<StockAcopio> lista = new ArrayList<StockAcopio>();
@@ -87,6 +88,30 @@ public class PlantaServiceDefault implements PlantaService {
 		return lista;
 	}
 
+	private List<StockAcopio> generarStockFaltante(PlantaProduccion p) {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+
+		for(Insumo i : is.listaInsumos()) {
+			int cant = p.cantidadNecesariaInsumo(i);
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
+				lista.add(new StockAcopio(-1,cant,i,p));
+
+		}
+		
+		for(Insumo il : is.listaInsumosLiquidos()) {
+			int cant = p.cantidadNecesariaInsumo(il);
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
+				lista.add(new StockAcopio(-1,cant,il,p));
+
+		}
+		
+		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
+		return lista;
+	}
+
+	
+	//Item 3.c Si se procede a seleccionar camión y generar solución,
+	//deben generarse los pedidos posibles con el stock disponible en PlantaAcopio inicial
 	@Override
 	public List<StockAcopio> generarStockFaltanteDisponible() {
 		List<StockAcopio> lista = new ArrayList<StockAcopio>();
@@ -107,9 +132,41 @@ public class PlantaServiceDefault implements PlantaService {
 			}
 
 		}
+		
+		for(Insumo i : is.listaInsumosLiquidos()) {
+			listaAux = generarStockFaltante(i);
+			Integer cantDisponible = i.getStock().getCantidad();
+
+			if(cantDisponible != null) {
+
+				for(StockAcopio s : listaAux) {
+					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
+						lista.add(s);
+						cantDisponible = cantDisponible - s.getCantidad();
+					}
+				}
+			}
+
+		}
 
 		return lista;
 	}
+	
+	private List<StockAcopio> generarStockFaltante(Insumo ins) {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+
+		for(PlantaProduccion p : this.listaPlantasProduccion()){
+			int cant = p.cantidadNecesariaInsumo(ins);
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
+				lista.add(new StockAcopio(-1,cant,ins,p));
+
+		}
+		
+		
+		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
+		return lista;
+	}
+
 
 
 	@Override
@@ -123,32 +180,6 @@ public class PlantaServiceDefault implements PlantaService {
 		return lista;
 	}
 
-
-	private List<StockAcopio> generarStockFaltante(PlantaProduccion p) {
-		List<StockAcopio> lista = new ArrayList<StockAcopio>();
-
-		for(Insumo i : is.listaInsumos()) {
-			int cant = p.cantidadNecesariaInsumo(i);
-			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
-				lista.add(new StockAcopio(-1,cant,i,p));
-
-		}
-		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
-		return lista;
-	}
-
-	private List<StockAcopio> generarStockFaltante(Insumo ins) {
-		List<StockAcopio> lista = new ArrayList<StockAcopio>();
-
-		for(PlantaProduccion p : this.listaPlantasProduccion()){
-			int cant = p.cantidadNecesariaInsumo(ins);
-			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
-				lista.add(new StockAcopio(-1,cant,ins,p));
-
-		}
-		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
-		return lista;
-	}
 
 
 
