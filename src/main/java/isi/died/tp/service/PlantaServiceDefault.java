@@ -292,10 +292,10 @@ public class PlantaServiceDefault implements PlantaService {
 		return listaResultante;
 	}
 
-
-
-
-
+	@Override
+	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2) {
+		return plantaDao.buscarCaminosInfo(p1,p2);
+	}
 
 
 }

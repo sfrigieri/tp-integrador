@@ -4,7 +4,7 @@ import java.util.List;
 
 import isi.died.tp.model.Planta;
 
-class Recorrido {
+public class Recorrido {
 	List<Ruta> recorrido;
 	double duracionTotal;
 	int pesoMax;

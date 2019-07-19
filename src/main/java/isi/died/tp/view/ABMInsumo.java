@@ -33,15 +33,18 @@ import isi.died.tp.model.Insumo;
 import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.Unidad;
 import isi.died.tp.service.InsumoService;
+import isi.died.tp.controller.StockController;
 
 public class ABMInsumo {
 
 	private InsumoController controller;
+	private StockController sc;
 	private JFrame ventana;
 	
-	public ABMInsumo(JFrame ventana,InsumoService insumoService){
-		this.controller = new InsumoController(insumoService);
+	public ABMInsumo(JFrame ventana,InsumoController ic, StockController sc){
+		this.controller = ic;
 		this.ventana = ventana;
+		this.sc = sc;
 	}
 	
 	public void agregarInsumo() {
@@ -539,9 +542,11 @@ public class ABMInsumo {
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar los cambios?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
 					Insumo insumoNuevo;
 					if (esLiquido.isSelected()) {
-						insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,valorRefrigeracion,valorDensidad,valorPeso);
+						insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,insumo.getStock(),valorRefrigeracion,valorDensidad,valorPeso);
+						insumoNuevo.getStock().setInsumo(insumoNuevo);
 					} else {
-						insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,valorPeso,valorRefrigeracion);
+						insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,insumo.getStock(),valorPeso,valorRefrigeracion);
+						insumoNuevo.getStock().setInsumo(insumoNuevo);
 					}
 					
 					if (insumo instanceof InsumoLiquido) {
@@ -549,12 +554,12 @@ public class ABMInsumo {
 							controller.editarInsumoLiquido(insumoNuevo);
 						} else {
 							controller.eliminarInsumoLiquido(insumo.getId());
-							controller.agregarInsumo(0, valorDescripcion, valorUnidad, valorCosto, valorPeso, valorRefrigeracion);
+							controller.agregarInsumo(insumoNuevo);
 						}
 					} else {
 						if (insumoNuevo instanceof InsumoLiquido) {
-							controller.eliminarInsumoLiquido(insumo.getId());
-							controller.agregarInsumo(0, valorDescripcion, valorCosto, valorRefrigeracion, valorDensidad, valorPeso);
+							controller.eliminarInsumoNoLiquido(insumo.getId());
+							controller.agregarInsumo(insumoNuevo);
 						} else {
 							controller.editarInsumoNoLiquido(insumoNuevo);
 						}
@@ -741,10 +746,15 @@ public class ABMInsumo {
 			int numFila = tablaInsumos.getSelectedRow();
 			int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
 			if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-				if (cambiarTipoInsumo.getText() == "No Líquidos")
+				
+				if (cambiarTipoInsumo.getText() == "No Líquidos") {
+					sc.eliminarStock(controller.buscarInsumoNoLiquido(id).getStock());
 					controller.eliminarInsumoNoLiquido(id);
-				else
+				}
+				else {
+					sc.eliminarStock(controller.buscarInsumoLiquido(id).getStock());
 					controller.eliminarInsumoLiquido(id);
+				}
 				this.eliminarInsumo();
 			}
 		});

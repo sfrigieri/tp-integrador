@@ -14,6 +14,10 @@ public class InsumoController {
 		this.insumoService =  insumoService;
 	}
 	
+	public void agregarInsumo(Insumo ins) {
+		insumoService.agregarInsumo(ins);
+	}
+	
 	public void agregarInsumo(int id, String descripcion, Unidad unidadDeMedida, double costo, double peso, boolean esRefrigerado) {
 		Insumo insumo = new Insumo(id, descripcion, unidadDeMedida, costo, peso, esRefrigerado);
 		insumoService.agregarInsumo(insumo);

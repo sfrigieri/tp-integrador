@@ -9,6 +9,11 @@ public class InsumoLiquido extends Insumo{
 	
 	
 
+	public InsumoLiquido(int id_, String descrip, double costo_, Stock stock, boolean esRef, double dens, double litros) {
+		super(id_, descrip, Unidad.LITRO, costo_, stock, (litros/1000)*dens, esRef);
+		this.densidad = dens;
+	}
+	
 	public InsumoLiquido(int id_, String descrip, double costo_, boolean esRef, double dens, double litros) {
 		super(id_, descrip, Unidad.LITRO, costo_, (litros/1000)*dens, esRef);
 		this.densidad = dens;

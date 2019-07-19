@@ -2,6 +2,7 @@ package isi.died.tp.service;
 
 import java.util.List;
 
+import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.model.*;
 
@@ -44,5 +45,7 @@ public interface PlantaService {
 	public void addInsumos(List<Insumo> lista);
 
 	public void setStocksProduccion(List<StockProduccion> lista);
+	
+	public List<Recorrido> buscarCaminosInfo(Planta p1,Planta p2);
 
 }

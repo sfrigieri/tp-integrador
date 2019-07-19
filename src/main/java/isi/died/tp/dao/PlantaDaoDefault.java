@@ -272,6 +272,11 @@ public class PlantaDaoDefault implements PlantaDao {
 		}
 	}
 
+	@Override
+	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2) {
+		return GRAFO_PLANTA.buscarCaminosInfo(p1, p2);
+	}
+
 
 	
 	

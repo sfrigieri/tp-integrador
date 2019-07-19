@@ -16,16 +16,21 @@ public class GestionEntidadesController {
 	private StockService stockService;
 	private InsumoService insumoService;
 	private RutaService rutaService;
+	private InsumoController insumoController;
+	private StockController stockController;
 	
 	public GestionEntidadesController(JFrame ventana) {
 			
 		plantaService = new PlantaServiceDefault();
 		insumoService = new InsumoServiceDefault(plantaService);
+		insumoController = new InsumoController(insumoService);
+		stockService = new StockServiceDefault(plantaService, insumoService);
+		stockController = new StockController(stockService);
 		//Luego, internamente, se asigna rutaService llamando a PlantaService:setRutaService(rs)
 		rutaService = new RutaServiceDefault(plantaService);
-		stockService = new StockServiceDefault(plantaService, insumoService);
 
-		interfazInsumo = new ABMInsumo(ventana, insumoService);
+
+		interfazInsumo = new ABMInsumo(ventana, insumoController, stockController);
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		plantaService.setRutaService(rutaService);

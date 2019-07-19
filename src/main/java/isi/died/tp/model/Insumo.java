@@ -56,7 +56,17 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 	}
 
 
-
+	public Insumo(int id, String descripcion, Unidad unidadDeMedida, double costo, Stock stock, double peso,
+			boolean esRefrigerado) {
+		super();
+		this.id = id;
+		this.descripcion = descripcion;
+		this.unidadDeMedida = unidadDeMedida;
+		this.costo = costo;
+		this.stock = (StockAcopio) stock;
+		this.peso = peso;
+		this.esRefrigerado = esRefrigerado;
+	}
 
 	public Insumo(int id) {
 		super();

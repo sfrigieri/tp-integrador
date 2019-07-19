@@ -3,6 +3,7 @@ package isi.died.tp.dao;
 import java.util.List;
 
 import isi.died.tp.estructuras.Arista;
+import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.estructuras.Vertice;
 import isi.died.tp.model.Insumo;
@@ -47,6 +48,8 @@ public interface PlantaDao {
 	public PlantaAcopio buscarAcopioInicial();
 
 	public void setRutaService(RutaService rs);
+
+	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2);
 
 
 }

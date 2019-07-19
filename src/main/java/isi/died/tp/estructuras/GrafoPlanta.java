@@ -118,8 +118,12 @@ public class GrafoPlanta extends Grafo<Planta> {
 		List<Planta> visitados = new ArrayList<Planta>();
 		List<Ruta> recActual = new ArrayList<Ruta>();
 		List<Recorrido> recorridos = new ArrayList<Recorrido>();
+		
 		this.buscarCaminosInfo(origen, destino,visitados,recorridos, recActual);
-
+		
+		for(Recorrido r : recorridos)
+			r.calcularInfo();
+		
 		return recorridos;	
 
 	}
