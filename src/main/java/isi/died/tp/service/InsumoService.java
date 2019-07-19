@@ -3,7 +3,6 @@ package isi.died.tp.service;
 import java.util.List;
 
 import isi.died.tp.model.Insumo;
-import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.StockAcopio;
 
 public interface InsumoService {

@@ -9,12 +9,10 @@ import isi.died.tp.model.StockAcopio;
 public class InsumoServiceDefault implements InsumoService {
 
 	private InsumoDao insumoDao;
-	private PlantaService ps;
 	
 	public InsumoServiceDefault(PlantaService plantaService) {
 		super();
 		this.insumoDao = new InsumoDaoDefault(plantaService);
-		this.ps = plantaService;
 	}
 	
 	@Override

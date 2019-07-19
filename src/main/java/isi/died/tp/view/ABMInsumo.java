@@ -32,7 +32,6 @@ import isi.died.tp.controller.InsumoController;
 import isi.died.tp.model.Insumo;
 import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.Unidad;
-import isi.died.tp.service.InsumoService;
 import isi.died.tp.controller.StockController;
 
 public class ABMInsumo {
@@ -52,7 +51,7 @@ public class ABMInsumo {
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel errorDescripcion = new JLabel(), errorCosto = new JLabel(),
 				errorPesoCantidad = new JLabel(), errorDensidad = new JLabel(),
-				encabezado = new JLabel("Agregar Nuevo Insumo"), labelPesoCantidad = new JLabel("Peso: ");
+				encabezado = new JLabel("Agregar Nuevo Insumo");
 		JTextField descripcion = new JTextField(20), costo = new JTextField(20),
 					pesoCantidad = new JTextField(20), densidad = new JTextField(20);
 		JButton aceptar = new JButton("Aceptar"), cancelar = new JButton("Cancelar");
@@ -87,13 +86,13 @@ public class ABMInsumo {
 		panel.add(new JLabel("Descripción: "), constraints);
 		
 		constraints.gridy=3;
-		panel.add(new JLabel("Costo: "), constraints);
+		panel.add(new JLabel("Costo ($): "), constraints);
 		
 		constraints.gridy=4;
-		panel.add(labelPesoCantidad, constraints);
+		panel.add(new JLabel("Peso (Kg): "), constraints);
 
 		constraints.gridy=5;
-		panel.add(new JLabel("Densidad: "), constraints);
+		panel.add(new JLabel("Densidad (Kg/m3): "), constraints);
 		
 		constraints.gridy=6;
 		panel.add(new JLabel("Refrigeración: "), constraints);
@@ -148,13 +147,11 @@ public class ABMInsumo {
 				int estado = itemEvent.getStateChange();
 				if (estado == ItemEvent.SELECTED) { //si es liquido-- 	 descrip, unidad(LITRO) , double costo, boolean esRef, double dens, double litros
 					unidad.setSelectedItem(Unidad.LITRO);
-					unidad.setEnabled(false);
-					labelPesoCantidad.setText("Cantidad: ");
+					unidad.setEnabled(false);;
 					densidad.setEnabled(true);
 				} else {							//si no es liquido-- descrip, unidadDeMedida, double costo, boolean esRefrigerado,double peso
 					unidad.setEnabled(true);
 					unidad.setSelectedItem(Unidad.KILO);
-					labelPesoCantidad.setText("Peso: ");
 					densidad.setEnabled(false);
 				}
 			}
@@ -351,7 +348,7 @@ public class ABMInsumo {
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Modificar Insumo");
 		JButton guardarCambios = new JButton("Guardar cambios"), seleccionarOtroInsumo = new JButton("Seleccionar otro Insumo"), cancelar = new JButton("Cancelar");
-		JLabel errorDescripcion = new JLabel(), errorCosto = new JLabel(), errorPesoCantidad = new JLabel(), errorDensidad = new JLabel(), labelPesoCantidad = new JLabel("Peso: ");
+		JLabel errorDescripcion = new JLabel(), errorCosto = new JLabel(), errorPesoCantidad = new JLabel(), errorDensidad = new JLabel();
 		JTextField descripcion = new JTextField(20), costo = new JTextField(20), pesoCantidad = new JTextField(20), densidad = new JTextField(20);
 		JComboBox<Unidad> unidad = new JComboBox<Unidad>();
 		final ButtonGroup checkboxRefrigerado = new ButtonGroup(), 
@@ -383,13 +380,13 @@ public class ABMInsumo {
 		panel.add(new JLabel("Descripción: "), constraints);
 		
 		constraints.gridy=3;
-		panel.add(new JLabel("Costo: "), constraints);
+		panel.add(new JLabel("Costo ($): "), constraints);
 		
 		constraints.gridy=4;
-		panel.add(labelPesoCantidad, constraints);
+		panel.add(new JLabel("Peso (Kg): "), constraints);
 
 		constraints.gridy=5;
-		panel.add(new JLabel("Densidad: "), constraints);
+		panel.add(new JLabel("Densidad (Kg/m3): "), constraints);
 		
 		constraints.gridy=6;
 		panel.add(new JLabel("Refrigeración: "), constraints);
@@ -412,7 +409,6 @@ public class ABMInsumo {
 		panel.add(esRefrigerado, constraints);
 		if (insumo instanceof InsumoLiquido) {
 			esLiquido.setSelected(true);
-			labelPesoCantidad.setText("Cantidad: ");
 			unidad.setSelectedItem(Unidad.LITRO);
 			unidad.setEnabled(false);
 			densidad.setEnabled(true);
@@ -462,12 +458,10 @@ public class ABMInsumo {
 				if (estado == ItemEvent.SELECTED) { //si es liquido-
 					unidad.setSelectedItem(Unidad.LITRO);
 					unidad.setEnabled(false);
-					labelPesoCantidad.setText("Cantidad: ");
 					densidad.setEnabled(true);
 				} else {							//si no es liquido-
 					unidad.setEnabled(true);
 					unidad.setSelectedItem(insumo.getUnidad());
-					labelPesoCantidad.setText("Peso: ");
 					densidad.setEnabled(false);
 				}
 			}
@@ -520,11 +514,7 @@ public class ABMInsumo {
 					valorCosto = Double.parseDouble(costo.getText());
 				}
 				if(pesoCantidad.getText().isEmpty()) {
-					if (!esLiquido.isSelected()) {
 						errorPesoCantidad.setText("Debe ingresar un peso");
-					} else {
-						errorPesoCantidad.setText("Debe ingresar una cantidad");
-					}
 					return;
 				}else{
 					valorPeso = Double.parseDouble(pesoCantidad.getText());
@@ -540,15 +530,24 @@ public class ABMInsumo {
 				valorRefrigeracion = esRefrigerado.isSelected();
 						
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar los cambios?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-					Insumo insumoNuevo;
+					Insumo insumoNuevo; 
 					if (esLiquido.isSelected()) {
-						insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,insumo.getStock(),valorRefrigeracion,valorDensidad,valorPeso);
-						//Si modifico la planta en ABMPlanta, habrá que realizar la asignacion del nuevo objeto Planta
-						// a sus insumos, si es PlantaAcopio, o a cada uno de sus stocks, si es PlantaProduccion.
-						insumoNuevo.getStock().setInsumo(insumoNuevo);
+						if(insumo.getStock() != null) {
+							insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,insumo.getStock(),valorRefrigeracion,valorDensidad,valorPeso);
+							//Si modifico la planta en ABMPlanta, habrá que realizar la asignacion del nuevo objeto Planta
+							// a sus insumos, si es PlantaAcopio, o a cada uno de sus stocks, si es PlantaProduccion.
+							insumoNuevo.getStock().setInsumo(insumoNuevo);
+						}else
+							insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,valorRefrigeracion,valorDensidad,valorPeso);
+						
+						
 					} else {
-						insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,insumo.getStock(),valorPeso,valorRefrigeracion);
-						insumoNuevo.getStock().setInsumo(insumoNuevo);
+						if(insumo.getStock() != null) {
+							insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,insumo.getStock(),valorPeso,valorRefrigeracion);
+							insumoNuevo.getStock().setInsumo(insumoNuevo);
+						}
+						else
+							insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,valorPeso,valorRefrigeracion);
 					}
 					
 					if (insumo instanceof InsumoLiquido) {
@@ -558,13 +557,15 @@ public class ABMInsumo {
 							controller.eliminarInsumoLiquido(insumo.getId());
 							controller.agregarInsumo(insumoNuevo);
 							//Como cambió el tipo de Insumo, es necesario actualizar el archivo de StocksAcopio
-							sc.editarStock(insumoNuevo.getStock());
+							if(insumoNuevo.getStock() != null)
+								sc.editarStock(insumoNuevo.getStock());
 						}
 					} else {
 						if (insumoNuevo instanceof InsumoLiquido) {
 							controller.eliminarInsumoNoLiquido(insumo.getId());
 							controller.agregarInsumo(insumoNuevo);
-							sc.editarStock(insumoNuevo.getStock());
+							if(insumoNuevo.getStock() != null)
+								sc.editarStock(insumoNuevo.getStock());
 						} else {
 							controller.editarInsumoNoLiquido(insumoNuevo);
 						}
@@ -753,11 +754,17 @@ public class ABMInsumo {
 			if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
 				//Hacer lo mismo: llamar a eliminarStocksProduccion(stocks) en ABMPlanta si se elimina PlantaProduccion definitivamente
 				if (cambiarTipoInsumo.getText() == "No Líquidos") {
-					sc.eliminarStock(controller.buscarInsumoNoLiquido(id).getStock());
+					Insumo ins = controller.buscarInsumoNoLiquido(id);
+					if(ins.getStock() != null)
+						sc.eliminarStock(ins.getStock());
+					
 					controller.eliminarInsumoNoLiquido(id);
 				}
 				else {
-					sc.eliminarStock(controller.buscarInsumoLiquido(id).getStock());
+					Insumo ins = controller.buscarInsumoLiquido(id);
+					if(ins.getStock() != null)
+						sc.eliminarStock(ins.getStock());
+					
 					controller.eliminarInsumoLiquido(id);
 				}
 				this.eliminarInsumo();
