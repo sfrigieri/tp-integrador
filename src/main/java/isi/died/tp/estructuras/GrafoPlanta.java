@@ -111,6 +111,42 @@ public class GrafoPlanta extends Grafo<Planta> {
 		return plantas;
 	}
 
+
+	public List<Recorrido> buscarCaminosInfo(Planta p1,Planta p2){
+		Vertice<Planta> origen = this.getNodo(p1);
+		Vertice<Planta> destino = this.getNodo(p2);
+		List<Planta> visitados = new ArrayList<Planta>();
+		List<Ruta> recActual = new ArrayList<Ruta>();
+		List<Recorrido> recorridos = new ArrayList<Recorrido>();
+		this.buscarCaminosInfo(origen, destino,visitados,recorridos, recActual);
+
+		return recorridos;	
+
+	}
+
+	private void buscarCaminosInfo(Vertice<Planta> v1,Vertice<Planta> v2,List<Planta> visitados,List<Recorrido> recorridos, List<Ruta> recActual){
+
+		List<Planta> copiaVisitados = visitados.stream().collect(Collectors.toList());
+
+		if(!copiaVisitados.contains(v1.getValor())) {   
+			copiaVisitados.add(v1.getValor());
+
+			if(v1.equals(v2))
+				recorridos.add(new Recorrido(recActual));
+			else
+				for(Arista<Planta> ruta : this.getAristasSalientes(v1)) {
+					Ruta rutaAux = (Ruta) ruta;
+					if(!recActual.contains(rutaAux)){ 
+						List<Ruta> copiaRecActual = recActual.stream().collect(Collectors.toList());
+						copiaRecActual.add(rutaAux);
+						buscarCaminosInfo(ruta.getFin(), v2, copiaVisitados,recorridos, copiaRecActual);
+					}
+				}
+		}
+
+	}
+
+
 	@Override
 	public void conectar(Planta n1,Planta n2){
 		this.conectar(getNodo(n1), getNodo(n2), 0,0.0,0);
@@ -126,16 +162,18 @@ public class GrafoPlanta extends Grafo<Planta> {
 		this.aristas.add(new Ruta(nodo1, nodo2, distanciaKm, duracionViaje, pesoMax));
 		//acomodar el 0 del new ruta
 	}
-	
+
 	public void setRutas(List<Arista<Planta>> lista) {
 		this.aristas = lista;
-		
+
 	}
-	
+
 	public List<Arista<Planta>> getRutas() {
 		return this.aristas;
 
 	}
+
+
 
 	public void resetFlujo() {
 		for (Arista<Planta> ruta : this.aristas)
@@ -235,8 +273,6 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 
 	}
-
-
 
 
 
