@@ -142,18 +142,18 @@ public class StockDaoDefault implements StockDao {
 	}
 	
 	@Override
-	public void editarStock(Integer id, Stock stock) {
+	public void editarStock(Stock stock) {
 		Stock old = null;
 		
 		if(stock instanceof StockProduccion) {
-			old = buscarStockProduccion(id);
+			old = buscarStockProduccion(stock.getId());
 			if (old != null)
 				LISTA_STOCKS_PRODUCCION.remove(old);
 			LISTA_STOCKS_PRODUCCION.add((StockProduccion)stock);
 			this.actualizarArchivoProduccion();
 		}
 		else {
-			old = buscarStockAcopio(id);
+			old = buscarStockAcopio(stock.getId());
 			if (old != null)
 				LISTA_STOCKS_ACOPIO.remove(old);
 			LISTA_STOCKS_ACOPIO.add((StockAcopio)stock);
@@ -183,6 +183,12 @@ public class StockDaoDefault implements StockDao {
 		else
 			ps.buscarPlantaAcopio(stock.getPlanta().getId()).removeStock(stock.getInsumo());
 		
+	}
+	
+	@Override
+	public void eliminarStocksProduccion(List<Stock> lista) {
+		LISTA_STOCKS_PRODUCCION.removeAll(lista);
+		actualizarArchivoProduccion();
 	}
 	
 	@Override
@@ -229,4 +235,6 @@ public class StockDaoDefault implements StockDao {
 			e1.printStackTrace();
 		}
 	}
+
+	
 }

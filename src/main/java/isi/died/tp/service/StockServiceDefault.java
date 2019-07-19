@@ -32,8 +32,13 @@ public class StockServiceDefault implements StockService {
 	}
 
 	@Override
-	public void editarStock(Integer id, Stock stock){
-		this.stockDao.editarStock(id,stock);
+	public void eliminarStocksProduccion(List<Stock> lista) {
+		this.stockDao.eliminarStocksProduccion(lista);
+	}
+	
+	@Override
+	public void editarStock(Stock stock){
+		this.stockDao.editarStock(stock);
 	}
 
 	@Override
@@ -50,5 +55,7 @@ public class StockServiceDefault implements StockService {
 	public StockProduccion buscarStockProduccion(Integer id){
 		return this.stockDao.buscarStockProduccion(id);
 	}
+
+
 
 }

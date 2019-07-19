@@ -543,6 +543,8 @@ public class ABMInsumo {
 					Insumo insumoNuevo;
 					if (esLiquido.isSelected()) {
 						insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,insumo.getStock(),valorRefrigeracion,valorDensidad,valorPeso);
+						//Si modifico la planta en ABMPlanta, habrá que realizar la asignacion del nuevo objeto Planta
+						// a sus insumos, si es PlantaAcopio, o a cada uno de sus stocks, si es PlantaProduccion.
 						insumoNuevo.getStock().setInsumo(insumoNuevo);
 					} else {
 						insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,insumo.getStock(),valorPeso,valorRefrigeracion);
@@ -555,11 +557,14 @@ public class ABMInsumo {
 						} else {
 							controller.eliminarInsumoLiquido(insumo.getId());
 							controller.agregarInsumo(insumoNuevo);
+							//Como cambió el tipo de Insumo, es necesario actualizar el archivo de StocksAcopio
+							sc.editarStock(insumoNuevo.getStock());
 						}
 					} else {
 						if (insumoNuevo instanceof InsumoLiquido) {
 							controller.eliminarInsumoNoLiquido(insumo.getId());
 							controller.agregarInsumo(insumoNuevo);
+							sc.editarStock(insumoNuevo.getStock());
 						} else {
 							controller.editarInsumoNoLiquido(insumoNuevo);
 						}
@@ -746,7 +751,7 @@ public class ABMInsumo {
 			int numFila = tablaInsumos.getSelectedRow();
 			int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
 			if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-				
+				//Hacer lo mismo: llamar a eliminarStocksProduccion(stocks) en ABMPlanta si se elimina PlantaProduccion definitivamente
 				if (cambiarTipoInsumo.getText() == "No Líquidos") {
 					sc.eliminarStock(controller.buscarInsumoNoLiquido(id).getStock());
 					controller.eliminarInsumoNoLiquido(id);

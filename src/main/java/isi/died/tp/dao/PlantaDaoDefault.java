@@ -42,6 +42,32 @@ public class PlantaDaoDefault implements PlantaDao {
 		}
 
  	}
+	
+	
+	private int maxIdProd() {
+
+		int maxID = 0;
+		
+		for(Planta p : GRAFO_PLANTA.listaVertices()) {
+			if(p instanceof PlantaProduccion && p.getId()>maxID)
+				maxID = p.getId();
+		}
+		
+		return maxID;
+	}
+
+	private int maxIdAcop() {
+
+		int maxID = 0;
+		
+		for(Planta p : GRAFO_PLANTA.listaVertices()) {
+			if(p instanceof PlantaAcopio && p.getId()>maxID)
+				maxID = p.getId();
+		}
+		
+		return maxID;
+	}
+	
 
 	@Override
 	public void setRutas(List<Arista<Planta>> lista) {
@@ -72,31 +98,7 @@ public class PlantaDaoDefault implements PlantaDao {
 				return (PlantaAcopio) actual;
 		return null;
 	}
-	
-	private int maxIdProd() {
 
-		int maxID = 0;
-		
-		for(Planta p : GRAFO_PLANTA.listaVertices()) {
-			if(p instanceof PlantaProduccion && p.getId()>maxID)
-				maxID = p.getId();
-		}
-		
-		return maxID;
-	}
-
-	private int maxIdAcop() {
-
-		int maxID = 0;
-		
-		for(Planta p : GRAFO_PLANTA.listaVertices()) {
-			if(p instanceof PlantaAcopio && p.getId()>maxID)
-				maxID = p.getId();
-		}
-		
-		return maxID;
-	}
-	
 
 	@Override
 	public void setRutaService(RutaService rs) {

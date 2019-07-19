@@ -27,10 +27,14 @@ public class StockController {
 	public void eliminarStock(Stock stock){
 		this.ss.eliminarStock(stock);
 	}
+	
+	public void eliminarStocksProduccion(List<Stock> lista){
+		this.ss.eliminarStocksProduccion(lista);
+	}
 
 	
-	public void editarStock(Integer id, Stock stock){
-		this.ss.editarStock(id,stock);
+	public void editarStock(Stock stock){
+		this.ss.editarStock(stock);
 	}
 
 	
