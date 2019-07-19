@@ -202,6 +202,8 @@ public class ABMInsumo {
 					return;
 				}else{
 					valorPeso = Double.parseDouble(pesoCantidad.getText());
+					System.out.println(pesoCantidad.getText());
+					System.out.println(Double.parseDouble(pesoCantidad.getText()));
 				}
 				if(esLiquido.isSelected() && densidad.getText().isEmpty()) {
 					errorDensidad.setText("Debe ingresar una densidad");
@@ -413,7 +415,7 @@ public class ABMInsumo {
 			unidad.setEnabled(false);
 			densidad.setEnabled(true);
 			densidad.setText(((Double)((InsumoLiquido)insumo).getDensidad()).toString());
-			pesoCantidad.setText(((Double)((insumo.getPeso())*1000/((InsumoLiquido)insumo).getDensidad())).toString());
+			pesoCantidad.setText(((Double)insumo.getPeso()).toString());
 		} else {
 			noLiquido.setSelected(true);
 			densidad.setEnabled(false);
