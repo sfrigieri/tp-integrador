@@ -59,8 +59,8 @@ public class InsumoDaoDefault implements InsumoDao {
 			aux.loadFromStringRow(filaInsumo);
 			LISTA_INSUMOS.add(aux);
 		}
-
-		ps.addInsumos(LISTA_INSUMOS);
+		if (!LISTA_INSUMOS.isEmpty())
+			ps.addInsumos(LISTA_INSUMOS);
 	}
 	public void cargarListaInsumosLiquidos() {
 		List<List<String>> insumosLiquidos = dataSource.readFile("insumosLiquidos.csv");
@@ -69,8 +69,8 @@ public class InsumoDaoDefault implements InsumoDao {
 			aux.loadFromStringRow(filaInsumo);
 			LISTA_INSUMOS_LIQUIDOS.add(aux);
 		}
-
-		ps.addInsumos(LISTA_INSUMOS_LIQUIDOS);
+		if (!LISTA_INSUMOS_LIQUIDOS.isEmpty())
+			ps.addInsumos(LISTA_INSUMOS_LIQUIDOS);
 	}
 
 	@Override

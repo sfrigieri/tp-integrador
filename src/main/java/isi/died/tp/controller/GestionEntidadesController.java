@@ -7,8 +7,7 @@ import isi.died.tp.view.*;
 
 public class GestionEntidadesController {
 	private ABMInsumo interfazInsumo;
-	private ABMPlantaAcopio interfazPlantaAcopio;
-	private ABMPlantaProduccion interfazPlantaProduccion;
+	private ABMPlanta interfazPlanta;
 	private ABMStock interfazStock;
 	private ABMCamion interfazCamion;
 	private ABMRuta interfazRuta;
@@ -34,6 +33,7 @@ public class GestionEntidadesController {
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		plantaService.setRutaService(rutaService);
+		interfazPlanta = new ABMPlanta(ventana, plantaService);
 		
 		interfazRuta = new ABMRuta(ventana,plantaService);
 	}
@@ -44,6 +44,8 @@ public class GestionEntidadesController {
 		case AGREGAR_INSUMO: interfazInsumo.agregarInsumo(); break;
 		case MODIFICAR_INSUMO: interfazInsumo.modificarInsumo(); break;
 		case ELIMINAR_INSUMO: interfazInsumo.eliminarInsumo(); break;
+		
+		case AGREGAR_PLANTA: interfazPlanta.agregarPlanta(); break;
 		
 		case AGREGAR_RUTA: interfazRuta.agregarRuta(); break;
 		}

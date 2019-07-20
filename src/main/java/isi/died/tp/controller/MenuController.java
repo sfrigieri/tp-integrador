@@ -5,8 +5,7 @@ import javax.swing.JFrame;
 import isi.died.tp.dao.InsumoDao;
 import isi.died.tp.view.ABMCamion;
 import isi.died.tp.view.ABMInsumo;
-import isi.died.tp.view.ABMPlantaAcopio;
-import isi.died.tp.view.ABMPlantaProduccion;
+import isi.died.tp.view.ABMPlanta;
 import isi.died.tp.view.ABMStock;
 import isi.died.tp.view.GestionEntidades;
 

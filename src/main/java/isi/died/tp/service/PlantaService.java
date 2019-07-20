@@ -25,6 +25,8 @@ public interface PlantaService {
 	public PlantaAcopio buscarPlantaAcopio(Integer id);
 
 	public List<PlantaProduccion> listaPlantasProduccion();
+	
+	public List<PlantaAcopio> listaPlantasAcopio();
 
 	public List<StockAcopio> generarStockFaltante();
 
@@ -47,5 +49,6 @@ public interface PlantaService {
 	public void setStocksProduccion(List<StockProduccion> lista);
 	
 	public List<Recorrido> buscarCaminosInfo(Planta p1,Planta p2);
+
 
 }

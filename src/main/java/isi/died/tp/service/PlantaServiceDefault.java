@@ -181,7 +181,16 @@ public class PlantaServiceDefault implements PlantaService {
 		return lista;
 	}
 
+	@Override
+	public List<PlantaAcopio> listaPlantasAcopio() {
+		List<PlantaAcopio> lista = new ArrayList<PlantaAcopio>();
 
+		for(Planta p : plantaDao.listaPlantas())
+			if(p instanceof PlantaAcopio)
+				lista.add((PlantaAcopio) p);
+
+		return lista;
+	}
 
 
 	@Override

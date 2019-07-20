@@ -26,7 +26,9 @@ public class PlantaController {
 		return ps.listaPlantas();
 	}
 
-
+	public List<PlantaAcopio> listaPlantasAcopio() {
+		return ps.listaPlantasAcopio();
+	}
 	
 	public void eliminarPlanta(Planta planta) {
 		ps.eliminarPlanta(planta);
