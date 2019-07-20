@@ -111,6 +111,8 @@ public class PlantaAcopio extends Planta {
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.id+"");
 		lista.add(this.nombre);
+		lista.add(this.pageRank.toString());
+		lista.add(Boolean.toString(this.esOrigen));
 		return lista;
 	}
 	
@@ -119,6 +121,8 @@ public class PlantaAcopio extends Planta {
 		try {
 			this.id = Integer.valueOf(datos.get(0));
 			this.nombre = datos.get(1);
+			this.pageRank = Double.valueOf(datos.get(2));
+			this.esOrigen = Boolean.valueOf(datos.get(3)); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

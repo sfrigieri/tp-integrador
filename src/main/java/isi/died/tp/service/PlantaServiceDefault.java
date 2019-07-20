@@ -116,7 +116,8 @@ public class PlantaServiceDefault implements PlantaService {
 	public List<StockAcopio> generarStockFaltanteDisponible() {
 		List<StockAcopio> lista = new ArrayList<StockAcopio>();
 		List<StockAcopio> listaAux;
-
+		//listaAux recibe stocks ordenados de menor a mayor cantidad faltante.
+		//lo que permite maximizar la cantidad de envíos a realizar por camión/viaje
 		for(Insumo i : is.listaInsumos()) {
 			listaAux = generarStockFaltante(i);
 			Integer cantDisponible = i.getStock().getCantidad();
@@ -161,8 +162,8 @@ public class PlantaServiceDefault implements PlantaService {
 				lista.add(new StockAcopio(-1,cant,ins,p));
 
 		}
-		
-		
+		//Se ordena la lista de stock, de menor a mayor cantidad faltante
+		//para maximizar la cantidad de envíos a diferentes plantas
 		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
 		return lista;
 	}

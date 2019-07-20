@@ -114,6 +114,7 @@ public class PlantaProduccion extends Planta {
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.id+"");
 		lista.add(this.nombre);
+		lista.add(this.pageRank.toString());
 		return lista;
 	}
 	
@@ -122,6 +123,7 @@ public class PlantaProduccion extends Planta {
 		try {
 			this.id = Integer.valueOf(datos.get(0));
 			this.nombre = datos.get(1);
+			this.pageRank = Double.valueOf(datos.get(2));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

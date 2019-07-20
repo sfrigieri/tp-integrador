@@ -204,7 +204,7 @@ public class GrafoPlanta extends Grafo<Planta> {
 			Vertice<Planta> visitar = aVisitar.getVertice();
 
 			if(this.getAdyacentes(visitar).size() == 0) {
-				//Si llegué al sumidero, maxflow tendrá el valor de flujo máximo posible por ese camino
+				//Si llegué al sumidero, flujoActual tendrá el valor de flujo máximo posible por ese camino
 				int flujoActual = aVisitar.getFlujoEnCurso();
 
 				// Volver por el mismo camino
