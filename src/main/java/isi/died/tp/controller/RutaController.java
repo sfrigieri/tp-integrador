@@ -11,8 +11,8 @@ public class RutaController {
 
 private RutaService rutaService;
 	
-	public RutaController(PlantaService ps) {
-		this.rutaService = new RutaServiceDefault(ps);
+	public RutaController(PlantaService ps, RutaService rs) {
+		this.rutaService = rs;
 	}
 	
 	public Ruta agregarRuta(int idRuta, Planta plantaOrigen, Planta plantaFin, int distancia, double duracion, int pesoMax) {

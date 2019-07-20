@@ -72,9 +72,6 @@ public class PlantaDaoDefault implements PlantaDao {
 	public void setRutas(List<Arista<Planta>> lista) {
 		GRAFO_PLANTA.setRutas(lista);
 	
-	for(Arista<Planta> ruta : lista)
-				System.out.println(ruta.getInicio().getValor().getNombre()+" - "+ruta.getFin().getValor().getNombre());
-			System.out.println("FIN");
 	}
 	
 	@Override

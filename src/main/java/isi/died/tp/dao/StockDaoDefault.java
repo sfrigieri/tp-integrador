@@ -63,11 +63,11 @@ public class StockDaoDefault implements StockDao {
 		for(List<String> filaStock : stocks) {
 			StockAcopio aux = new StockAcopio();
 			aux.loadFromStringRow(filaStock);
-			if(filaStock.get(2) == "L")
+			if(filaStock.get(2).matches("L"))
 				aux.setInsumo(is.buscarInsumoLiquido(Integer.valueOf(filaStock.get(3))));
 			else
 				aux.setInsumo(is.buscarInsumoNoLiquido(Integer.valueOf(filaStock.get(3))));
-			if(filaStock.get(4) == "P")
+			if(filaStock.get(4).matches("P"))
 				aux.setPlanta(ps.buscarPlantaProduccion(Integer.valueOf(filaStock.get(5))));
 			else
 				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));
@@ -81,11 +81,11 @@ public class StockDaoDefault implements StockDao {
 		for(List<String> filaStock : stocksProduccion) {
 			StockProduccion aux = new StockProduccion();
 			aux.loadFromStringRow(filaStock);
-			if(filaStock.get(2) == "L")
+			if(filaStock.get(2).matches("L"))
 				aux.setInsumo(is.buscarInsumoLiquido(Integer.valueOf(filaStock.get(3))));
 			else
 				aux.setInsumo(is.buscarInsumoNoLiquido(Integer.valueOf(filaStock.get(3))));
-			if(filaStock.get(4) == "P")
+			if(filaStock.get(4).matches("P"))
 				aux.setPlanta(ps.buscarPlantaProduccion(Integer.valueOf(filaStock.get(5))));
 			else
 				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));

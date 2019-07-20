@@ -25,8 +25,8 @@ public class ABMRuta {
 	private RutaController controller;
 	private JFrame ventana;
 	
-	public ABMRuta(JFrame ventana, PlantaService ps){
-		this.controller = new RutaController(ps);
+	public ABMRuta(JFrame ventana, PlantaService ps, RutaService rs){
+		this.controller = new RutaController(ps, rs);
 		this.ventana = ventana;
 	}
 	

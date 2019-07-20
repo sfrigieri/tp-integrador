@@ -35,10 +35,9 @@ public class GestionEntidadesController {
 		interfazInsumo = new ABMInsumo(ventana, insumoController, stockController);
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
-		plantaService.setRutaService(rutaService);
 		interfazPlanta = new ABMPlanta(ventana, plantaController, stockController);
 		
-		interfazRuta = new ABMRuta(ventana,plantaService);
+		interfazRuta = new ABMRuta(ventana,plantaService, rutaService);
 	}
 	
 	

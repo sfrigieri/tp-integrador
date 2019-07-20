@@ -45,7 +45,9 @@ public class PlantaServiceDefault implements PlantaService {
 			listaAux.add(ruta);
 		
 		plantaDao.setRutas(listaAux);
-		
+		for(Arista<Planta> ruta : lista)
+			System.out.println(ruta.getInicio().getValor().getNombre()+" - "+ruta.getFin().getValor().getNombre());
+		System.out.println("FIN");
 	}
 	
 	@Override
