@@ -681,6 +681,8 @@ public class ABMInsumo {
 		DefaultTableModel model = (DefaultTableModel) tablaInsumos.getModel();
 		if (mostrarTablaNoLiquidos) {
 			for (Insumo insumo : listaInsumosNoLiquidos) {
+				cambiarTipoInsumo.setText("Ver Líquidos");
+				tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Unidad");
 				String refrig = "";
 				if (insumo.getEsRefrigerado())
 					refrig += "SI";
@@ -761,32 +763,9 @@ public class ABMInsumo {
 		cambiarTipoInsumo.setPreferredSize(new Dimension(130, 25));
 		cambiarTipoInsumo.addActionListener(a -> {
 			if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
-				cambiarTipoInsumo.setText("Ver No Líquidos");
-				tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Densidad");
-				for (int i=0; i<listaInsumosNoLiquidos.size(); i++) 
-					model.removeRow(0);
-				for (Insumo insumo : listaInsumosLiquidos) {
-					String refrig = "";
-					if (insumo.getEsRefrigerado())
-						refrig += "SI";
-					else
-						refrig += "NO";
-					model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), Double.toString(((InsumoLiquido)insumo).getDensidad()), refrig});
-				}
-				
+				this.eliminarInsumo(false);
 			} else if (cambiarTipoInsumo.getText() == "Ver No Líquidos"){
-				cambiarTipoInsumo.setText("Ver Líquidos");
-				tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Unidad");
-				for (int i=0; i<listaInsumosLiquidos.size(); i++) 
-					model.removeRow(0);
-				for (Insumo insumo : listaInsumosNoLiquidos) {
-					String refrig = "";
-					if (insumo.getEsRefrigerado())
-						refrig += "SI";
-					else
-						refrig += "NO";
-					model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), insumo.getUnidad().toString(), refrig});
-				}
+				this.eliminarInsumo(true);
 			}
 		});
 		panel.add(cambiarTipoInsumo, constraints);
