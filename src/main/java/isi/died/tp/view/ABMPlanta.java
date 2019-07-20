@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -23,7 +22,6 @@ import isi.died.tp.controller.PlantaController;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
-import isi.died.tp.model.Unidad;
 import isi.died.tp.service.PlantaService;
 
 public class ABMPlanta {
@@ -206,5 +204,82 @@ public class ABMPlanta {
 		ventana.setTitle("Sistema de Gestión de Entidades");
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
+	}
+	
+	public void modificarPlanta() {
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		JLabel encabezado = new JLabel("Modificar Planta");
+		JButton aceptar = new JButton("Aceptar"), volver = new JButton("Volver");
+		JComboBox<String> seleccionarPlanta = new JComboBox<String>();
+		
+		//titulo
+		constraints.gridx=0;
+		constraints.gridy=0;
+		constraints.gridheight=1;
+		constraints.gridwidth=8;
+		constraints.anchor=GridBagConstraints.NORTH;
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		panel.add(encabezado,constraints);
+		
+		//combobox seleccion
+		constraints.fill=GridBagConstraints.HORIZONTAL;
+		constraints.anchor=GridBagConstraints.CENTER;
+		constraints.insets.set(25, 5, 25, 5);
+		constraints.gridx=0;
+		constraints.gridy=1;
+		panel.add(seleccionarPlanta, constraints);
+		
+		for (Planta planta : controller.listaPlantas()) {
+			String item = "";
+			item += Integer.toString(planta.getId()) + ": " + planta.getNombre();
+			if (planta instanceof PlantaAcopio) {
+				item += " (A)";
+			} else {
+				item += " (P)";
+			}
+			seleccionarPlanta.addItem(item);
+		}
+		
+		//botones
+		constraints.gridy=2;
+		constraints.fill=GridBagConstraints.NONE;
+		constraints.anchor=GridBagConstraints.EAST;
+		
+		constraints.gridx=0;
+		constraints.insets=new Insets(5, 5, 5, 15);
+		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
+		panel.add(volver, constraints);
+				
+		constraints.anchor=GridBagConstraints.WEST;
+		constraints.insets=new Insets(5, 15, 5, 5);
+		constraints.gridx=0;
+		aceptar.addActionListener(a -> {
+			String stringPlanta = (String)seleccionarPlanta.getSelectedItem();
+			String arr[] = stringPlanta.split(": ");
+			Integer idSeleccionado = Integer.valueOf(arr[0]);
+			String segParte[] = arr[1].split(" ");
+			String ultimaPalabra = segParte[segParte.length-1];
+			
+			if (ultimaPalabra.equals("(A)")) {
+				this.modificarPlanta((PlantaAcopio)controller.buscarPlantaAcopio(idSeleccionado));
+			} else {
+				this.modificarPlanta((PlantaProduccion)controller.buscarPlantaProduccion(idSeleccionado));
+			}
+		});
+		panel.add(aceptar,constraints);
+		
+		//ventana
+		ventana.setContentPane(panel);
+		ventana.pack();
+		ventana.setSize(800, 600);
+		ventana.setLocationRelativeTo(null);
+		ventana.setTitle("Sistema de Gestión de Entidades");
+		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		ventana.setVisible(true);
+	}
+	
+	public void modificarPlanta(Planta planta){
+		
 	}
 }

@@ -46,6 +46,7 @@ public class GestionEntidadesController {
 		case ELIMINAR_INSUMO: interfazInsumo.eliminarInsumo(true); break;
 		
 		case AGREGAR_PLANTA: interfazPlanta.agregarPlanta(); break;
+		case MODIFICAR_PLANTA: interfazPlanta.modificarPlanta(); break;
 		
 		case AGREGAR_RUTA: interfazRuta.agregarRuta(); break;
 		}

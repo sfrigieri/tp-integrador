@@ -34,6 +34,14 @@ public class PlantaController {
 		ps.eliminarPlanta(planta);
 
 	}
+	
+	public Planta buscarPlantaAcopio(int id) {
+		return ps.buscarPlantaAcopio(id);
+	}
+	
+	public Planta buscarPlantaProduccion(int id) {
+		return ps.buscarPlantaProduccion(id);
+	}
 
 	//Item 3.a "EL sistema debe mostrar una lista de los insumos faltantes y cantidad"
 	public List<StockAcopio> generarStockFaltante() {
