@@ -172,24 +172,12 @@ public class PlantaServiceDefault implements PlantaService {
 
 	@Override
 	public List<PlantaProduccion> listaPlantasProduccion() {
-		List<PlantaProduccion> lista = new ArrayList<PlantaProduccion>();
-
-		for(Planta p : plantaDao.listaPlantas())
-			if(p instanceof PlantaProduccion)
-				lista.add((PlantaProduccion) p);
-
-		return lista;
+		return plantaDao.listaPlantasProduccion();
 	}
 
 	@Override
 	public List<PlantaAcopio> listaPlantasAcopio() {
-		List<PlantaAcopio> lista = new ArrayList<PlantaAcopio>();
-
-		for(Planta p : plantaDao.listaPlantas())
-			if(p instanceof PlantaAcopio)
-				lista.add((PlantaAcopio) p);
-
-		return lista;
+		return plantaDao.listaPlantasAcopio();
 	}
 
 
