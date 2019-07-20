@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
+import javax.swing.CellEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -25,8 +27,10 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 
 import isi.died.tp.controller.PlantaController;
 import isi.died.tp.controller.StockController;
@@ -468,7 +472,6 @@ public class ABMPlanta {
 		tablaPlantas.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		tablaPlantas.getColumnModel().getColumn(1).setCellRenderer(leftRenderer);
 		//tamaño y headers tabla
-		
 		tablaPlantas.getColumnModel().getColumn(0).setHeaderValue("Id");
 		tablaPlantas.getColumnModel().getColumn(1).setHeaderValue("Nombre");
 		
@@ -481,6 +484,15 @@ public class ABMPlanta {
 		
 		//agregar datos tabla
 		DefaultTableModel model = (DefaultTableModel) tablaPlantas.getModel();
+		DefaultTableModel modeloDefecto = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		DefaultCellEditor editor = (DefaultCellEditor) tablaPlantas.getDefaultEditor(Object.class);
+		editor.setClickCountToStart(10000);
+		
 		if (mostrarTablaAcopio) {
 			for (Planta planta : listaPlantasAcopio) {
 				cambiarTipoPlanta.setText("Ver Plantas de Producción");
@@ -530,8 +542,9 @@ public class ABMPlanta {
 				int id = Integer.valueOf((String)tablaPlantas.getValueAt(numFila, 0));
 				if (mostrarTablaAcopio) {
 					PlantaAcopio planta = (PlantaAcopio)controller.buscarPlantaAcopio(id);
-					if (planta.esOrigen() /*&& planta.getListaDeInsumos() != null*/) {
-						errorSeleccion.setText("No puedes eliminar una planta de acopio origen con insumos");
+					if (planta.esOrigen() && planta.getListaDeInsumos() != null && !planta.getListaDeInsumos().isEmpty()) {
+						errorSeleccion.setText("No es posible eliminar. Existen insumos asociados");
+												
 						return;
 					} else {
 						if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar la planta seleccionada?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
@@ -565,14 +578,9 @@ public class ABMPlanta {
 		panel.add(cambiarTipoPlanta, constraints);
 		
 		//error seleccion
-		if (errorSeleccion.getText() == "Debes seleccionar una planta") {
-			constraints.insets.set(6,473,0,0);
-			errorSeleccion.setPreferredSize(new Dimension(230, 16));
-		} else {
-			constraints.insets.set(6,296,0,0);
-			errorSeleccion.setPreferredSize(new Dimension(360, 16));
-		}
 		constraints.anchor=GridBagConstraints.NORTHWEST;
+		constraints.insets.set(6,350,0,0);
+		errorSeleccion.setPreferredSize(new Dimension(360, 16));
 		constraints.gridx=3;
 		constraints.gridy=2;
 		errorSeleccion.setForeground(Color.red);

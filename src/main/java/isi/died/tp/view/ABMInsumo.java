@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -702,6 +703,8 @@ public class ABMInsumo {
 				model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), Double.toString(((InsumoLiquido)insumo).getDensidad()), refrig});
 			}
 		}
+		DefaultCellEditor editor = (DefaultCellEditor) tablaInsumos.getDefaultEditor(Object.class);
+		editor.setClickCountToStart(10000);
 
 		//titulo
 		constraints.gridx=0;
