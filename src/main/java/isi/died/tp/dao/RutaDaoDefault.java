@@ -110,12 +110,17 @@ public class RutaDaoDefault implements RutaDao {
 	private void actualizarArchivo() {
 		File archivoRutas = new File("rutas.csv");
 		archivoRutas.delete();
-		for(Ruta actual: LISTA_RUTAS) {
-			try {
-				dataSource.agregarFilaAlFinal("rutas.csv", actual);
-			} catch (IOException e) {
-				e.printStackTrace();
+		try {
+			archivoRutas.createNewFile();
+			for(Ruta actual: LISTA_RUTAS) {
+				try {
+					dataSource.agregarFilaAlFinal("rutas.csv", actual);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 	}
 

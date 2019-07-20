@@ -16,11 +16,13 @@ public class GestionEntidadesController {
 	private InsumoService insumoService;
 	private RutaService rutaService;
 	private InsumoController insumoController;
+	private PlantaController plantaController;
 	private StockController stockController;
 	
 	public GestionEntidadesController(JFrame ventana) {
 			
 		plantaService = new PlantaServiceDefault();
+		plantaController = new PlantaController(plantaService, insumoService, stockService);
 		insumoService = new InsumoServiceDefault(plantaService);
 		insumoController = new InsumoController(insumoService);
 		stockService = new StockServiceDefault(plantaService, insumoService);
@@ -33,7 +35,7 @@ public class GestionEntidadesController {
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		plantaService.setRutaService(rutaService);
-		interfazPlanta = new ABMPlanta(ventana, plantaService);
+		interfazPlanta = new ABMPlanta(ventana, plantaController, stockController);
 		
 		interfazRuta = new ABMRuta(ventana,plantaService);
 	}
@@ -47,6 +49,7 @@ public class GestionEntidadesController {
 		
 		case AGREGAR_PLANTA: interfazPlanta.agregarPlanta(); break;
 		case MODIFICAR_PLANTA: interfazPlanta.modificarPlanta(); break;
+		case ELIMINAR_PLANTA: interfazPlanta.eliminarPlanta(true); break;
 		
 		case AGREGAR_RUTA: interfazRuta.agregarRuta(); break;
 		}

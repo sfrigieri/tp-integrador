@@ -240,13 +240,17 @@ public class PlantaDaoDefault implements PlantaDao {
 	private void actualizarArchivoPlantasAcopio() {
 		File archivoPlantasAcopio = new File("plantasAcopio.csv");
 		archivoPlantasAcopio.delete();
-		for(PlantaAcopio actual: this.listaPlantasAcopio()) {
-			try {
-				dataSource.agregarFilaAlFinal("plantasAcopio.csv", actual);
-			} catch (IOException e) {
-				e.printStackTrace();
-				}
-		
+		try {
+			archivoPlantasAcopio.createNewFile();
+			for(PlantaAcopio actual: this.listaPlantasAcopio()) {
+				try {
+					dataSource.agregarFilaAlFinal("plantasAcopio.csv", actual);
+				} catch (IOException e) {
+					e.printStackTrace();
+					}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 	}
 	
@@ -255,13 +259,17 @@ public class PlantaDaoDefault implements PlantaDao {
 	private void actualizarArchivoPlantasProduccion() {
 		File archivoPlantasProduccion = new File("plantasProduccion.csv");
 		archivoPlantasProduccion.delete();
-		for(PlantaProduccion actual: this.listaPlantasProduccion()) {
-			try {
-				dataSource.agregarFilaAlFinal("plantasProduccion.csv", actual);
-			} catch (IOException e) {
-				e.printStackTrace();
-				}
-		
+		try {
+			archivoPlantasProduccion.createNewFile();
+			for(PlantaProduccion actual: this.listaPlantasProduccion()) {
+				try {
+					dataSource.agregarFilaAlFinal("plantasProduccion.csv", actual);
+				} catch (IOException e) {
+					e.printStackTrace();
+					}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 	}
 

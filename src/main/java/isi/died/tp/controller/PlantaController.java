@@ -30,9 +30,16 @@ public class PlantaController {
 		return ps.listaPlantasAcopio();
 	}
 	
+	public List<PlantaProduccion> listaPlantasProduccion() {
+		return ps.listaPlantasProduccion();
+	}
+	
 	public void eliminarPlanta(Planta planta) {
 		ps.eliminarPlanta(planta);
-
+	}
+	
+	public void editarPlanta(Planta planta) {
+		ps.editarPlanta(planta);
 	}
 	
 	public Planta buscarPlantaAcopio(int id) {

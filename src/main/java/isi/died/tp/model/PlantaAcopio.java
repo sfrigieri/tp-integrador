@@ -3,7 +3,6 @@ package isi.died.tp.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Date;
 
 public class PlantaAcopio extends Planta {
 	
@@ -34,7 +33,10 @@ public class PlantaAcopio extends Planta {
 	@Override
 	public void addInsumos(List<Insumo> lista) {
 		this.listaDeInsumos.addAll(lista);
-
+	}
+	
+	public List<Insumo> getListaDeInsumos(){
+		return this.listaDeInsumos;
 	}
 	
 	@Override
