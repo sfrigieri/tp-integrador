@@ -9,10 +9,15 @@ import isi.died.tp.model.StockAcopio;
 public class InsumoServiceDefault implements InsumoService {
 
 	private InsumoDao insumoDao;
+	private PlantaService ps;
+	private StockService ss;
 	
-	public InsumoServiceDefault(PlantaService plantaService) {
+	public InsumoServiceDefault(PlantaService ps) {
 		super();
-		this.insumoDao = new InsumoDaoDefault(plantaService);
+		this.insumoDao = new InsumoDaoDefault();
+		this.ps = ps;
+		ps.addInsumos(insumoDao.listaInsumos());
+		ps.addInsumos(insumoDao.listaInsumosLiquidos());
 	}
 	
 	@Override
@@ -42,6 +47,7 @@ public class InsumoServiceDefault implements InsumoService {
 
 	@Override
 	public void eliminarInsumo(Insumo insumo) {
+		ss.eliminarStock(insumo.getStock());
 		insumoDao.eliminarInsumo(insumo);
 	}
 
@@ -58,6 +64,12 @@ public class InsumoServiceDefault implements InsumoService {
 	@Override
 	public void setStocksAcopio(List<StockAcopio> lista) {
 		insumoDao.setStocksAcopio(lista);
+		
+	}
+
+	@Override
+	public void setStockService(StockService stockService) {
+		this.ss = stockService;
 		
 	}
 }

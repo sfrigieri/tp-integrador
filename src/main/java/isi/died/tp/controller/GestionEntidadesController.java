@@ -26,6 +26,7 @@ public class GestionEntidadesController {
 		insumoService = new InsumoServiceDefault(plantaService);
 		insumoController = new InsumoController(insumoService);
 		stockService = new StockServiceDefault(plantaService, insumoService);
+		insumoService.setStockService(stockService);
 		stockController = new StockController(stockService);
 		//Luego, internamente, se asigna rutaService llamando a PlantaService:setRutaService(rs)
 		rutaService = new RutaServiceDefault(plantaService);

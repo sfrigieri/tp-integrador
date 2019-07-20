@@ -178,6 +178,8 @@ public class StockDaoDefault implements StockDao {
 			actualizarArchivoAcopio();
 		}
 		
+		//Si es stockProduccion, debo buscar la Planta correspondiente y eliminarlo de listaDeStocks
+		//Si es stockAcopio, lo mismo, pero se eliminará del insumo correspondiente.
 		if(stock.getPlanta() instanceof PlantaProduccion) 
 			ps.buscarPlantaProduccion(stock.getPlanta().getId()).removeStock(stock.getInsumo());
 		else

@@ -22,4 +22,6 @@ public interface InsumoService {
 
 	public void setStocksAcopio(List<StockAcopio> lista);
 
+	public void setStockService(StockService stockService);
+
 }
