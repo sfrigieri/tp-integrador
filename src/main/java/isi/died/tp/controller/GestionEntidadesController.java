@@ -43,7 +43,7 @@ public class GestionEntidadesController {
 		switch(op) {
 		case AGREGAR_INSUMO: interfazInsumo.agregarInsumo(); break;
 		case MODIFICAR_INSUMO: interfazInsumo.modificarInsumo(); break;
-		case ELIMINAR_INSUMO: interfazInsumo.eliminarInsumo(); break;
+		case ELIMINAR_INSUMO: interfazInsumo.eliminarInsumo(true); break;
 		
 		case AGREGAR_PLANTA: interfazPlanta.agregarPlanta(); break;
 		

@@ -54,7 +54,7 @@ public class ABMInsumo {
 				encabezado = new JLabel("Agregar Nuevo Insumo");
 		JTextField descripcion = new JTextField(20), costo = new JTextField(20),
 					pesoCantidad = new JTextField(20), densidad = new JTextField(20);
-		JButton aceptar = new JButton("Aceptar"), cancelar = new JButton("Cancelar");
+		JButton aceptar = new JButton("Aceptar"), volver = new JButton("Volver");
 		JComboBox<Unidad> unidad = new JComboBox<Unidad>();
 		final ButtonGroup checkboxRefrigerado = new ButtonGroup(), 
 						  checkboxLiquido = new ButtonGroup();
@@ -165,8 +165,8 @@ public class ABMInsumo {
 		constraints.anchor=GridBagConstraints.EAST;
 		
 		constraints.gridx=2;
-		cancelar.addActionListener(a -> GestionEntidades.mostrarMenu());
-		panel.add(cancelar, constraints);
+		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
+		panel.add(volver, constraints);
 						
 		constraints.gridx=1;
 		aceptar.addActionListener(a -> {
@@ -218,8 +218,12 @@ public class ABMInsumo {
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar el nuevo insumo con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
 					if (esLiquido.isSelected()) { //Sería valorLitros en lugar de valorPeso, el peso se calcula internamente
 						controller.agregarInsumo(0, valorDescripcion, valorCosto, valorRefrigeracion, valorDensidad, valorPeso);
+						JOptionPane.showConfirmDialog(ventana, "Insumo creado exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+						GestionEntidades.mostrarMenu();
 					} else {
 						controller.agregarInsumo(0, valorDescripcion, valorUnidad, valorCosto, valorPeso, valorRefrigeracion);
+						JOptionPane.showConfirmDialog(ventana, "Insumo creado exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+						GestionEntidades.mostrarMenu();
 					}
 				}					
 						
@@ -280,7 +284,7 @@ public class ABMInsumo {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Modificar Insumo");
-		JButton aceptar = new JButton("Aceptar"), cancelar = new JButton("Cancelar");
+		JButton aceptar = new JButton("Aceptar"), volver = new JButton("Volver");
 		JComboBox<String> seleccionarInsumo = new JComboBox<String>();
 		List<Insumo> listaInsumos = new ArrayList<Insumo>();
 		listaInsumos.addAll(controller.listaInsumos());
@@ -315,8 +319,8 @@ public class ABMInsumo {
 		
 		constraints.gridx=0;
 		constraints.insets=new Insets(5, 5, 5, 15);
-		cancelar.addActionListener(a -> GestionEntidades.mostrarMenu());
-		panel.add(cancelar, constraints);
+		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
+		panel.add(volver, constraints);
 				
 		constraints.anchor=GridBagConstraints.WEST;
 		constraints.insets=new Insets(5, 15, 5, 5);
@@ -349,7 +353,7 @@ public class ABMInsumo {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Modificar Insumo");
-		JButton guardarCambios = new JButton("Guardar cambios"), seleccionarOtroInsumo = new JButton("Seleccionar otro Insumo"), cancelar = new JButton("Cancelar");
+		JButton guardarCambios = new JButton("Guardar"), volver = new JButton("Volver");
 		JLabel errorDescripcion = new JLabel(), errorCosto = new JLabel(), errorPesoCantidad = new JLabel(), errorDensidad = new JLabel();
 		JTextField descripcion = new JTextField(20), costo = new JTextField(20), pesoCantidad = new JTextField(20), densidad = new JTextField(20);
 		JComboBox<Unidad> unidad = new JComboBox<Unidad>();
@@ -474,22 +478,15 @@ public class ABMInsumo {
 		constraints.gridy=8;
 		constraints.fill=GridBagConstraints.NONE;
 		
-		constraints.anchor=GridBagConstraints.WEST;
-		constraints.gridx=3;
-		constraints.insets=new Insets(20, 5, 5, 15);
-		cancelar.addActionListener(a -> GestionEntidades.mostrarMenu());
-		panel.add(cancelar, constraints);
-		
-		//boton cambiar de insumo
-		constraints.anchor=GridBagConstraints.CENTER;
+		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridx=2;
-		constraints.insets=new Insets(20, 5, 5, 0);
-		seleccionarOtroInsumo.addActionListener(a -> this.modificarInsumo());
-		panel.add(seleccionarOtroInsumo, constraints);
+		constraints.insets=new Insets(20, 5, 5, 15);
+		volver.addActionListener(a -> this.modificarInsumo());
+		panel.add(volver, constraints);
 		
 		//boton guardarCambios				
 		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(20, 15, 5, 5);
+		constraints.insets=new Insets(20, 35, 5, 0);
 		constraints.gridx=1;
 		guardarCambios.addActionListener(a -> {
 			String valorDescripcion;
@@ -628,11 +625,11 @@ public class ABMInsumo {
 		ventana.setVisible(true);
 	}
 	
-	public void eliminarInsumo() {
+	public void eliminarInsumo(boolean mostrarTablaNoLiquidos) {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Eliminar Insumo");
-		JButton eliminar = new JButton("Eliminar"), cancelar = new JButton("Cancelar"), cambiarTipoInsumo = new JButton("No Líquidos");
+		JButton eliminar = new JButton("Eliminar"), volver = new JButton("Volver"), cambiarTipoInsumo = new JButton("Ver Líquidos");
 		JTable tablaInsumos = new JTable(0,6);
 		List<Insumo> listaInsumosNoLiquidos = new ArrayList<Insumo>();
 		List<Insumo> listaInsumosLiquidos = new ArrayList<Insumo>();
@@ -640,7 +637,7 @@ public class ABMInsumo {
 		listaInsumosLiquidos.addAll(controller.listaInsumosLiquidos());
 		
 		//tabla
-		constraints.insets=new Insets(5, 5, 40, 5);
+		constraints.insets=new Insets(5, 5, 0, 5);
 		tablaInsumos.setFillsViewportHeight(true);
 		tablaInsumos.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tablaInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -685,14 +682,29 @@ public class ABMInsumo {
 		
 		//agregar datos tabla
 		DefaultTableModel model = (DefaultTableModel) tablaInsumos.getModel();
-		for (Insumo insumo : listaInsumosNoLiquidos) {
-			String refrig = "";
-			if (insumo.getEsRefrigerado())
-				refrig += "SI";
-			else
-				refrig += "NO";
-			model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), insumo.getUnidad().toString(), refrig});
+		if (mostrarTablaNoLiquidos) {
+			for (Insumo insumo : listaInsumosNoLiquidos) {
+				String refrig = "";
+				if (insumo.getEsRefrigerado())
+					refrig += "SI";
+				else
+					refrig += "NO";
+				model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), insumo.getUnidad().toString(), refrig});
+			}
+		} else {
+			cambiarTipoInsumo.setText("Ver No Líquidos");
+			tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Densidad");
+			for (Insumo insumo : listaInsumosLiquidos) {
+				String refrig = "";
+				if (insumo.getEsRefrigerado())
+					refrig += "SI";
+				else
+					refrig += "NO";
+				model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), Double.toString(((InsumoLiquido)insumo).getDensidad()), refrig});
+			}
 		}
+		
+		
 
 		//titulo
 		constraints.gridx=0;
@@ -704,20 +716,51 @@ public class ABMInsumo {
 		panel.add(encabezado,constraints);
 		
 		//botones
-		constraints.gridy=14;
+		constraints.gridy=3;
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
 		
 		constraints.gridx=0;
-		constraints.insets=new Insets(5, 5, 5, 170);
-		cancelar.addActionListener(a -> GestionEntidades.mostrarMenu());
-		panel.add(cancelar, constraints);
+		constraints.insets=new Insets(5, 5, 5, 250);
+		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
+		panel.add(volver, constraints);
 		
+		constraints.anchor=GridBagConstraints.WEST;
+		constraints.insets=new Insets(5, 250, 5, 5);
+		constraints.gridx=2;
+		eliminar.addActionListener(a -> {
+			int numFila = tablaInsumos.getSelectedRow();
+			int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
+			if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+				//Hacer lo mismo: llamar a eliminarStocksProduccion(stocks) en ABMPlanta si se elimina PlantaProduccion definitivamente
+				if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
+					Insumo ins = controller.buscarInsumoNoLiquido(id);
+					if(ins.getStock() != null)
+						sc.eliminarStock(ins.getStock());
+					
+					controller.eliminarInsumoNoLiquido(id);
+					this.eliminarInsumo(true);
+				}
+				else {
+					Insumo ins = controller.buscarInsumoLiquido(id);
+					if(ins.getStock() != null)
+						sc.eliminarStock(ins.getStock());
+					
+					controller.eliminarInsumoLiquido(id);
+					this.eliminarInsumo(false);
+				}
+			}
+		});
+		panel.add(eliminar,constraints);
+		
+		constraints.gridy=2;
 		constraints.gridx=1;
-		constraints.insets = new Insets(5,5,5,337);
+		constraints.anchor=GridBagConstraints.CENTER;
+		constraints.insets = new Insets(1,5,39,375);
+		cambiarTipoInsumo.setPreferredSize(new Dimension(130, 25));
 		cambiarTipoInsumo.addActionListener(a -> {
-			if (cambiarTipoInsumo.getText() == "No Líquidos") {
-				cambiarTipoInsumo.setText("Líquidos");
+			if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
+				cambiarTipoInsumo.setText("Ver No Líquidos");
 				tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Densidad");
 				for (int i=0; i<listaInsumosNoLiquidos.size(); i++) 
 					model.removeRow(0);
@@ -730,8 +773,8 @@ public class ABMInsumo {
 					model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), Double.toString(((InsumoLiquido)insumo).getDensidad()), refrig});
 				}
 				
-			} else if (cambiarTipoInsumo.getText() == "Líquidos"){
-				cambiarTipoInsumo.setText("No Líquidos");
+			} else if (cambiarTipoInsumo.getText() == "Ver No Líquidos"){
+				cambiarTipoInsumo.setText("Ver Líquidos");
 				tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Unidad");
 				for (int i=0; i<listaInsumosLiquidos.size(); i++) 
 					model.removeRow(0);
@@ -747,32 +790,6 @@ public class ABMInsumo {
 		});
 		panel.add(cambiarTipoInsumo, constraints);
 		
-		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(5, 170, 5, 5);
-		constraints.gridx=2;
-		eliminar.addActionListener(a -> {
-			int numFila = tablaInsumos.getSelectedRow();
-			int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
-			if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-				//Hacer lo mismo: llamar a eliminarStocksProduccion(stocks) en ABMPlanta si se elimina PlantaProduccion definitivamente
-				if (cambiarTipoInsumo.getText() == "No Líquidos") {
-					Insumo ins = controller.buscarInsumoNoLiquido(id);
-					if(ins.getStock() != null)
-						sc.eliminarStock(ins.getStock());
-					
-					controller.eliminarInsumoNoLiquido(id);
-				}
-				else {
-					Insumo ins = controller.buscarInsumoLiquido(id);
-					if(ins.getStock() != null)
-						sc.eliminarStock(ins.getStock());
-					
-					controller.eliminarInsumoLiquido(id);
-				}
-				this.eliminarInsumo();
-			}
-		});
-		panel.add(eliminar,constraints);
 		
 		ventana.setContentPane(panel);
 		ventana.pack();
