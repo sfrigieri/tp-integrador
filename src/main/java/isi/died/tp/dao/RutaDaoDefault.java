@@ -17,9 +17,9 @@ public class RutaDaoDefault implements RutaDao {
 	
 	private CsvSource dataSource;
 	
-	public RutaDaoDefault(PlantaService plantaService) {
+	public RutaDaoDefault(PlantaService ps) {
+		this.ps = ps;
 		dataSource = new CsvSource();
-		ps = plantaService;
 		if(LISTA_RUTAS.isEmpty())
 			this.cargarListaRutas();
 		
@@ -59,10 +59,6 @@ public class RutaDaoDefault implements RutaDao {
 			aux.setFin(new Vertice<Planta>(p2));
 			LISTA_RUTAS.add(aux);
 		}
-		//Cuando paso la lista, la otra lista tendrá una referencia a cada uno de los objetos.
-		//Aunque elimine, modifique, etc objetos en esta lista, la otra seguirá apuntando a esos objetos
-		//por lo que es necesario volver a actualizar la lista Completa.
-		ps.setRutas(LISTA_RUTAS);
 	}
 
 	@Override
@@ -82,8 +78,6 @@ public class RutaDaoDefault implements RutaDao {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		ps.setRutas(LISTA_RUTAS);
 	}
 	
 	@Override
@@ -96,7 +90,6 @@ public class RutaDaoDefault implements RutaDao {
 			LISTA_RUTAS.remove(old);
 		
 		LISTA_RUTAS.add(ruta);
-		ps.setRutas(LISTA_RUTAS);
 		this.actualizarArchivo();
 	}
 	
@@ -104,7 +97,6 @@ public class RutaDaoDefault implements RutaDao {
 	@Override
 	public void eliminarRuta(Ruta ruta) {
 		LISTA_RUTAS.remove(ruta);
-		ps.setRutas(LISTA_RUTAS);
 		this.actualizarArchivo();
 		
 	}

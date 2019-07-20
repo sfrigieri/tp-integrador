@@ -35,7 +35,6 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public void setRutaService(RutaService rs) {
 		this.rs = rs;
-		plantaDao.setRutaService(rs);
 	}
 	
 	//Al cargar las rutas, en RutaService se pasa la lista correspondiente al Grafo
@@ -189,9 +188,13 @@ public class PlantaServiceDefault implements PlantaService {
 
 	@Override
 	public void eliminarPlanta(Planta planta) {
+		//Grafo Planta elimina el nodo y sus rutas incidentes
 		plantaDao.eliminarPlanta(planta);
+		//Entonces es necesario: actualizar desde PlantaService la LISTA_RUTAS en RutaService
 		rs.setRutas(plantaDao.listaRutas());
-
+		//Y, si era PlantaProduccion, eliminar sus stocksProduccion
+		if(planta instanceof PlantaProduccion)
+			ss.eliminarStocksProduccion(((PlantaProduccion) planta).getListaDeStock());
 	}
 
 	@Override

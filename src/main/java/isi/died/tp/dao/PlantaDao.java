@@ -47,8 +47,6 @@ public interface PlantaDao {
 
 	public PlantaAcopio buscarAcopioInicial();
 
-	public void setRutaService(RutaService rs);
-
 	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2);
 
 

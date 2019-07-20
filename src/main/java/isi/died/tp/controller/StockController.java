@@ -28,7 +28,7 @@ public class StockController {
 		this.ss.eliminarStock(stock);
 	}
 	
-	public void eliminarStocksProduccion(List<Stock> lista){
+	public void eliminarStocksProduccion(List<StockProduccion> lista){
 		this.ss.eliminarStocksProduccion(lista);
 	}
 

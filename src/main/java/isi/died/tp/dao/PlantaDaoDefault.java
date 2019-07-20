@@ -9,13 +9,13 @@ import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.estructuras.*;
 import isi.died.tp.model.*;
 import isi.died.tp.service.RutaService;
+import isi.died.tp.service.StockService;
 
 public class PlantaDaoDefault implements PlantaDao {
 
 	private static Integer ULTIMO_ID_PROD;
 	private static Integer ULTIMO_ID_ACOP;
 	private static GrafoPlanta GRAFO_PLANTA  = new GrafoPlanta();
-	private RutaService rs;
 	
 	private CsvSource dataSource;
 
@@ -99,12 +99,6 @@ public class PlantaDaoDefault implements PlantaDao {
 		return null;
 	}
 
-
-	@Override
-	public void setRutaService(RutaService rs) {
-		this.rs = rs;
-		
-	}
 	
 	@Override
 	public void agregarPlanta(Planta planta) {
@@ -151,11 +145,8 @@ public class PlantaDaoDefault implements PlantaDao {
 	
 	@Override
 	public void eliminarPlanta(Planta planta) {
-		//Grafo Planta elimina el nodo y sus rutas incidentes
 		GRAFO_PLANTA.eliminarNodo(planta);
-		//Entonces es necesario actualizar desde PlantaService la LISTA_RUTAS en RutaService
-		rs.setRutas(GRAFO_PLANTA.getRutas());
-		
+	
 		if(planta instanceof PlantaAcopio)
 			this.actualizarArchivoPlantasAcopio();
 		else

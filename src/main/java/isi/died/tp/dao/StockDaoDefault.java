@@ -186,7 +186,7 @@ public class StockDaoDefault implements StockDao {
 	}
 	
 	@Override
-	public void eliminarStocksProduccion(List<Stock> lista) {
+	public void eliminarStocksProduccion(List<StockProduccion> lista) {
 		LISTA_STOCKS_PRODUCCION.removeAll(lista);
 		actualizarArchivoProduccion();
 	}

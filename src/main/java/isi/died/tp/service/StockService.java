@@ -22,6 +22,6 @@ public interface StockService {
 
 	public StockProduccion buscarStockProduccion(Integer id);
 
-	public void eliminarStocksProduccion(List<Stock> lista);
+	public void eliminarStocksProduccion(List<StockProduccion> lista);
 
 }

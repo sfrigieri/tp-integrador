@@ -32,7 +32,7 @@ public class StockServiceDefault implements StockService {
 	}
 
 	@Override
-	public void eliminarStocksProduccion(List<Stock> lista) {
+	public void eliminarStocksProduccion(List<StockProduccion> lista) {
 		this.stockDao.eliminarStocksProduccion(lista);
 	}
 	
