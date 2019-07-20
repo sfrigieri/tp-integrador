@@ -26,6 +26,7 @@ public class GestionEntidadesController {
 		insumoService = new InsumoServiceDefault(plantaService);
 		insumoController = new InsumoController(insumoService);
 		stockService = new StockServiceDefault(plantaService, insumoService);
+		insumoService.setStockService(stockService);
 		stockController = new StockController(stockService);
 		//Luego, internamente, se asigna rutaService llamando a PlantaService:setRutaService(rs)
 		rutaService = new RutaServiceDefault(plantaService);
@@ -34,10 +35,9 @@ public class GestionEntidadesController {
 		interfazInsumo = new ABMInsumo(ventana, insumoController, stockController);
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
-		plantaService.setRutaService(rutaService);
 		interfazPlanta = new ABMPlanta(ventana, plantaController, stockController);
 		
-		interfazRuta = new ABMRuta(ventana,plantaService);
+		interfazRuta = new ABMRuta(ventana,plantaService, rutaService);
 	}
 	
 	

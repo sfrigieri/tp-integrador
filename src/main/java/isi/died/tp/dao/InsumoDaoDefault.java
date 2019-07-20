@@ -17,12 +17,10 @@ public class InsumoDaoDefault implements InsumoDao {
 	private static List<Insumo> LISTA_INSUMOS_LIQUIDOS  = new ArrayList<Insumo>();
 	private static Integer ULTIMO_ID_NO_LIQUIDOS;
 	private static Integer ULTIMO_ID_LIQUIDOS;
-	private PlantaService ps;
 
 	private CsvSource dataSource;
 
-	public InsumoDaoDefault(PlantaService plantaService) {
-		this.ps = plantaService;
+	public InsumoDaoDefault() {
 		dataSource = new CsvSource();
 		if(LISTA_INSUMOS.isEmpty())
 			this.cargarListaInsumos();
@@ -59,9 +57,8 @@ public class InsumoDaoDefault implements InsumoDao {
 			aux.loadFromStringRow(filaInsumo);
 			LISTA_INSUMOS.add(aux);
 		}
-		if (!LISTA_INSUMOS.isEmpty())
-			ps.addInsumos(LISTA_INSUMOS);
 	}
+	
 	public void cargarListaInsumosLiquidos() {
 		List<List<String>> insumosLiquidos = dataSource.readFile("insumosLiquidos.csv");
 		for(List<String> filaInsumo : insumosLiquidos) {
@@ -69,8 +66,6 @@ public class InsumoDaoDefault implements InsumoDao {
 			aux.loadFromStringRow(filaInsumo);
 			LISTA_INSUMOS_LIQUIDOS.add(aux);
 		}
-		if (!LISTA_INSUMOS_LIQUIDOS.isEmpty())
-			ps.addInsumos(LISTA_INSUMOS_LIQUIDOS);
 	}
 
 	@Override

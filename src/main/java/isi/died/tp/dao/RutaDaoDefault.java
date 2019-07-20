@@ -46,12 +46,12 @@ public class RutaDaoDefault implements RutaDao {
 			Ruta aux = new Ruta();
 			aux.loadFromStringRow(filaRuta);
 			Planta p1, p2;
-			if(filaRuta.get(1) == "P")
+			if(filaRuta.get(1).matches("P"))
 				p1 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(2)));
 			else
 				p1 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(2)));
 			
-			if(filaRuta.get(3) == "P")
+			if(filaRuta.get(3).matches("P"))
 				p2 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(4)));
 			else
 				p2 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(4)));

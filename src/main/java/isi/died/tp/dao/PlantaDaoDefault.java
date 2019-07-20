@@ -8,8 +8,7 @@ import java.util.List;
 import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.estructuras.*;
 import isi.died.tp.model.*;
-import isi.died.tp.service.RutaService;
-import isi.died.tp.service.StockService;
+
 
 public class PlantaDaoDefault implements PlantaDao {
 
@@ -72,7 +71,7 @@ public class PlantaDaoDefault implements PlantaDao {
 	@Override
 	public void setRutas(List<Arista<Planta>> lista) {
 		GRAFO_PLANTA.setRutas(lista);
-		
+	
 	}
 	
 	@Override
@@ -181,10 +180,11 @@ public class PlantaDaoDefault implements PlantaDao {
 
 	@Override
 	public void addInsumos(List<Insumo> lista) {
-		PlantaAcopio plantaOrigen = this.buscarAcopioInicial();
-		if(plantaOrigen != null)
-			plantaOrigen.addInsumos(lista);
-		
+		if(!lista.isEmpty()) {
+			PlantaAcopio plantaOrigen = this.buscarAcopioInicial();
+			if(plantaOrigen != null)
+				plantaOrigen.addInsumos(lista);
+		}	
 	}
 
 	@Override
