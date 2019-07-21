@@ -45,9 +45,9 @@ public class PlantaServiceDefault implements PlantaService {
 			listaAux.add(ruta);
 		
 		plantaDao.setRutas(listaAux);
-		for(Arista<Planta> ruta : lista)
+		/*for(Arista<Planta> ruta : lista)
 			System.out.println(ruta.getInicio().getValor().getNombre()+" - "+ruta.getFin().getValor().getNombre());
-		System.out.println("FIN");
+		System.out.println("FIN");*/
 	}
 	
 	@Override
@@ -329,6 +329,11 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2) {
 		return plantaDao.buscarCaminosInfo(p1,p2);
+	}
+	
+	@Override
+	public PlantaAcopio buscarAcopioInicial() {
+		return plantaDao.buscarAcopioInicial();
 	}
 
 

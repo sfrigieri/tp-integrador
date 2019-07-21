@@ -50,5 +50,7 @@ public interface PlantaService {
 	
 	public List<Recorrido> buscarCaminosInfo(Planta p1,Planta p2);
 
+	public PlantaAcopio buscarAcopioInicial();
+
 
 }
