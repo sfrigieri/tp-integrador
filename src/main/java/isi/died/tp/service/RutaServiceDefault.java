@@ -22,7 +22,13 @@ public class RutaServiceDefault implements RutaService {
 		//por lo que es necesario volver a actualizar la lista Completa.
 		ps.setRutas(rutaDao.listaRutas());
 		ps.setRutaService(this);
+		System.out.println(" ");
 		System.out.println("Flujo Máximo: "+ps.flujoMaximoRed(ps.buscarAcopioInicial())+" Toneladas");
+		System.out.println(" ");
+		System.out.println(" ");
+		System.out.println("Page Ranks:");
+		ps.resetPageRanks();
+		ps.generarPageRanks();
 	}
 	
 	@Override

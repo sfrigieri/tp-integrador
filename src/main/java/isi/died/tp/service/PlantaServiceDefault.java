@@ -227,14 +227,17 @@ public class PlantaServiceDefault implements PlantaService {
 
 			if(nuevosPageRanks.size() != 0)
 				for(int i = 0; i < plantas.size(); i++) {
+					difPromedio = difPromedio + Math.abs(nuevosPageRanks.get(i) - plantas.get(i).getPageRank());
 					plantas.get(i).setPageRank(nuevosPageRanks.get(i));
-					difPromedio += Math.abs(nuevosPageRanks.get(i) - plantas.get(i).getPageRank());
-					//System.out.println(plantas.get(i).getNombre()+" Page Rank: "+plantas.get(i).getPageRank());
+					//System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());
 				}
 
 			difPromedio = difPromedio / nuevosPageRanks.size();
-
-		} while(difPromedio > 0.00001);
+		} while(difPromedio > 0.000001);
+		
+		for(int i = 0; i < plantas.size(); i++) {
+			System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());
+		}
 		
 	}
 	
