@@ -52,5 +52,7 @@ public interface PlantaService {
 
 	public PlantaAcopio buscarAcopioInicial();
 
+	public Boolean necesitaInsumo(Integer id, Insumo ins);
+
 
 }

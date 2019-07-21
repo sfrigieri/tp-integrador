@@ -49,5 +49,7 @@ public interface PlantaDao {
 
 	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2);
 
+	public Boolean necesitaInsumo(Integer id, Insumo ins);
+
 
 }

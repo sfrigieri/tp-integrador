@@ -36,20 +36,20 @@ public class PlantaServiceDefault implements PlantaService {
 	public void setRutaService(RutaService rs) {
 		this.rs = rs;
 	}
-	
+
 	//Al cargar las rutas, en RutaService se pasa la lista correspondiente al Grafo
 	@Override
 	public void setRutas(List<Ruta> lista) {
 		List<Arista<Planta>> listaAux = new ArrayList<Arista<Planta>>();
 		for(Arista<Planta> ruta : lista)
 			listaAux.add(ruta);
-		
+
 		plantaDao.setRutas(listaAux);
 		/*for(Arista<Planta> ruta : lista)
 			System.out.println(ruta.getInicio().getValor().getNombre()+" - "+ruta.getFin().getValor().getNombre());
 		System.out.println("FIN");*/
 	}
-	
+
 	@Override
 	public void setStocksProduccion(List<StockProduccion> lista) {
 		for(StockProduccion s: lista) {
@@ -58,15 +58,15 @@ public class PlantaServiceDefault implements PlantaService {
 					p.addStock(s);
 			}
 		}
-		
+
 	}
-	
+
 	@Override
 	public void addInsumos(List<Insumo> lista) {
 		plantaDao.addInsumos(lista);
-		
+
 	}
-	
+
 	@Override
 	public Planta agregarPlanta(Planta planta) {
 		plantaDao.agregarPlanta(planta);
@@ -77,98 +77,6 @@ public class PlantaServiceDefault implements PlantaService {
 	public List<Planta> listaPlantas() {
 		return plantaDao.listaPlantas();
 	}
-
-	//Item 3.a "EL sistema debe mostrar una lista de los insumos faltantes y cantidad"
-	@Override
-	public List<StockAcopio> generarStockFaltante() {
-		List<StockAcopio> lista = new ArrayList<StockAcopio>();
-
-		for(PlantaProduccion p : this.listaPlantasProduccion())
-			lista.addAll(this.generarStockFaltante(p));
-
-		return lista;
-	}
-
-	private List<StockAcopio> generarStockFaltante(PlantaProduccion p) {
-		List<StockAcopio> lista = new ArrayList<StockAcopio>();
-
-		for(Insumo i : is.listaInsumos()) {
-			int cant = p.cantidadNecesariaInsumo(i);
-			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
-				lista.add(new StockAcopio(-1,cant,i,p));
-
-		}
-		
-		for(Insumo il : is.listaInsumosLiquidos()) {
-			int cant = p.cantidadNecesariaInsumo(il);
-			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
-				lista.add(new StockAcopio(-1,cant,il,p));
-
-		}
-		
-		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
-		return lista;
-	}
-
-	
-	//Item 3.c Si se procede a seleccionar camión y generar solución,
-	//deben generarse los pedidos posibles con el stock disponible en PlantaAcopio inicial
-	@Override
-	public List<StockAcopio> generarStockFaltanteDisponible() {
-		List<StockAcopio> lista = new ArrayList<StockAcopio>();
-		List<StockAcopio> listaAux;
-		//listaAux recibe stocks ordenados de menor a mayor cantidad faltante.
-		//lo que permite maximizar la cantidad de envíos a realizar por camión/viaje
-		for(Insumo i : is.listaInsumos()) {
-			listaAux = generarStockFaltante(i);
-			Integer cantDisponible = i.getStock().getCantidad();
-
-			if(cantDisponible != null) {
-
-				for(StockAcopio s : listaAux) {
-					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
-						lista.add(s);
-						cantDisponible = cantDisponible - s.getCantidad();
-					}
-				}
-			}
-
-		}
-		
-		for(Insumo i : is.listaInsumosLiquidos()) {
-			listaAux = generarStockFaltante(i);
-			Integer cantDisponible = i.getStock().getCantidad();
-
-			if(cantDisponible != null) {
-
-				for(StockAcopio s : listaAux) {
-					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
-						lista.add(s);
-						cantDisponible = cantDisponible - s.getCantidad();
-					}
-				}
-			}
-
-		}
-
-		return lista;
-	}
-	
-	private List<StockAcopio> generarStockFaltante(Insumo ins) {
-		List<StockAcopio> lista = new ArrayList<StockAcopio>();
-
-		for(PlantaProduccion p : this.listaPlantasProduccion()){
-			int cant = p.cantidadNecesariaInsumo(ins);
-			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
-				lista.add(new StockAcopio(-1,cant,ins,p));
-
-		}
-		//Se ordena la lista de stock, de menor a mayor cantidad faltante
-		//para maximizar la cantidad de envíos a diferentes plantas
-		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
-		return lista;
-	}
-
 
 
 	@Override
@@ -209,43 +117,20 @@ public class PlantaServiceDefault implements PlantaService {
 		return plantaDao.buscarPlantaAcopio(id);
 	}
 
-	
+	// Item 4.2 a)
 	@Override
-	public void generarPageRanks() {
-
-	
-		List<Planta> plantas = plantaDao.listaPlantas();
-		double difPromedio;	
-		
-		do {
-			List<Double> nuevosPageRanks = new ArrayList<Double>();
-			difPromedio = 0;	
-			
-			for(Planta p: plantas) {
-				nuevosPageRanks.add(plantaDao.generarNuevoPageRank(p));
-			}
-
-			if(nuevosPageRanks.size() != 0)
-				for(int i = 0; i < plantas.size(); i++) {
-					difPromedio = difPromedio + Math.abs(nuevosPageRanks.get(i) - plantas.get(i).getPageRank());
-					plantas.get(i).setPageRank(nuevosPageRanks.get(i));
-					//System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());
-				}
-
-			difPromedio = difPromedio / nuevosPageRanks.size();
-		} while(difPromedio > 0.000001);
-		
-		for(int i = 0; i < plantas.size(); i++) {
-			System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());
-		}
-		
-	}
-	
-	@Override
-	public void resetPageRanks() {
-		plantaDao.resetPageRanks();
+	public Boolean necesitaInsumo(Integer id, Insumo ins) {
+		return plantaDao.necesitaInsumo(id,ins);
 	}
 
+	// Item 4.3
+	@Override
+	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2) {
+		return plantaDao.buscarCaminosInfo(p1,p2);
+	}
+
+
+	// Item 5.1
 	@Override
 	public int flujoMaximoRed(Planta origen){
 
@@ -262,7 +147,140 @@ public class PlantaServiceDefault implements PlantaService {
 
 		return flujoMaximo;
 	}
+	
 
+	// Item 5.2
+	@Override
+	public void generarPageRanks() {
+
+
+		List<Planta> plantas = plantaDao.listaPlantas();
+		double difPromedio;	
+
+		do {
+			List<Double> nuevosPageRanks = new ArrayList<Double>();
+			difPromedio = 0;	
+
+			for(Planta p: plantas) {
+				nuevosPageRanks.add(plantaDao.generarNuevoPageRank(p));
+			}
+
+			if(nuevosPageRanks.size() != 0)
+				for(int i = 0; i < plantas.size(); i++) {
+					difPromedio = difPromedio + Math.abs(nuevosPageRanks.get(i) - plantas.get(i).getPageRank());
+					plantas.get(i).setPageRank(nuevosPageRanks.get(i));
+					//System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());
+				}
+
+			difPromedio = difPromedio / nuevosPageRanks.size();
+		} while(difPromedio > 0.000001);
+
+		for(int i = 0; i < plantas.size(); i++) {
+			System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());
+		}
+
+	}
+
+	@Override
+	public void resetPageRanks() {
+		plantaDao.resetPageRanks();
+	}
+
+
+	//Item 5.3 a) "EL sistema debe mostrar una lista de los insumos faltantes y cantidad"
+	@Override
+	public List<StockAcopio> generarStockFaltante() {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+
+		for(PlantaProduccion p : this.listaPlantasProduccion())
+			lista.addAll(this.generarStockFaltante(p));
+
+		return lista;
+	}
+
+	private List<StockAcopio> generarStockFaltante(PlantaProduccion p) {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+
+		for(Insumo i : is.listaInsumos()) {
+			int cant = p.cantidadNecesariaInsumo(i);
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
+				lista.add(new StockAcopio(-1,cant,i,p));
+
+		}
+
+		for(Insumo il : is.listaInsumosLiquidos()) {
+			int cant = p.cantidadNecesariaInsumo(il);
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
+				lista.add(new StockAcopio(-1,cant,il,p));
+
+		}
+
+		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
+		return lista;
+	}
+
+
+	
+	//Item 5.3 c) Si se procede a seleccionar camión y generar solución,
+	//deben generarse los pedidos posibles con el stock disponible en PlantaAcopio inicial
+	@Override
+	public List<StockAcopio> generarStockFaltanteDisponible() {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+		List<StockAcopio> listaAux;
+		//listaAux recibe stocks ordenados de menor a mayor cantidad faltante.
+		//lo que permite maximizar la cantidad de envíos a realizar por camión/viaje
+		for(Insumo i : is.listaInsumos()) {
+			listaAux = generarStockFaltante(i);
+			Integer cantDisponible = i.getStock().getCantidad();
+
+			if(cantDisponible != null) {
+
+				for(StockAcopio s : listaAux) {
+					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
+						lista.add(s);
+						cantDisponible = cantDisponible - s.getCantidad();
+					}
+				}
+			}
+
+		}
+
+		for(Insumo i : is.listaInsumosLiquidos()) {
+			listaAux = generarStockFaltante(i);
+			Integer cantDisponible = i.getStock().getCantidad();
+
+			if(cantDisponible != null) {
+
+				for(StockAcopio s : listaAux) {
+					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
+						lista.add(s);
+						cantDisponible = cantDisponible - s.getCantidad();
+					}
+				}
+			}
+
+		}
+
+		return lista;
+	}
+
+	private List<StockAcopio> generarStockFaltante(Insumo ins) {
+		List<StockAcopio> lista = new ArrayList<StockAcopio>();
+
+		for(PlantaProduccion p : this.listaPlantasProduccion()){
+			int cant = p.cantidadNecesariaInsumo(ins);
+			if(cant != 0)	//No corresponde Id, StocksAcopio utilizados temporalmente 
+				lista.add(new StockAcopio(-1,cant,ins,p));
+
+		}
+		//Se ordena la lista de stock, de menor a mayor cantidad faltante
+		//para maximizar la cantidad de envíos a diferentes plantas
+		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
+		return lista;
+	}
+	
+	// Item 5.3 c) Luego con la lista de StocksAcopio disponibles y el camión seleccionado
+	// se genera la mejor selección para el envío
 	@Override
 	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> listaDisponibles) {
 
@@ -329,11 +347,6 @@ public class PlantaServiceDefault implements PlantaService {
 		return listaResultante;
 	}
 
-	@Override
-	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2) {
-		return plantaDao.buscarCaminosInfo(p1,p2);
-	}
-	
 	@Override
 	public PlantaAcopio buscarAcopioInicial() {
 		return plantaDao.buscarAcopioInicial();

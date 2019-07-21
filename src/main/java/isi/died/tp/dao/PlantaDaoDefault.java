@@ -187,6 +187,15 @@ public class PlantaDaoDefault implements PlantaDao {
 		}
 		return plantas;
 	}
+	
+	@Override
+	public Boolean necesitaInsumo(Integer id, Insumo ins) {
+		PlantaProduccion p = null;
+		p = this.buscarPlantaProduccion(id);
+		if(p != null)
+			return this.buscarPlantaProduccion(id).necesitaInsumo(ins);
+		return null; 
+	}
 
 	@Override
 	public void addInsumos(List<Insumo> lista) {
@@ -287,7 +296,6 @@ public class PlantaDaoDefault implements PlantaDao {
 	public List<Recorrido> buscarCaminosInfo(Planta p1, Planta p2) {
 		return GRAFO_PLANTA.buscarCaminosInfo(p1, p2);
 	}
-
 
 	
 	
