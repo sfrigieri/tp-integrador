@@ -2,6 +2,7 @@ package isi.died.tp.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import isi.died.tp.dao.*;
 import isi.died.tp.model.*;
@@ -119,9 +120,83 @@ public class PlantaServiceDefault implements PlantaService {
 
 	// Item 4.2 a)
 	@Override
-	public Boolean necesitaInsumo(Integer id, Insumo ins) {
-		return plantaDao.necesitaInsumo(id,ins);
+	public List<PlantaProduccion> buscarPlantasNecesitanInsumo(Insumo ins) {
+		List<PlantaProduccion> lista = new ArrayList<PlantaProduccion>();
+
+		for(PlantaProduccion p : this.listaPlantasProduccion())
+			if(p.necesitaInsumo(ins))
+				lista.add(p);
+
+		return lista;
 	}
+
+
+	// Item 4.2 b)
+	@Override
+	public Recorrido mejorCaminoEnvio(List<PlantaProduccion> plantas) {
+
+		List<Recorrido> caminosPosibles = this.buscarCaminosInfo(this.buscarAcopioInicial(), this.buscarAcopioFinal());
+
+		if(caminosPosibles.isEmpty())
+			return null;
+
+		List<Recorrido> caminosConteniendoPlantas = this.filtrarCaminosContienen(caminosPosibles, plantas);
+
+		if(caminosConteniendoPlantas.isEmpty())
+			return null;
+
+		Recorrido mejorCaminoActual = null;
+
+		for(Recorrido r : caminosConteniendoPlantas) {
+			if(mejorCaminoActual == null)
+				mejorCaminoActual = r;
+			else 
+				mejorCaminoActual = this.mejorCaminoEntre(mejorCaminoActual, r);
+		}
+
+		return mejorCaminoActual;
+	}
+
+
+
+	private Recorrido mejorCaminoEntre(Recorrido r1, Recorrido r2) {
+
+		if(r1.getDuracionTotal() < r2.getDuracionTotal())
+			return r1;
+		else
+			if(r1.getDuracionTotal() > r2.getDuracionTotal())
+				return r2;
+			else
+				if(r1.getDistanciaTotal() < r2.getDistanciaTotal())
+					return r1;
+
+		return r2;
+	}
+
+
+	private List<Recorrido> filtrarCaminosContienen(List<Recorrido> caminos, List<PlantaProduccion> plantas) {
+
+		List<Recorrido> caminosConteniendoPlantas = new ArrayList<Recorrido>();
+		List<PlantaProduccion> listaAux = plantas.stream().collect(Collectors.toList());
+
+		for(Recorrido recorrido : caminos) {
+			for(Ruta ruta : recorrido.getRecorrido()) {
+				if(listaAux.contains(ruta.getInicio().getValor()))
+					listaAux.remove(ruta.getInicio().getValor());
+
+				if(listaAux.contains(ruta.getFin().getValor()))
+					listaAux.remove(ruta.getFin().getValor());
+			}
+
+			if(listaAux.isEmpty())
+				caminosConteniendoPlantas.add(recorrido);
+
+			listaAux = plantas.stream().collect(Collectors.toList());
+		}	
+
+		return caminosConteniendoPlantas;
+	}
+
 
 	// Item 4.3
 	@Override
@@ -147,7 +222,7 @@ public class PlantaServiceDefault implements PlantaService {
 
 		return flujoMaximo;
 	}
-	
+
 
 	// Item 5.2
 	@Override
@@ -220,7 +295,7 @@ public class PlantaServiceDefault implements PlantaService {
 	}
 
 
-	
+
 	//Item 5.3 c) Si se procede a seleccionar camión y generar solución,
 	//deben generarse los pedidos posibles con el stock disponible en PlantaAcopio inicial
 	@Override
@@ -278,7 +353,7 @@ public class PlantaServiceDefault implements PlantaService {
 		lista.sort((s1,s2) -> s1.getCantidad().compareTo(s2.getCantidad()));
 		return lista;
 	}
-	
+
 	// Item 5.3 c) Luego con la lista de StocksAcopio disponibles y el camión seleccionado
 	// se genera la mejor selección para el envío
 	@Override
@@ -350,6 +425,11 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public PlantaAcopio buscarAcopioInicial() {
 		return plantaDao.buscarAcopioInicial();
+	}
+
+	@Override
+	public PlantaAcopio buscarAcopioFinal() {
+		return plantaDao.buscarAcopioFinal();
 	}
 
 

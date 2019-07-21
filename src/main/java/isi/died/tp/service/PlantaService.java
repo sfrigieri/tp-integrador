@@ -52,7 +52,11 @@ public interface PlantaService {
 
 	public PlantaAcopio buscarAcopioInicial();
 
-	public Boolean necesitaInsumo(Integer id, Insumo ins);
+	public PlantaAcopio buscarAcopioFinal();
+
+	public List<PlantaProduccion> buscarPlantasNecesitanInsumo(Insumo ins);
+
+	public Recorrido mejorCaminoEnvio(List<PlantaProduccion> plantas);
 
 
 }

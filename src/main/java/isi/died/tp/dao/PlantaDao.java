@@ -51,5 +51,7 @@ public interface PlantaDao {
 
 	public Boolean necesitaInsumo(Integer id, Insumo ins);
 
+	public PlantaAcopio buscarAcopioFinal();
+
 
 }

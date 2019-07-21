@@ -2,7 +2,6 @@ package isi.died.tp.estructuras;
 
 import java.util.List;
 
-import isi.died.tp.model.Planta;
 
 public class Recorrido {
 	List<Ruta> recorrido;

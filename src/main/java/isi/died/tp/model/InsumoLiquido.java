@@ -56,4 +56,6 @@ public class InsumoLiquido extends Insumo{
 			e.printStackTrace();
 		}
 	}
+	
+	
 }

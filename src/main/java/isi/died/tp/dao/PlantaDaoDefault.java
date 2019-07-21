@@ -215,6 +215,17 @@ public class PlantaDaoDefault implements PlantaDao {
 		return null;
 	}
 	
+	
+	@Override
+	public PlantaAcopio buscarAcopioFinal() {
+		for(PlantaAcopio p : this.listaPlantasAcopio()) {
+			if(!p.esOrigen())
+				return p;
+		}
+		return null;
+	}
+	
+	
 	@Override
 	public int buscarProximoFlujoDisponible(Vertice<Planta> origen) {
 		return GRAFO_PLANTA.buscarProximoFlujoDisponible(origen);
