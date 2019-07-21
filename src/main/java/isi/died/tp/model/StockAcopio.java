@@ -20,6 +20,8 @@ public class StockAcopio extends Stock {
 
 	public StockAcopio() {
 		super();
+		this.ins = null;
+		this.planta = null;
 	}
 
 	@Override

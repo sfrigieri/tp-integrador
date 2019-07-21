@@ -23,6 +23,8 @@ public class StockProduccion extends Stock {
 
 	public StockProduccion() {
 		super();
+		this.ins = null;
+		this.planta = null;
 	}
 
 

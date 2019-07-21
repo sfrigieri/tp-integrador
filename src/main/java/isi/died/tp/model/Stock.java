@@ -21,6 +21,8 @@ public abstract class Stock implements CsvRecord {
 		super();
 		this.id = id;
 		this.cantidad = cantidad;
+		this.ins = null;
+		this.planta = null;
 	}
 	
 	protected Stock(int id, Insumo ins, Planta planta) {
@@ -33,7 +35,8 @@ public abstract class Stock implements CsvRecord {
 	
 	
 	protected Stock() {
-
+		this.ins = null;
+		this.planta = null;
 	}
 
 	public int getId() {

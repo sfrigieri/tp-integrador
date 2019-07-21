@@ -9,18 +9,19 @@ import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.model.Insumo;
 import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.StockAcopio;
-import isi.died.tp.service.PlantaService;
 
 public class InsumoDaoDefault implements InsumoDao {
 
-	private static List<Insumo> LISTA_INSUMOS  = new ArrayList<Insumo>();
-	private static List<Insumo> LISTA_INSUMOS_LIQUIDOS  = new ArrayList<Insumo>();
+	private static List<Insumo> LISTA_INSUMOS;
+	private static List<Insumo> LISTA_INSUMOS_LIQUIDOS;
 	private static Integer ULTIMO_ID_NO_LIQUIDOS;
 	private static Integer ULTIMO_ID_LIQUIDOS;
 
 	private CsvSource dataSource;
 
 	public InsumoDaoDefault() {
+		LISTA_INSUMOS = new ArrayList<Insumo>();
+		LISTA_INSUMOS_LIQUIDOS = new ArrayList<Insumo>();
 		dataSource = new CsvSource();
 		if(LISTA_INSUMOS.isEmpty())
 			this.cargarListaInsumos();

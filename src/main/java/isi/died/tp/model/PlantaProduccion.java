@@ -10,6 +10,7 @@ public class PlantaProduccion extends Planta {
 	
 	public PlantaProduccion() {
 		super();
+		listaDeStock = new ArrayList<StockProduccion>();
 	}
 	
 	public PlantaProduccion(int id, String nombre) {

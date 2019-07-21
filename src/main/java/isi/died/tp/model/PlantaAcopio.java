@@ -27,6 +27,8 @@ public class PlantaAcopio extends Planta {
 
 	public PlantaAcopio() {
 		super();
+		listaDeStocks = new ArrayList<StockAcopio>();
+		listaDeInsumos  = new ArrayList<Insumo>();
 		this.pageRank = 1.0;
 	}
 	
