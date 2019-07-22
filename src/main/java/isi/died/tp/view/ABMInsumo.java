@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import isi.died.tp.controller.InsumoController;
 import isi.died.tp.model.Insumo;
 import isi.died.tp.model.InsumoLiquido;
+import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.Unidad;
 import isi.died.tp.controller.StockController;
 
@@ -40,13 +41,13 @@ public class ABMInsumo {
 	private InsumoController controller;
 	private StockController sc;
 	private JFrame ventana;
-	
+
 	public ABMInsumo(JFrame ventana,InsumoController ic, StockController sc){
 		this.controller = ic;
 		this.ventana = ventana;
 		this.sc = sc;
 	}
-	
+
 	public void agregarInsumo() {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -54,18 +55,18 @@ public class ABMInsumo {
 				errorPesoCantidad = new JLabel(), errorDensidad = new JLabel(),
 				encabezado = new JLabel("Agregar Nuevo Insumo");
 		JTextField descripcion = new JTextField(20), costo = new JTextField(20),
-					pesoCantidad = new JTextField(20), densidad = new JTextField(20);
+				pesoCantidad = new JTextField(20), densidad = new JTextField(20);
 		JButton aceptar = new JButton("Aceptar"), volver = new JButton("Volver");
 		JComboBox<Unidad> unidad = new JComboBox<Unidad>();
 		final ButtonGroup checkboxRefrigerado = new ButtonGroup(), 
-						  checkboxLiquido = new ButtonGroup();
+				checkboxLiquido = new ButtonGroup();
 		JCheckBox esLiquido = new JCheckBox("Es líquido"), noLiquido = new JCheckBox("No es líquido"),
-				  esRefrigerado = new JCheckBox("Refrigerado"), noRefrigerado = new JCheckBox("No Refrigerado");
+				esRefrigerado = new JCheckBox("Refrigerado"), noRefrigerado = new JCheckBox("No Refrigerado");
 		checkboxLiquido.add(esLiquido);
 		checkboxLiquido.add(noLiquido);
 		checkboxRefrigerado.add(esRefrigerado);
 		checkboxRefrigerado.add(noRefrigerado);
-			
+
 		//titulo
 		constraints.insets=new Insets(5, 5, 40, 5);
 		constraints.gridx=0;
@@ -75,35 +76,35 @@ public class ABMInsumo {
 		constraints.anchor=GridBagConstraints.NORTH;
 		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
 		panel.add(encabezado,constraints);
-	
+
 		//labels
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.insets.set(5, 5, 15, 5);
 		constraints.gridx=1;
 		constraints.gridwidth=1;
-		
+
 		constraints.gridy=2;
 		panel.add(new JLabel("Descripción: "), constraints);
-		
+
 		constraints.gridy=3;
 		panel.add(new JLabel("Costo ($): "), constraints);
-		
+
 		constraints.gridy=4;
 		panel.add(new JLabel("Peso (Kg): "), constraints);
 
 		constraints.gridy=5;
 		panel.add(new JLabel("Densidad (Kg/m3): "), constraints);
-		
+
 		constraints.gridy=6;
 		panel.add(new JLabel("Refrigeración: "), constraints);
-		
+
 		constraints.gridy=7;
 		panel.add(new JLabel("Unidad: "), constraints);
-		
+
 		//checkboxs
 		constraints.gridx=2;
-		
+
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridy=1;
 		panel.add(noLiquido, constraints);
@@ -116,24 +117,24 @@ public class ABMInsumo {
 		panel.add(esRefrigerado, constraints);
 		noLiquido.setSelected(true);
 		noRefrigerado.setSelected(true);
-		
+
 		//campos de texto
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
-		
+
 		constraints.gridy=2;
 		panel.add(descripcion, constraints);
 
 		constraints.gridy=3;
 		panel.add(costo, constraints);
-		
+
 		constraints.gridy=4;
 		panel.add(pesoCantidad, constraints);
-		
+
 		constraints.gridy=5;
 		panel.add(densidad, constraints);
 		densidad.setEnabled(false);
-		
+
 		constraints.gridy=7;
 		unidad.addItem(Unidad.KILO);
 		unidad.addItem(Unidad.METRO);
@@ -141,7 +142,7 @@ public class ABMInsumo {
 		unidad.addItem(Unidad.LITRO);
 		unidad.setSelectedItem(Unidad.KILO);
 		panel.add(unidad, constraints);
-		
+
 		//listener checkboxLiquido
 		ItemListener esLiquidoListener = new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
@@ -158,17 +159,17 @@ public class ABMInsumo {
 			}
 		};
 		esLiquido.addItemListener(esLiquidoListener);
-		
+
 		//botones
 		constraints.insets.set(15,0,0,0);
 		constraints.gridy=10;
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
-		
+
 		constraints.gridx=2;
 		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		panel.add(volver, constraints);
-						
+
 		constraints.gridx=1;
 		aceptar.addActionListener(a -> {
 			String valorDescripcion;
@@ -176,7 +177,7 @@ public class ABMInsumo {
 			Boolean valorRefrigeracion = false;
 			Unidad valorUnidad;
 			Double valorDensidad = null;
-					
+
 			errorDescripcion.setText("");
 			errorCosto.setText("");
 			errorPesoCantidad.setText("");
@@ -212,10 +213,10 @@ public class ABMInsumo {
 				} else if (esLiquido.isSelected()){
 					valorDensidad = Double.parseDouble(densidad.getText());
 				}
-						
+
 				valorUnidad = (Unidad)unidad.getSelectedItem();
 				valorRefrigeracion = esRefrigerado.isSelected();
-						
+
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar el nuevo insumo con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
 					if (esLiquido.isSelected()) { //Sería valorLitros en lugar de valorPeso, el peso se calcula internamente
 						controller.agregarInsumo(0, valorDescripcion, valorCosto, valorRefrigeracion, valorDensidad, valorPeso);
@@ -225,7 +226,7 @@ public class ABMInsumo {
 					JOptionPane.showConfirmDialog(ventana, "Insumo creado exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					GestionEntidades.mostrarMenu();
 				}					
-						
+
 			}catch(NumberFormatException nfex) {
 				if(valorCosto == null) {
 					JOptionPane.showConfirmDialog(ventana, "El campo Costo debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);	
@@ -243,10 +244,10 @@ public class ABMInsumo {
 					}
 				}
 			}
-			
+
 		});
 		panel.add(aceptar, constraints);
-				
+
 		constraints.anchor=GridBagConstraints.NORTHWEST;
 		constraints.insets.set(5,0,3,0);
 		constraints.gridx=3;
@@ -254,22 +255,22 @@ public class ABMInsumo {
 		errorDescripcion.setPreferredSize(new Dimension(230, 16));
 		errorDescripcion.setForeground(Color.red);
 		panel.add(errorDescripcion,constraints);
-				
+
 		constraints.gridy=3;
 		errorCosto.setPreferredSize(new Dimension(230, 16));
 		errorCosto.setForeground(Color.red);
 		panel.add(errorCosto,constraints);
-				
+
 		constraints.gridy=4;
 		errorPesoCantidad.setPreferredSize(new Dimension(230, 16));
 		errorPesoCantidad.setForeground(Color.red);
 		panel.add(errorPesoCantidad,constraints);
-		
+
 		constraints.gridy=5;
 		errorDensidad.setPreferredSize(new Dimension(230, 16));
 		errorDensidad.setForeground(Color.red);
 		panel.add(errorDensidad,constraints);
-				
+
 		ventana.setContentPane(panel);
 		ventana.pack();
 		ventana.setSize(800, 600);
@@ -285,7 +286,7 @@ public class ABMInsumo {
 		JLabel encabezado = new JLabel("Modificar Insumo");
 		JButton aceptar = new JButton("Aceptar"), volver = new JButton("Volver");
 		JComboBox<String> seleccionarInsumo = new JComboBox<String>();
-		
+
 		//titulo
 		constraints.gridx=0;
 		constraints.gridy=0;
@@ -294,7 +295,7 @@ public class ABMInsumo {
 		constraints.anchor=GridBagConstraints.NORTH;
 		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
 		panel.add(encabezado,constraints);
-		
+
 		//combobox seleccion
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
@@ -302,22 +303,22 @@ public class ABMInsumo {
 		constraints.gridx=0;
 		constraints.gridy=1;
 		panel.add(seleccionarInsumo, constraints);
-		
+
 		for (Insumo ins : controller.listaInsumos())
 			seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": " + ins.getDescripcion());
 		for (Insumo ins : controller.listaInsumosLiquidos())
 			seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": " + ins.getDescripcion() + " (L)");
-		
+
 		//botones
 		constraints.gridy=2;
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
-		
+
 		constraints.gridx=0;
 		constraints.insets=new Insets(5, 5, 5, 15);
 		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		panel.add(volver, constraints);
-				
+
 		constraints.anchor=GridBagConstraints.WEST;
 		constraints.insets=new Insets(5, 15, 5, 5);
 		constraints.gridx=0;
@@ -327,7 +328,7 @@ public class ABMInsumo {
 			Integer idSeleccionado = Integer.valueOf(arr[0]);
 			String segParte[] = arr[1].split(" ");
 			String ultimaPalabra = segParte[segParte.length-1];
-			
+
 			if (ultimaPalabra.equals("(L)")) {
 				this.modificarInsumo((InsumoLiquido)controller.buscarInsumoLiquido(idSeleccionado));
 			} else {
@@ -335,7 +336,7 @@ public class ABMInsumo {
 			}
 		});
 		panel.add(aceptar,constraints);
-		
+
 		ventana.setContentPane(panel);
 		ventana.pack();
 		ventana.setSize(800, 600);
@@ -344,7 +345,7 @@ public class ABMInsumo {
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
 	}
-	
+
 	public void modificarInsumo(Insumo insumo) {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -354,14 +355,14 @@ public class ABMInsumo {
 		JTextField descripcion = new JTextField(20), costo = new JTextField(20), pesoCantidad = new JTextField(20), densidad = new JTextField(20);
 		JComboBox<Unidad> unidad = new JComboBox<Unidad>();
 		final ButtonGroup checkboxRefrigerado = new ButtonGroup(), 
-						  checkboxLiquido = new ButtonGroup();
+				checkboxLiquido = new ButtonGroup();
 		JCheckBox esLiquido = new JCheckBox("Es líquido"), noLiquido = new JCheckBox("No es líquido"),
-				  esRefrigerado = new JCheckBox("Refrigerado"), noRefrigerado = new JCheckBox("No Refrigerado");
+				esRefrigerado = new JCheckBox("Refrigerado"), noRefrigerado = new JCheckBox("No Refrigerado");
 		checkboxLiquido.add(esLiquido);
 		checkboxLiquido.add(noLiquido);
 		checkboxRefrigerado.add(esRefrigerado);
 		checkboxRefrigerado.add(noRefrigerado);
-		
+
 		//titulo
 		constraints.gridx=0;
 		constraints.gridy=0;
@@ -370,35 +371,35 @@ public class ABMInsumo {
 		constraints.anchor=GridBagConstraints.NORTH;
 		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
 		panel.add(encabezado,constraints);
-		
+
 		//labels
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.insets.set(5, 5, 15, 5);
 		constraints.gridx=1;
 		constraints.gridwidth=1;
-		
+
 		constraints.gridy=2;
 		panel.add(new JLabel("Descripción: "), constraints);
-		
+
 		constraints.gridy=3;
 		panel.add(new JLabel("Costo ($): "), constraints);
-		
+
 		constraints.gridy=4;
 		panel.add(new JLabel("Peso (Kg): "), constraints);
 
 		constraints.gridy=5;
 		panel.add(new JLabel("Densidad (Kg/m3): "), constraints);
-		
+
 		constraints.gridy=6;
 		panel.add(new JLabel("Refrigeración: "), constraints);
-		
+
 		constraints.gridy=7;
 		panel.add(new JLabel("Unidad: "), constraints);
-		
+
 		//checkboxs
 		constraints.gridx=2;
-		
+
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridy=1;
 		panel.add(noLiquido, constraints);
@@ -421,16 +422,16 @@ public class ABMInsumo {
 			densidad.setEnabled(false);
 			pesoCantidad.setText(((Double)insumo.getPeso()).toString());
 		}
-		
+
 		if(!insumo.getEsRefrigerado())
 			noRefrigerado.setSelected(true);
 		else
 			esRefrigerado.setSelected(true);
-		
+
 		//campos de texto
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
-		
+
 		constraints.gridy=2;
 		descripcion.setText(insumo.getDescripcion());
 		panel.add(descripcion, constraints);
@@ -438,13 +439,13 @@ public class ABMInsumo {
 		constraints.gridy=3;
 		costo.setText(insumo.getCosto().toString());
 		panel.add(costo, constraints);
-		
+
 		constraints.gridy=4;
 		panel.add(pesoCantidad, constraints);
-		
+
 		constraints.gridy=5;
 		panel.add(densidad, constraints);
-		
+
 		constraints.gridy=7;
 		unidad.addItem(Unidad.KILO);
 		unidad.addItem(Unidad.METRO);
@@ -452,7 +453,7 @@ public class ABMInsumo {
 		unidad.addItem(Unidad.LITRO);
 		unidad.setSelectedItem(insumo.getUnidad());
 		panel.add(unidad, constraints);
-		
+
 		//listener checkboxLiquido
 		ItemListener esLiquidoListener = new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
@@ -469,17 +470,17 @@ public class ABMInsumo {
 			}
 		};
 		esLiquido.addItemListener(esLiquidoListener);
-		
+
 		//botones
 		constraints.gridy=8;
 		constraints.fill=GridBagConstraints.NONE;
-		
+
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridx=2;
 		constraints.insets=new Insets(20, 5, 5, 15);
 		volver.addActionListener(a -> this.modificarInsumo());
 		panel.add(volver, constraints);
-		
+
 		//boton guardarCambios				
 		constraints.anchor=GridBagConstraints.WEST;
 		constraints.insets=new Insets(20, 35, 5, 0);
@@ -490,7 +491,7 @@ public class ABMInsumo {
 			Boolean valorRefrigeracion = false;
 			Unidad valorUnidad;
 			Double valorDensidad = null;
-					
+
 			errorDescripcion.setText("");
 			errorCosto.setText("");
 			errorPesoCantidad.setText("");
@@ -509,7 +510,7 @@ public class ABMInsumo {
 					valorCosto = Double.parseDouble(costo.getText());
 				}
 				if(pesoCantidad.getText().isEmpty()) {
-						errorPesoCantidad.setText("Debe ingresar un peso");
+					errorPesoCantidad.setText("Debe ingresar un peso");
 					return;
 				}else{
 					valorPeso = Double.parseDouble(pesoCantidad.getText());
@@ -520,10 +521,10 @@ public class ABMInsumo {
 				} else if (esLiquido.isSelected()){
 					valorDensidad = Double.parseDouble(densidad.getText());
 				}
-						
+
 				valorUnidad = (Unidad)unidad.getSelectedItem();
 				valorRefrigeracion = esRefrigerado.isSelected();
-						
+
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar los cambios?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
 					Insumo insumoNuevo; 
 					if (esLiquido.isSelected()) {
@@ -534,8 +535,8 @@ public class ABMInsumo {
 							insumoNuevo.getStock().setInsumo(insumoNuevo);
 						}else
 							insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,valorRefrigeracion,valorDensidad,valorPeso);
-						
-						
+
+
 					} else {
 						if(insumo.getStock() != null) {
 							insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,insumo.getStock(),valorPeso,valorRefrigeracion);
@@ -544,7 +545,7 @@ public class ABMInsumo {
 						else
 							insumoNuevo = new Insumo(insumo.getId(),valorDescripcion,valorUnidad,valorCosto,valorPeso,valorRefrigeracion);
 					}
-					
+
 					if (insumo instanceof InsumoLiquido) {
 						if (insumoNuevo instanceof InsumoLiquido) {
 							controller.editarInsumoLiquido(insumoNuevo);
@@ -568,7 +569,7 @@ public class ABMInsumo {
 					JOptionPane.showConfirmDialog(ventana, "Insumo modificado exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					GestionEntidades.mostrarMenu();
 				}					
-						
+
 			}catch(NumberFormatException nfex) {
 				if(valorCosto == null) {
 					JOptionPane.showConfirmDialog(ventana, "El campo Costo debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);	
@@ -588,7 +589,7 @@ public class ABMInsumo {
 			}
 		});
 		panel.add(guardarCambios,constraints);
-		
+
 		//errores
 		constraints.anchor=GridBagConstraints.NORTHWEST;
 		constraints.insets.set(5,0,3,0);
@@ -597,22 +598,22 @@ public class ABMInsumo {
 		errorDescripcion.setPreferredSize(new Dimension(230, 16));
 		errorDescripcion.setForeground(Color.red);
 		panel.add(errorDescripcion,constraints);
-				
+
 		constraints.gridy=3;
 		errorCosto.setPreferredSize(new Dimension(230, 16));
 		errorCosto.setForeground(Color.red);
 		panel.add(errorCosto,constraints);
-				
+
 		constraints.gridy=4;
 		errorPesoCantidad.setPreferredSize(new Dimension(230, 16));
 		errorPesoCantidad.setForeground(Color.red);
 		panel.add(errorPesoCantidad,constraints);
-		
+
 		constraints.gridy=5;
 		errorDensidad.setPreferredSize(new Dimension(230, 16));
 		errorDensidad.setForeground(Color.red);
 		panel.add(errorDensidad,constraints);
-		
+
 		//ventana
 		ventana.setContentPane(panel);
 		ventana.pack();
@@ -622,7 +623,7 @@ public class ABMInsumo {
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
 	}
-	
+
 	public void eliminarInsumo(boolean mostrarTablaNoLiquidos) {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -633,13 +634,13 @@ public class ABMInsumo {
 		List<Insumo> listaInsumosLiquidos = new ArrayList<Insumo>();
 		listaInsumosNoLiquidos.addAll(controller.listaInsumos());
 		listaInsumosLiquidos.addAll(controller.listaInsumosLiquidos());
-		
+
 		//tabla
 		constraints.insets=new Insets(5, 5, 0, 5);
 		tablaInsumos.setFillsViewportHeight(true);
 		tablaInsumos.setBorder(new LineBorder(new Color(0, 0, 0)));
 		tablaInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		JScrollPane scroll = new JScrollPane(tablaInsumos,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setPreferredSize(new Dimension(500, 197));
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -650,7 +651,7 @@ public class ABMInsumo {
 		leftRenderer.setHorizontalAlignment( JLabel.LEFT );
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment( JLabel.RIGHT );
-		
+
 		//centrar celdas tabla
 		tablaInsumos.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		tablaInsumos.getColumnModel().getColumn(1).setCellRenderer(leftRenderer);
@@ -670,14 +671,14 @@ public class ABMInsumo {
 		tablaInsumos.getColumnModel().getColumn(3).setHeaderValue("Peso");
 		tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Unidad");
 		tablaInsumos.getColumnModel().getColumn(5).setHeaderValue("Refrigeración");
-		
+
 		constraints.gridx=1;
 		constraints.gridy=1;
 		constraints.gridheight=1;
 		constraints.gridwidth=3;
 		constraints.weightx=1;
 		panel.add(scroll, constraints);
-		
+
 		//agregar datos tabla
 		DefaultTableModel model = (DefaultTableModel) tablaInsumos.getModel();
 		if (mostrarTablaNoLiquidos) {
@@ -714,17 +715,17 @@ public class ABMInsumo {
 		constraints.anchor=GridBagConstraints.NORTH;
 		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
 		panel.add(encabezado,constraints);
-		
+
 		//botones
 		constraints.gridy=3;
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
-		
+
 		constraints.gridx=0;
 		constraints.insets=new Insets(5, 5, 5, 250);
 		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		panel.add(volver, constraints);
-		
+
 		constraints.anchor=GridBagConstraints.WEST;
 		constraints.insets=new Insets(5, 250, 5, 5);
 		constraints.gridx=2;
@@ -736,28 +737,42 @@ public class ABMInsumo {
 				return;
 			} else {
 				int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
-				if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-					if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
-						Insumo ins = controller.buscarInsumoNoLiquido(id);
-						if(ins.getStock() != null)
-							sc.eliminarStock(ins.getStock());
-						
-						controller.eliminarInsumoNoLiquido(id);
-						this.eliminarInsumo(true);
+				Insumo ins;
+				if (cambiarTipoInsumo.getText() == "Ver Líquidos")
+					ins = controller.buscarInsumoNoLiquido(id);
+				else
+					ins = controller.buscarInsumoLiquido(id);
+				if(ins != null) {
+					if (sc.existenStocksAsociados(ins)) {
+						errorSeleccion.setText("No es posible eliminar. Existen stocks asociados");
+						return;
 					}
 					else {
-						Insumo ins = controller.buscarInsumoLiquido(id);
-						if(ins.getStock() != null)
-							sc.eliminarStock(ins.getStock());
-						
-						controller.eliminarInsumoLiquido(id);
-						this.eliminarInsumo(false);
+						if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+							if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
+								if(ins.getStock() != null)
+									sc.eliminarStock(ins.getStock());
+
+								controller.eliminarInsumoNoLiquido(ins);
+								this.eliminarInsumo(true);
+							}
+							else {
+								if(ins.getStock() != null)
+									sc.eliminarStock(ins.getStock());
+
+								controller.eliminarInsumoLiquido(ins);
+								this.eliminarInsumo(false);
+							}
+						}
 					}
 				}
-			}
-		});
+				else {
+					errorSeleccion.setText("No se encuentra el insumo seleccionado.");
+					return;
+				}
+			} });
 		panel.add(eliminar,constraints);
-		
+
 		constraints.gridy=2;
 		constraints.gridx=1;
 		constraints.anchor=GridBagConstraints.CENTER;
@@ -771,16 +786,16 @@ public class ABMInsumo {
 			}
 		});
 		panel.add(cambiarTipoInsumo, constraints);
-		
+
 		//error seleccion
 		constraints.anchor=GridBagConstraints.NORTHWEST;
-		constraints.insets.set(6,473,0,0);
+		constraints.insets.set(6,280,0,0);
 		constraints.gridx=3;
 		constraints.gridy=2;
-		errorSeleccion.setPreferredSize(new Dimension(230, 16));
+		errorSeleccion.setPreferredSize(new Dimension(360, 16));
 		errorSeleccion.setForeground(Color.red);
 		panel.add(errorSeleccion,constraints);
-		
+
 		ventana.setContentPane(panel);
 		ventana.pack();
 		ventana.setSize(800, 600);
@@ -789,5 +804,5 @@ public class ABMInsumo {
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
 	}
-	
+
 }

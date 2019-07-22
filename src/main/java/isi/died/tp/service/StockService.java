@@ -2,6 +2,7 @@ package isi.died.tp.service;
 
 import java.util.List;
 
+import isi.died.tp.model.Insumo;
 import isi.died.tp.model.Stock;
 import isi.died.tp.model.StockAcopio;
 import isi.died.tp.model.StockProduccion;
@@ -23,5 +24,7 @@ public interface StockService {
 	public StockProduccion buscarStockProduccion(Integer id);
 
 	public void eliminarStocksProduccion(List<StockProduccion> lista);
+
+	public boolean existenStocksAsociados(Insumo ins);
 
 }

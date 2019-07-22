@@ -56,6 +56,14 @@ public class StockServiceDefault implements StockService {
 		return this.stockDao.buscarStockProduccion(id);
 	}
 
+	@Override
+	public boolean existenStocksAsociados(Insumo ins) {
+		for( StockProduccion s : stockDao.listaStocksProduccion())
+			if(s.getInsumo() != null && s.getInsumo().equals(ins))
+				return true;
+		return false;
+	}
+
 
 
 }

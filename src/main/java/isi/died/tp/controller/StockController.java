@@ -52,4 +52,9 @@ public class StockController {
 		return this.ss.buscarStockProduccion(id);
 	}
 
+
+	public boolean existenStocksAsociados(Insumo ins) {
+		return ss.existenStocksAsociados(ins);
+	}
+
 }

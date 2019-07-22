@@ -35,6 +35,13 @@ public class InsumoController {
 		return insumoService.listaInsumosLiquidos();
 	}
 	
+	public void eliminarInsumoNoLiquido (Insumo ins) {
+		insumoService.eliminarInsumo(ins);
+	}
+	public void eliminarInsumoLiquido (Insumo ins) {
+		insumoService.eliminarInsumo(ins);
+	}
+	
 	public void eliminarInsumoNoLiquido (int id) {
 		Insumo insumo = buscarInsumoNoLiquido(id);
 		insumoService.eliminarInsumo(insumo);
