@@ -70,18 +70,7 @@ public class PlantaDaoDefault implements PlantaDao {
 
 	@Override
 	public void setRutas(List<Arista<Planta>> lista) {
-		GRAFO_PLANTA.setRutas(lista);
-		for (Recorrido r : this.buscarCaminosInfo(this.buscarAcopioInicial(), this.buscarPlantaProduccion(2))) {
-			System.out.println("Distancia Total: "+r.getDistanciaTotal()+"Km");
-			System.out.println("Peso Máximo: "+r.getPesoMax()+" Toneladas");
-			System.out.println("Duración Viaje: "+r.getDuracionTotal()+" minutos");
-			System.out.println("Recorrido:");
-			for(Ruta ruta : r.getRecorrido())
-				System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
-			System.out.println(" ");
-			System.out.println(" ");
-		}
-		
+		GRAFO_PLANTA.setRutas(lista);		
 	}
 	
 	@Override

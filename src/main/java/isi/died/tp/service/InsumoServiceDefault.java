@@ -4,6 +4,7 @@ import java.util.List;
 
 import isi.died.tp.dao.*;
 import isi.died.tp.model.Insumo;
+import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.StockAcopio;
 
 public class InsumoServiceDefault implements InsumoService {
@@ -47,6 +48,9 @@ public class InsumoServiceDefault implements InsumoService {
 
 	@Override
 	public void eliminarInsumo(Insumo insumo) {
+		PlantaAcopio p = ps.buscarAcopioInicial();
+		if(p != null)
+			p.removeInsumo(insumo);
 		insumoDao.eliminarInsumo(insumo);
 	}
 
