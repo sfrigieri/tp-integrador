@@ -1,6 +1,10 @@
 package isi.died.tp.model;
 
-public class Camion {
+import java.util.List;
+
+import isi.died.tp.dao.util.CsvRecord;
+
+public class Camion implements CsvRecord {
 
 	private int id;
 	private String marca;
@@ -14,6 +18,10 @@ public class Camion {
 	
 	
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Camion(int id, double costoKm, Boolean aptoLiquidos, double capacidad) {
 		super();
 		this.id = id;
@@ -35,6 +43,10 @@ public class Camion {
 		this.capacidad = capacidad;
 	}
 	
+	public Camion() {
+	
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -139,6 +151,19 @@ public class Camion {
 			return false;
 		return true;
 	}
+
+	public void loadFromStringRow(List<String> filaCamion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<String> asCsvRow() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	
 
 	

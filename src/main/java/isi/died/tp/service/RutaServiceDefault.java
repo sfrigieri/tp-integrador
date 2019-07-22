@@ -24,7 +24,7 @@ public class RutaServiceDefault implements RutaService {
 		ps.setRutas(rutaDao.listaRutas());
 		ps.setRutaService(this);
 		if(!ps.listaPlantas().isEmpty()) {
-			for (Recorrido r : ps.buscarCaminosInfo(ps.buscarAcopioInicial(), ps.buscarPlantaProduccion(2))) {
+			/*	for (Recorrido r : ps.buscarCaminosInfo(ps.buscarAcopioInicial(), ps.buscarPlantaProduccion(2))) {
 				System.out.println("Distancia Total: "+r.getDistanciaTotal()+"Km");
 				System.out.println("Peso Máximo: "+r.getPesoMax()+" Toneladas");
 				System.out.println("Duración Viaje: "+r.getDuracionTotal()+" minutos");
@@ -54,7 +54,7 @@ public class RutaServiceDefault implements RutaService {
 					System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
 				System.out.println(" ");
 				System.out.println(" ");
-			}
+			}*/
 		}
 	}
 
