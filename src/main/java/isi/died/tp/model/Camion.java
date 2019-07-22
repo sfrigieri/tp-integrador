@@ -1,5 +1,6 @@
 package isi.died.tp.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import isi.died.tp.dao.util.CsvRecord;
@@ -22,16 +23,16 @@ public class Camion implements CsvRecord {
 		this.id = id;
 	}
 
-	public Camion(int id, double costoKm, Boolean aptoLiquidos, double capacidad) {
+	public Camion(int id, double costoKm, Boolean aptoLiquidos, double capacidadKg) {
 		super();
 		this.id = id;
 		this.costoKm = costoKm;
 		this.aptoLiquidos = aptoLiquidos;
-		this.capacidad = capacidad;
+		this.capacidad = capacidadKg;
 	}
 
 	public Camion(int id, String marca, String modelo, String dominio, int año, double costoKm,
-			Boolean aptoLiquidos, double capacidad) {
+			Boolean aptoLiquidos, double capacidadKg) {
 		super();
 		this.id = id;
 		this.marca = marca;
@@ -40,7 +41,7 @@ public class Camion implements CsvRecord {
 		this.año = año;
 		this.costoKm = costoKm;
 		this.aptoLiquidos = aptoLiquidos;
-		this.capacidad = capacidad;
+		this.capacidad = capacidadKg;
 	}
 	
 	public Camion() {
@@ -152,15 +153,33 @@ public class Camion implements CsvRecord {
 		return true;
 	}
 
-	public void loadFromStringRow(List<String> filaCamion) {
-		// TODO Auto-generated method stub
-		
+	public void loadFromStringRow(List<String> datos) {
+		try {
+			this.id = Integer.valueOf(datos.get(0));
+			this.marca = datos.get(1);
+			this.modelo = datos.get(2);
+			this.dominio = datos.get(3);
+			this.año = Integer.valueOf(datos.get(4)); 
+			this.costoKm = Double.valueOf(datos.get(5));
+			this.aptoLiquidos = Boolean.valueOf(datos.get(6));
+			this.capacidad = Double.valueOf(datos.get(7));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public List<String> asCsvRow() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> lista = new ArrayList<String>();
+		lista.add(this.id+"");
+		lista.add(this.marca);
+		lista.add(this.modelo);
+		lista.add(this.dominio);
+		lista.add(Integer.toString(this.año));
+		lista.add(Double.toString(this.costoKm));
+		lista.add(Boolean.toString(this.aptoLiquidos));
+		lista.add(Double.toString(this.capacidad));
+		return lista;
 	}
 
 
