@@ -737,7 +737,6 @@ public class ABMInsumo {
 			} else {
 				int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
 				if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-					//Hacer lo mismo: llamar a eliminarStocksProduccion(stocks) en ABMPlanta si se elimina PlantaProduccion definitivamente
 					if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
 						Insumo ins = controller.buscarInsumoNoLiquido(id);
 						if(ins.getStock() != null)

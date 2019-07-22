@@ -170,13 +170,6 @@ public class StockDaoDefault implements StockDao {
 	
 	@Override
 	public void eliminarStock(Stock stock) {
-		if (stock instanceof StockProduccion) {
-			LISTA_STOCKS_PRODUCCION.remove(stock);
-			actualizarArchivoProduccion();
-		} else {
-			LISTA_STOCKS_ACOPIO.remove(stock);
-			actualizarArchivoAcopio();
-		}
 		
 		//Si es stockProduccion, debo buscar la Planta correspondiente y eliminarlo de listaDeStocks
 		//Si es stockAcopio, lo mismo, pero se eliminará del insumo correspondiente.
@@ -184,6 +177,14 @@ public class StockDaoDefault implements StockDao {
 			ps.buscarPlantaProduccion(stock.getPlanta().getId()).removeStock(stock.getInsumo());
 		else
 			ps.buscarPlantaAcopio(stock.getPlanta().getId()).removeStock(stock.getInsumo());
+		
+		if (stock instanceof StockProduccion) {
+			LISTA_STOCKS_PRODUCCION.remove(stock);
+			actualizarArchivoProduccion();
+		} else {
+			LISTA_STOCKS_ACOPIO.remove(stock);
+			actualizarArchivoAcopio();
+		}
 		
 	}
 	

@@ -47,7 +47,6 @@ public class InsumoServiceDefault implements InsumoService {
 
 	@Override
 	public void eliminarInsumo(Insumo insumo) {
-		ss.eliminarStock(insumo.getStock());
 		insumoDao.eliminarInsumo(insumo);
 	}
 
