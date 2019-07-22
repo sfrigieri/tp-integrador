@@ -5,6 +5,7 @@ import java.util.List;
 import isi.died.tp.dao.RutaDao;
 import isi.died.tp.dao.RutaDaoDefault;
 import isi.died.tp.estructuras.Arista;
+import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.model.Planta;
 
@@ -29,15 +30,29 @@ public class RutaServiceDefault implements RutaService {
 		System.out.println("Page Ranks:");
 		ps.resetPageRanks();
 		ps.generarPageRanks();
+		System.out.println(" ");
+		System.out.println(" ");
+
+		Recorrido r = ps.mejorCaminoEnvio(ps.buscarPlantasNecesitanInsumo(ps.buscarPlantaAcopio(1).getInsumo(1)));
+		if(r!= null) {
+		System.out.println("Mejor Camino para Envío Insumo: "+ps.buscarPlantaAcopio(1).getInsumo(1).getDescripcion());
+		System.out.println("Distancia Total: "+r.getDistanciaTotal()+"Km");
+		System.out.println("Duración Viaje: "+r.getDuracionTotal()+" minutos");
+		System.out.println("Recorrido:");
+		for(Ruta ruta : r.getRecorrido())
+			System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
+		System.out.println(" ");
+		System.out.println(" ");
+		}
 	}
-	
+
 	@Override
 	public Ruta agregarRuta(Ruta ruta) {
 		rutaDao.agregarRuta(ruta);	
 		ps.setRutas(rutaDao.listaRutas());
 		return ruta;
 	}
-	
+
 	@Override
 	public List<Ruta> listaRutas() {
 		return rutaDao.listaRutas();
@@ -65,6 +80,6 @@ public class RutaServiceDefault implements RutaService {
 	@Override
 	public void setRutas(List<Arista<Planta>> listaRutas) {
 		rutaDao.setRutas(listaRutas);
-		
+
 	}
 }

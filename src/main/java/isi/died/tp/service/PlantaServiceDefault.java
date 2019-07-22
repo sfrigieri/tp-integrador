@@ -126,7 +126,7 @@ public class PlantaServiceDefault implements PlantaService {
 		for(PlantaProduccion p : this.listaPlantasProduccion())
 			if(p.necesitaInsumo(ins))
 				lista.add(p);
-
+		
 		return lista;
 	}
 
@@ -135,26 +135,31 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public Recorrido mejorCaminoEnvio(List<PlantaProduccion> plantas) {
 
-		List<Recorrido> caminosPosibles = this.buscarCaminosInfo(this.buscarAcopioInicial(), this.buscarAcopioFinal());
+		if(!plantas.isEmpty()) {
+			List<Recorrido> caminosPosibles = this.buscarCaminosInfo(this.buscarAcopioInicial(), this.buscarAcopioFinal());
 
-		if(caminosPosibles.isEmpty())
-			return null;
+			if(caminosPosibles.isEmpty())
+				return null;
 
-		List<Recorrido> caminosConteniendoPlantas = this.filtrarCaminosContienen(caminosPosibles, plantas);
+			List<Recorrido> caminosConteniendoPlantas = this.filtrarCaminosContienen(caminosPosibles, plantas);
 
-		if(caminosConteniendoPlantas.isEmpty())
-			return null;
+			if(caminosConteniendoPlantas.isEmpty())
+				return null;
 
-		Recorrido mejorCaminoActual = null;
+			Recorrido mejorCaminoActual = null;
 
-		for(Recorrido r : caminosConteniendoPlantas) {
-			if(mejorCaminoActual == null)
-				mejorCaminoActual = r;
-			else 
-				mejorCaminoActual = this.mejorCaminoEntre(mejorCaminoActual, r);
+			for(Recorrido r : caminosConteniendoPlantas) {
+				if(mejorCaminoActual == null)
+					mejorCaminoActual = r;
+				else 
+					mejorCaminoActual = this.mejorCaminoEntre(mejorCaminoActual, r);
+			}
+
+			return mejorCaminoActual;
 		}
+		
+		return null;
 
-		return mejorCaminoActual;
 	}
 
 
