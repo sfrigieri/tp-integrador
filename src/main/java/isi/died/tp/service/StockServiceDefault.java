@@ -33,7 +33,8 @@ public class StockServiceDefault implements StockService {
 
 	@Override
 	public void eliminarStocksProduccion(List<StockProduccion> lista) {
-		this.stockDao.eliminarStocksProduccion(lista);
+		if(!lista.isEmpty())
+			this.stockDao.eliminarStocksProduccion(lista);
 	}
 	
 	@Override

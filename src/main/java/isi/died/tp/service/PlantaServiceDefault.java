@@ -126,7 +126,7 @@ public class PlantaServiceDefault implements PlantaService {
 		for(PlantaProduccion p : this.listaPlantasProduccion())
 			if(p.necesitaInsumo(ins))
 				lista.add(p);
-		
+
 		return lista;
 	}
 
@@ -157,7 +157,7 @@ public class PlantaServiceDefault implements PlantaService {
 
 			return mejorCaminoActual;
 		}
-		
+
 		return null;
 
 	}
@@ -311,34 +311,36 @@ public class PlantaServiceDefault implements PlantaService {
 		//lo que permite maximizar la cantidad de envíos a realizar por camión/viaje
 		for(Insumo i : is.listaInsumos()) {
 			listaAux = generarStockFaltante(i);
-			Integer cantDisponible = i.getStock().getCantidad();
+			if(i.getStock() != null) {
+				Integer cantDisponible = i.getStock().getCantidad();
 
-			if(cantDisponible != null) {
+				if(cantDisponible != null) {
 
-				for(StockAcopio s : listaAux) {
-					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
-						lista.add(s);
-						cantDisponible = cantDisponible - s.getCantidad();
+					for(StockAcopio s : listaAux) {
+						if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
+							lista.add(s);
+							cantDisponible = cantDisponible - s.getCantidad();
+						}
 					}
 				}
 			}
-
 		}
 
 		for(Insumo i : is.listaInsumosLiquidos()) {
 			listaAux = generarStockFaltante(i);
-			Integer cantDisponible = i.getStock().getCantidad();
+			if(i.getStock() != null) {
+				Integer cantDisponible = i.getStock().getCantidad();
 
-			if(cantDisponible != null) {
+				if(cantDisponible != null) {
 
-				for(StockAcopio s : listaAux) {
-					if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
-						lista.add(s);
-						cantDisponible = cantDisponible - s.getCantidad();
+					for(StockAcopio s : listaAux) {
+						if(cantDisponible > 0 && s.getCantidad() <= cantDisponible) {
+							lista.add(s);
+							cantDisponible = cantDisponible - s.getCantidad();
+						}
 					}
 				}
 			}
-
 		}
 
 		return lista;

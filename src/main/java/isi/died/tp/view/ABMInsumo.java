@@ -204,8 +204,6 @@ public class ABMInsumo {
 					return;
 				}else{
 					valorPeso = Double.parseDouble(pesoCantidad.getText());
-					System.out.println(pesoCantidad.getText());
-					System.out.println(Double.parseDouble(pesoCantidad.getText()));
 				}
 				if(esLiquido.isSelected() && densidad.getText().isEmpty()) {
 					errorDensidad.setText("Debe ingresar una densidad");
