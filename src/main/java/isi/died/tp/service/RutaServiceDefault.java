@@ -64,25 +64,30 @@ public class RutaServiceDefault implements RutaService {
 				System.out.println(" ");
 				System.out.println(" ");
 			}
-
+			 int cant = 0;
 			System.out.println("Stock Faltante Disponible:");
 			for(StockAcopio s : ps.generarStockFaltanteDisponible()) {
+				cant++;
+				System.out.println(" "+cant);
 				System.out.println("Stock Insumo: "+s.getInsumo().getDescripcion()+" Cantidad: "+s.getCantidad());
 				System.out.println("Precio: "+s.getInsumo().getCosto()*s.getCantidad());
 				System.out.println("Planta destino: "+s.getPlanta().getNombre());
 				System.out.println("Peso: "+s.getCantidad()*s.getInsumo().getPeso());
 				System.out.println(" ");
 			}
+			cant = 0;
 			System.out.println(" ");
 			System.out.println("Mejor Seleccion Envio:");
-			for (StockAcopio s : ps.generarMejorSeleccionEnvio(cs.buscarCamion(1), ps.generarStockFaltanteDisponible())) {
+			for (StockAcopio s : ps.generarMejorSeleccionEnvio(cs.buscarCamion(12), ps.generarStockFaltanteDisponible())) {
+				cant++;
+				System.out.println(" "+cant);
 				System.out.println("Stock Insumo: "+s.getInsumo().getDescripcion()+" Cantidad: "+s.getCantidad());
 				System.out.println("Precio: "+s.getInsumo().getCosto()*s.getCantidad());
 				System.out.println("Planta destino: "+s.getPlanta().getNombre());
 				System.out.println("Peso: "+s.getCantidad()*s.getInsumo().getPeso());
 				System.out.println(" ");
-			}*/
-
+			}
+			*/
 		}
 	}
 

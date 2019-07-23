@@ -370,6 +370,11 @@ public class PlantaServiceDefault implements PlantaService {
 		List<Integer> pesos = new ArrayList<Integer>();
 		int capCamion = (int) camion.getCapacidad();
 
+		if(!camion.getAptoLiquidos())
+			listaDisponibles = listaDisponibles.stream()
+											.filter(s -> !(s.getInsumo() instanceof InsumoLiquido))
+											.collect(Collectors.toList());
+		
 		int cantStocks = listaDisponibles.size();
 
 		//Recibo arraylist con StockAcopio,  respetando posiciones creo array pesos y array costos.
