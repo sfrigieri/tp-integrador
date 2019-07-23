@@ -221,8 +221,11 @@ public class ABMInsumo {
 					} else {
 						controller.agregarInsumo(0, valorDescripcion, valorUnidad, valorCosto, valorPeso, valorRefrigeracion);
 					}
-					JOptionPane.showConfirmDialog(ventana, "Insumo creado exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-					GestionEntidades.mostrarMenu();
+					if(JOptionPane.showConfirmDialog(ventana, "Insumo creado exitosamente. \n¿Desea agregar otro insumo?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+						this.agregarInsumo();
+					} else {
+						GestionEntidades.mostrarMenu();
+					}
 				}					
 
 			}catch(NumberFormatException nfex) {

@@ -185,12 +185,13 @@ public class ABMPlanta {
 				if (tipo == "Acopio") { //
 					Planta planta = new PlantaAcopio(0, nombre, origen);
 					controller.agregarPlanta(planta);
-					JOptionPane.showConfirmDialog(ventana, "Planta creada exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-					GestionEntidades.mostrarMenu();
 				} else {
 					Planta planta = new PlantaProduccion(0, nombre);
 					controller.agregarPlanta(planta);
-					JOptionPane.showConfirmDialog(ventana, "Planta creada exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				}
+				if(JOptionPane.showConfirmDialog(ventana, "Planta creada exitosamente. \n¿Desea agregar otra planta?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+					this.agregarPlanta();
+				} else {
 					GestionEntidades.mostrarMenu();
 				}
 			}
