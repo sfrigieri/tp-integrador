@@ -10,7 +10,7 @@ public class PlantaController {
 	private PlantaService ps;
 
 	
-	public PlantaController(PlantaService ps, InsumoService is, StockService ss) {
+	public PlantaController(PlantaService ps) {
 		super();
 		this.ps = ps;
 	}

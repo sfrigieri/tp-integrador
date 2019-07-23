@@ -64,13 +64,13 @@ public class ABMRuta {
 		panel.add(new JLabel("Planta Fin: "), constraints);
 
 		constraints.gridy=4;
-		panel.add(new JLabel("Distancia (km): "), constraints);
+		panel.add(new JLabel("Distancia (Km): "), constraints);
 		
 		constraints.gridy=5;
-		panel.add(new JLabel("Duracion (min): "), constraints);
+		panel.add(new JLabel("Duracion (Min): "), constraints);
 		
 		constraints.gridy=6;
-		panel.add(new JLabel("Peso Máximo (ton): "), constraints);
+		panel.add(new JLabel("Peso Máximo (Ton): "), constraints);
 		
 		//botones
 		constraints.anchor=GridBagConstraints.CENTER;
