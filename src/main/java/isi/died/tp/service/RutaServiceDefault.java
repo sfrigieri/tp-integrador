@@ -78,7 +78,7 @@ public class RutaServiceDefault implements RutaService {
 			cant = 0;
 			System.out.println(" ");
 			System.out.println("Mejor Seleccion Envio:");
-			for (StockAcopio s : ps.generarMejorSeleccionEnvio(cs.buscarCamion(12), ps.generarStockFaltanteDisponible())) {
+			for (StockAcopio s : ps.generarMejorSeleccionEnvio(cs.buscarCamion(3), ps.generarStockFaltanteDisponible())) {
 				cant++;
 				System.out.println(" "+cant);
 				System.out.println("Stock Insumo: "+s.getInsumo().getDescripcion()+" Cantidad: "+s.getCantidad());
@@ -87,7 +87,7 @@ public class RutaServiceDefault implements RutaService {
 				System.out.println("Peso: "+s.getCantidad()*s.getInsumo().getPeso());
 				System.out.println(" ");
 			}
-			*/
+		*/	
 		}
 	}
 

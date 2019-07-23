@@ -366,71 +366,74 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> listaDisponibles) {
 
-		List<Integer> costos = new ArrayList<Integer>();
-		List<Integer> pesos = new ArrayList<Integer>();
-		int capCamion = (int) camion.getCapacidad();
-
-		if(!camion.getAptoLiquidos())
-			listaDisponibles = listaDisponibles.stream()
-											.filter(s -> !(s.getInsumo() instanceof InsumoLiquido))
-											.collect(Collectors.toList());
-		
-		int cantStocks = listaDisponibles.size();
-
-		//Recibo arraylist con StockAcopio,  respetando posiciones creo array pesos y array costos.
-		for(StockAcopio stock : listaDisponibles) {
-			costos.add((int) (stock.getCantidad()*stock.getInsumo().getCosto()));
-		}
-
-		for(StockAcopio stock : listaDisponibles) {
-			pesos.add((int) (stock.getCantidad()*stock.getInsumo().getPeso()));
-		}
-
-
-		int i, p; 
-		int[][] resultado = new int[cantStocks+1][capCamion+1]; 
-
-		//Si la cant Stock es cero o la capacidad es cero, el costo total será cero.
-		for (p = 0; p <= capCamion; p++)
-			resultado[0][p] = 0;
-
-		for (i = 0; i <= cantStocks; i++) 
-			resultado[i][0] = 0;   
-
-		//Comenzando con el primer stock de la lista, 
-		for (i = 1; i <= cantStocks; i++) { 
-			for (p = 1; p <= capCamion; p++){ 
-				//Si el peso del stock i no supere a la cap del camión
-				if (pesos.get(i-1) <= p) 
-					//El peso del stock i es IGUAL al peso ocupado hasta el momento por stocks previos seleccionados
-					// Siempre se busca maximizar la relacion Costo/Peso: 
-					//Para el mismo peso ocupado, al INCLUIR al stock i, puedo aumentar el costo resultante?
-
-					//Entonces debo realizar una comparación con el costo total acumulado previamente (SIN el stock i)
-					//Procedo a descontar del peso disponible el peso del stock i y consultar si al incluirlo a la selección,
-					//su costo + el mejor costo posible utilizando el peso restante (p actual - peso i)
-					//supera al mejor costo obtenido previamente para el peso p actual.
-					//Si lo supera guardo el costo de esta nueva combinación, sino mantengo el mejor resultado previo.
-					resultado[i][p] = Math.max(costos.get(i-1) + resultado[i-1][p-pesos.get(i-1)],  resultado[i-1][p]); 
-				else
-					resultado[i][p] = resultado[i-1][p]; 
-			} 
-		} 
-		//System.out.println(resultado[cantStocks][capCamion]);
-		//Busco stocks que pertenecen a la selección final
-		int temp = capCamion;
 		List<StockAcopio> listaResultante = new ArrayList<StockAcopio>();
 
-		for (i = cantStocks; i > 0 && temp > 0; i--)  {
-			//Si el costo i es diferente a i-1 para la misma capacidad, entonces el stock i pertenece a la selección.
-			if (resultado[i][temp] != resultado[i - 1][temp]) {
-				//el peso de i se encuentra en la posición i-1
-				temp = temp - pesos.get(i-1);
-				//el stock i seleccionado se encuentra en la posición i-1
-				listaResultante.add(listaDisponibles.get(i-1));
+		if(listaDisponibles.size() != 0) {
+			List<Integer> costos = new ArrayList<Integer>();
+			List<Integer> pesos = new ArrayList<Integer>();
+			int capCamion = (int) camion.getCapacidad();
+
+			if(!camion.getAptoLiquidos())
+				listaDisponibles = listaDisponibles.stream()
+				.filter(s -> !(s.getInsumo() instanceof InsumoLiquido))
+				.collect(Collectors.toList());
+			if(listaDisponibles.size() != 0) {
+				int cantStocks = listaDisponibles.size();
+
+				//Recibo arraylist con StockAcopio,  respetando posiciones creo array pesos y array costos.
+				for(StockAcopio stock : listaDisponibles) {
+					costos.add((int) (stock.getCantidad()*stock.getInsumo().getCosto()));
+				}
+
+				for(StockAcopio stock : listaDisponibles) {
+					pesos.add((int) (stock.getCantidad()*stock.getInsumo().getPeso()));
+				}
+
+
+				int i, p; 
+				int[][] resultado = new int[cantStocks+1][capCamion+1]; 
+
+				//Si la cant Stock es cero o la capacidad es cero, el costo total será cero.
+				for (p = 0; p <= capCamion; p++)
+					resultado[0][p] = 0;
+
+				for (i = 0; i <= cantStocks; i++) 
+					resultado[i][0] = 0;   
+
+				//Comenzando con el primer stock de la lista, 
+				for (i = 1; i <= cantStocks; i++) { 
+					for (p = 1; p <= capCamion; p++){ 
+						//Si el peso del stock i no supere a la cap del camión
+						if (pesos.get(i-1) <= p) 
+							//El peso del stock i es IGUAL al peso ocupado hasta el momento por stocks previos seleccionados
+							// Siempre se busca maximizar la relacion Costo/Peso: 
+							//Para el mismo peso ocupado, al INCLUIR al stock i, puedo aumentar el costo resultante?
+
+							//Entonces debo realizar una comparación con el costo total acumulado previamente (SIN el stock i)
+							//Procedo a descontar del peso disponible el peso del stock i y consultar si al incluirlo a la selección,
+							//su costo + el mejor costo posible utilizando el peso restante (p actual - peso i)
+							//supera al mejor costo obtenido previamente para el peso p actual.
+							//Si lo supera guardo el costo de esta nueva combinación, sino mantengo el mejor resultado previo.
+							resultado[i][p] = Math.max(costos.get(i-1) + resultado[i-1][p-pesos.get(i-1)],  resultado[i-1][p]); 
+						else
+							resultado[i][p] = resultado[i-1][p]; 
+					} 
+				} 
+				//System.out.println(resultado[cantStocks][capCamion]);
+				//Busco stocks que pertenecen a la selección final
+				int temp = capCamion;
+
+				for (i = cantStocks; i > 0 && temp > 0; i--)  {
+					//Si el costo i es diferente a i-1 para la misma capacidad, entonces el stock i pertenece a la selección.
+					if (resultado[i][temp] != resultado[i - 1][temp]) {
+						//el peso de i se encuentra en la posición i-1
+						temp = temp - pesos.get(i-1);
+						//el stock i seleccionado se encuentra en la posición i-1
+						listaResultante.add(listaDisponibles.get(i-1));
+					}
+				}
 			}
 		}
-
 		return listaResultante;
 	}
 
