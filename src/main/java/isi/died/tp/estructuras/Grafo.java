@@ -416,7 +416,25 @@ public class Grafo<T> {
 		return false;
 	}
 
+	public Boolean existeCamino(Vertice<T> v1, Vertice<T> v2) {
 
+		Stack<Vertice<T>> visitar = new Stack<Vertice<T>>();
+		HashSet<Vertice<T>> visitados = new HashSet<Vertice<T>>();
+
+		visitar.push(v1);
+
+		while(!visitar.empty()) {
+			Vertice<T> vInicio = visitar.pop();
+			for(Vertice<T> unAdya : this.getAdyacentes(vInicio)) {
+				if(unAdya.equals(v2)) return true;
+				if(!visitados.contains(unAdya)) {
+					visitar.push(unAdya);
+					visitados.add(unAdya);
+				}
+			}
+		}
+		return false;
+	}
 	
 	public Boolean existeCaminoRec(Vertice<T> v1, Vertice<T> v2, Integer n) {
 		List<Vertice<T>> visitados = new ArrayList<Vertice<T>>();

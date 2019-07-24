@@ -10,13 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,7 +23,8 @@ import javax.swing.JOptionPane;
 import isi.died.tp.app.Main;
 import isi.died.tp.controller.GestionEntidadesController;
 import isi.died.tp.controller.GestionEnviosController;
-import isi.died.tp.controller.OpcionesMenu;
+import isi.died.tp.controller.OpcionesMenuEnvios;
+import isi.died.tp.controller.PlantaController;
 import isi.died.tp.model.Planta;
 import isi.died.tp.view.table.PlantaTableModel;
 
@@ -35,6 +32,7 @@ public class GestionEnvios {
 
 	private static JFrame ventana;
 	private static GestionEnviosController controller;
+
 
 	public GestionEnvios(JFrame v) {
 		ventana = v;
@@ -80,19 +78,19 @@ public class GestionEnvios {
 
 		flujoMaximo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.opcion(OpcionesMenu.FLUJO_MAXIMO);
+				controller.opcion(OpcionesMenuEnvios.FLUJO_MAXIMO);
 			}
 		});
 
 		mejorSeleccion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.opcion(OpcionesMenu.MEJOR_SELECCION_ENVIO);
+				controller.opcion(OpcionesMenuEnvios.MEJOR_SELECCION_ENVIO);
 			}
 		});
 
 		pageRanks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getFactorAmortiguacion();
+				controller.opcion(OpcionesMenuEnvios.PAGE_RANKS);
 			}
 		});
 
@@ -120,62 +118,93 @@ public class GestionEnvios {
 
 	}
 
-	private static void getFactorAmortiguacion() {
+	private static Double getFactorAmortiguacion() {
 
-		JTextField field = new JTextField(10);
+		JTextField field = new JTextField(5);
 		JPanel panel = new JPanel();
-		panel.add(new JLabel("Factor (0-1): "));
+		panel.add(new JLabel("Factor de Transición (0-1): "));
 		panel.add(field);
-		int result = JOptionPane.showConfirmDialog(null, panel, "Ingrese el Factor de Amortiguación",
+		int result = JOptionPane.showConfirmDialog(null, panel, "Probabilidad de Transición a Planta",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (result == JOptionPane.OK_OPTION) {
 			try {
 				Double.parseDouble(field.getText());
-				if (Double.valueOf(field.getText()) <= 1 && Double.valueOf(field.getText()) >= 0)
-					mostrarTablaPageRanks(Double.valueOf(field.getText()));
-				else {
+				if (Double.valueOf(field.getText()) <= 1 && Double.valueOf(field.getText()) >= 0) {
+					return Double.valueOf(field.getText());
+				}else {
 					JOptionPane.showConfirmDialog(ventana, "Valor ingresado fuera de rango.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-					getFactorAmortiguacion();
 				} }
 			catch(NumberFormatException nfex) {
-				JOptionPane.showConfirmDialog(ventana, "El valor debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);	
-				getFactorAmortiguacion();
+				JOptionPane.showConfirmDialog(ventana, "El valor debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 			}
 
 
 		} else {
-			mostrarMenu();
+			return -1.0;
 		}
+
+		return null;
 	}
 
-	private static void mostrarTablaPageRanks(Double factor) {
-		JFrame popup = new JFrame("Page Rank de Plantas en la Red Actual");
-		JPanel panel = new JPanel(new GridBagLayout());
-		popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
-		panel.setPreferredSize( new Dimension(500,500));
-		List<Planta> plantas = GestionEntidadesController.plantaController.generarPageRanks(factor);
+	public static void mostrarTablaPageRanks() {
 
-		if(plantas.isEmpty()) {
-			JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
+		Double factor = getFactorAmortiguacion();
+		if(factor != null && factor >= 0) {	
+			JFrame popup = new JFrame("Page Rank de Plantas en la Red Actual");
+			JPanel panel = new JPanel(new GridBagLayout());
+			popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
+			panel.setPreferredSize( new Dimension(500,500));
+
+			List<Planta> plantas = controller.getPlantasPageRank(factor);
+			if(plantas.isEmpty()) {
+				JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.ERROR_MESSAGE);
+			}else {
+
+				PlantaTableModel tmodel = new PlantaTableModel(plantas);
+				JTable table = new JTable(tmodel);
+				GridBagConstraints constraints = new GridBagConstraints();
+				table.setFillsViewportHeight(true);
+				//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+				//table.setPreferredSize(new Dimension(300,350));
+
+				JScrollPane scroll = new JScrollPane(table);
+				constraints.anchor=GridBagConstraints.CENTER;
+				panel.add(scroll);
+				popup.setContentPane(panel);
+				popup.pack();
+				popup.setLocationRelativeTo(ventana);
+				popup.setVisible(true);
+			}
+		}
+		else 
+			if(factor == null){
+				mostrarTablaPageRanks();
+			}
+			else if(factor == -1.0)
+				mostrarMenu();
+	}
+
+	public static void mostrarFlujoMaximo() {
+		if(controller.hayCaminoDisponible()){	
+			Integer flujo = controller.flujoMaximoRed();
+
+			if(flujo == 0) {
+				JOptionPane.showConfirmDialog(null,"No existe flujo disponible.","Advertencia",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+			}else {
+				JOptionPane.showConfirmDialog(null,"El Flujo Máximo posible es de: "+flujo+" Toneladas.","Flujo en la Red Actual",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		else {
+			JOptionPane.showConfirmDialog(null,"No hay caminos disponibles.","Error",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE);
-		}else {
-
-			PlantaTableModel tmodel = new PlantaTableModel(plantas);
-			JTable table = new JTable(tmodel);
-			GridBagConstraints constraints = new GridBagConstraints();
-			table.setFillsViewportHeight(true);
-			//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			//table.setPreferredSize(new Dimension(300,350));
-
-			JScrollPane scroll = new JScrollPane(table);
-			constraints.anchor=GridBagConstraints.CENTER;
-			panel.add(scroll);
-			popup.setContentPane(panel);
-			popup.pack();
-			popup.setLocationRelativeTo(ventana);
-			popup.setVisible(true);
 		}
 	}
 

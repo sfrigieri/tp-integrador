@@ -209,6 +209,10 @@ public class PlantaServiceDefault implements PlantaService {
 		return plantaDao.buscarCaminosInfo(p1,p2);
 	}
 
+	@Override
+	public Boolean existeCamino(Planta p1, Planta p2) {
+		return plantaDao.existeCamino(p1,p2);
+	}
 
 	// Item 5.1
 	@Override

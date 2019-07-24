@@ -107,4 +107,9 @@ public class PlantaController {
 		return ps.generarMejorSeleccionEnvio(camion, listaDisponibles);
 	}
 
+
+	public boolean existeCamino(PlantaAcopio inicial, PlantaAcopio fin) {
+		return ps.existeCamino(inicial, fin);
+	}
+
 }

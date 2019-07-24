@@ -279,5 +279,11 @@ public class GrafoPlanta extends Grafo<Planta> {
 	}
 
 
+	public Boolean existeCamino(Planta p1, Planta p2) {
+		return this.existeCamino(new Vertice<Planta>(p1),new Vertice<Planta>(p2));
+		
+	}
+
+
 
 }

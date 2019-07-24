@@ -53,5 +53,7 @@ public interface PlantaDao {
 
 	public PlantaAcopio buscarAcopioFinal();
 
+	public Boolean existeCamino(Planta p1, Planta p2);
+
 
 }
