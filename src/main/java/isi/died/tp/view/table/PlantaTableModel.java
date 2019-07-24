@@ -51,7 +51,7 @@ public class PlantaTableModel extends AbstractTableModel {
 			valor = this.plantas.get(rowIndex).getNombre();
 			break;
 		case 2:
-			valor = (Math.round(this.plantas.get(rowIndex).getPageRank()*Math.pow(10, 3)))/Math.pow(10, 3);
+			valor = (Math.round(this.plantas.get(rowIndex).getPageRank()*Math.pow(10, 2)))/Math.pow(10, 2);
 			break;
 		default:
 			System.out.println("Out of Index");

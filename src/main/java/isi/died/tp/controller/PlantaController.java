@@ -76,8 +76,8 @@ public class PlantaController {
 
 
 	// Item 5.2
-	public List<Planta> generarPageRanks() {
-		return ps.generarPageRanks();
+	public List<Planta> generarPageRanks(Double factor) {
+		return ps.generarPageRanks(factor);
 	}
 
 

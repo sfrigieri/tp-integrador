@@ -64,13 +64,13 @@ public class Main {
 	    ventana.setJMenuBar(barraMenu);
 		
 		//titulo
-		constraints.insets=new Insets(5, 5, 5, 5);
+		constraints.insets=new Insets(0, 0, 0, 0);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado1.setFont(new Font(encabezado1.getFont().getName(), encabezado1.getFont().getStyle(), 40));
+		encabezado1.setFont(new Font(encabezado1.getFont().getName(), encabezado1.getFont().getStyle(), 30));
 		panel.add(encabezado1,constraints);
 		constraints.gridy=1;
 		constraints.insets.set(5, 5, 100, 5);
@@ -78,9 +78,9 @@ public class Main {
 		panel.add(encabezado2,constraints);
 		
 		//botones ocultos
-		constraints.insets.set(0, 25, 20, 5);
+		constraints.insets.set(0, 110, 20, 5);
 		constraints.gridwidth=1;
-		constraints.gridx=7;
+		constraints.gridx=6;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		
 		constraints.gridy=3;

@@ -231,7 +231,7 @@ public class PlantaServiceDefault implements PlantaService {
 
 	// Item 5.2
 	@Override
-	public List<Planta> generarPageRanks() {
+	public List<Planta> generarPageRanks(Double factor) {
 
 		this.resetPageRanks();
 		List<Planta> plantas = plantaDao.listaPlantas();
@@ -242,7 +242,7 @@ public class PlantaServiceDefault implements PlantaService {
 			difPromedio = 0;	
 
 			for(Planta p: plantas) {
-				nuevosPageRanks.add(plantaDao.generarNuevoPageRank(p));
+				nuevosPageRanks.add(plantaDao.generarNuevoPageRank(p, factor));
 			}
 
 			if(nuevosPageRanks.size() != 0)
@@ -253,7 +253,7 @@ public class PlantaServiceDefault implements PlantaService {
 				}
 
 			difPromedio = difPromedio / nuevosPageRanks.size();
-		} while(difPromedio > 0.000001);
+		} while(difPromedio > 0.000000001);
 
 		/*for(int i = 0; i < plantas.size(); i++) {
 			System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());

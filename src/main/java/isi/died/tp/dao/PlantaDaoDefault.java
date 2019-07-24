@@ -226,7 +226,7 @@ public class PlantaDaoDefault implements PlantaDao {
 	}
 	
 	@Override
-	public double generarNuevoPageRank(Planta p) {
+	public double generarNuevoPageRank(Planta p, Double factor) {
 		
 		double sum = 0;
 		int referencias;
@@ -241,8 +241,7 @@ public class PlantaDaoDefault implements PlantaDao {
 				sum+= pPred.getValor().getPageRank()/referencias;
 		}
 		
-		//Factor amortigüación: 0.5
-		return (1-0.5) + 0.5*sum;
+		return (1-factor) + factor*sum;
 	}
 
 

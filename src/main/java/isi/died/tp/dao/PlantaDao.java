@@ -31,7 +31,7 @@ public interface PlantaDao {
 
 	public void eliminarPlanta(Planta planta);
 
-	public double generarNuevoPageRank(Planta p);
+	public double generarNuevoPageRank(Planta p, Double factor);
 
 	public void resetPageRanks();
 

@@ -1,5 +1,6 @@
 package isi.died.tp.view;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.JOptionPane;
 
@@ -89,7 +92,7 @@ public class GestionEnvios {
 
 		pageRanks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mostrarTablaPageRanks();
+				getFactorAmortiguacion();
 			}
 		});
 
@@ -117,23 +120,55 @@ public class GestionEnvios {
 
 	}
 
+	private static void getFactorAmortiguacion() {
 
-	private static void mostrarTablaPageRanks() {
+		JTextField field = new JTextField(10);
+		JPanel panel = new JPanel();
+		panel.add(new JLabel("Factor (0-1): "));
+		panel.add(field);
+		int result = JOptionPane.showConfirmDialog(null, panel, "Ingrese el Factor de Amortiguación",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		if (result == JOptionPane.OK_OPTION) {
+			try {
+				Double.parseDouble(field.getText());
+				if (Double.valueOf(field.getText()) <= 1 && Double.valueOf(field.getText()) >= 0)
+					mostrarTablaPageRanks(Double.valueOf(field.getText()));
+				else {
+					JOptionPane.showConfirmDialog(ventana, "Valor ingresado fuera de rango.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+					getFactorAmortiguacion();
+				} }
+			catch(NumberFormatException nfex) {
+				JOptionPane.showConfirmDialog(ventana, "El valor debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);	
+				getFactorAmortiguacion();
+			}
+
+
+		} else {
+			mostrarMenu();
+		}
+	}
+
+	private static void mostrarTablaPageRanks(Double factor) {
 		JFrame popup = new JFrame("Page Rank de Plantas en la Red Actual");
 		JPanel panel = new JPanel(new GridBagLayout());
-
-		List<Planta> plantas = GestionEntidadesController.plantaController.generarPageRanks();
+		popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
+		panel.setPreferredSize( new Dimension(500,500));
+		List<Planta> plantas = GestionEntidadesController.plantaController.generarPageRanks(factor);
 
 		if(plantas.isEmpty()) {
 			JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
-			JOptionPane.DEFAULT_OPTION,
-			JOptionPane.ERROR_MESSAGE);
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.ERROR_MESSAGE);
 		}else {
 
 			PlantaTableModel tmodel = new PlantaTableModel(plantas);
 			JTable table = new JTable(tmodel);
 			GridBagConstraints constraints = new GridBagConstraints();
 			table.setFillsViewportHeight(true);
+			//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			//table.setPreferredSize(new Dimension(300,350));
+
 			JScrollPane scroll = new JScrollPane(table);
 			constraints.anchor=GridBagConstraints.CENTER;
 			panel.add(scroll);
