@@ -14,7 +14,6 @@ public class GestionEnviosController {
 		switch(op) {
 		//case FLUJO_MAXIMO: interfazInsumo.agregarInsumo(); break;
 		//case MEJOR_SELECCION_ENVIO: interfazInsumo.modificarInsumo(); break;
-		//case PAGE_RANKS: interfazInsumo.eliminarInsumo(true); break;
 		}
 	}
 }

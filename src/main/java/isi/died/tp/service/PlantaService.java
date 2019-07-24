@@ -36,9 +36,7 @@ public interface PlantaService {
 
 	public List<StockAcopio> generarStockFaltanteDisponible();
 
-	public void generarPageRanks();
-
-	public void resetPageRanks();
+	public List<Planta> generarPageRanks();
 
 	public void setRutas(List<Ruta> lista);
 

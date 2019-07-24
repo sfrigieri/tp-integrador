@@ -2,25 +2,65 @@ package isi.died.tp.view.table;
 
 import javax.swing.table.AbstractTableModel;
 
+import isi.died.tp.model.Planta;
+import isi.died.tp.model.PlantaAcopio;
+
+import java.util.List;
+
 public class PlantaTableModel extends AbstractTableModel {
 
+	
+	private List<Planta> plantas;
+	
+	private String[] columns = {"Tipo Planta","Nombre","Page Rank"};
+
 	@Override
-	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String getColumnName(int indice) {
+		return this.columns[indice];
+	}
+	
+
+	
+	public PlantaTableModel(List<Planta> plantas) {
+		this.plantas = plantas;
+	}
+
+
+	public List<Planta> getPlantas(){
+		return this.plantas;
 	}
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return plantas.size();
+	}
+
+	@Override
+	public int getColumnCount() {
+		return columns.length;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		Object valor = null;
+		switch (columnIndex) {
+		case 0:
+			valor = this.plantas.get(rowIndex) instanceof PlantaAcopio?"Acopio":"Producción";
+			break;
+		case 1:
+			valor = this.plantas.get(rowIndex).getNombre();
+			break;
+		case 2:
+			valor = (Math.round(this.plantas.get(rowIndex).getPageRank()*Math.pow(10, 3)))/Math.pow(10, 3);
+			break;
+		default:
+			System.out.println("Out of Index");
+			valor = "undetermined";
+			break;
+		}
+		return valor;
 	}
+	
 
 }
 
