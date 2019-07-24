@@ -25,8 +25,8 @@ public class ABMRuta {
 	private RutaController controller;
 	private JFrame ventana;
 	
-	public ABMRuta(JFrame ventana, PlantaService ps, RutaService rs){
-		this.controller = new RutaController(ps, rs);
+	public ABMRuta(JFrame ventana, RutaService rs){
+		this.controller = new RutaController(rs);
 		this.ventana = ventana;
 	}
 	
@@ -206,7 +206,7 @@ public class ABMRuta {
 		ventana.pack();
 		ventana.setSize(800, 600);
 		ventana.setLocationRelativeTo(null);
-		ventana.setTitle("Sistema de Gestión de Entidades");
+		ventana.setTitle("Gestión de Entidades");
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
 	}

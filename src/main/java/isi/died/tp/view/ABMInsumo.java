@@ -531,8 +531,6 @@ public class ABMInsumo {
 					if (esLiquido.isSelected()) {
 						if(insumo.getStock() != null) {
 							insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,insumo.getStock(),valorRefrigeracion,valorDensidad,valorPeso);
-							//Si modifico la planta en ABMPlanta, habrá que realizar la asignacion del nuevo objeto Planta
-							// a sus insumos, si es PlantaAcopio, o a cada uno de sus stocks, si es PlantaProduccion.
 							insumoNuevo.getStock().setInsumo(insumoNuevo);
 						}else
 							insumoNuevo = new InsumoLiquido(insumo.getId(),valorDescripcion,valorCosto,valorRefrigeracion,valorDensidad,valorPeso);
