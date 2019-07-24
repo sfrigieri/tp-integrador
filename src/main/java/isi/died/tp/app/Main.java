@@ -99,6 +99,12 @@ public class Main {
 			}
 		});
 		
+		gestionEnvios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.opcion(OpcionesMenu.GESTION_ENVIOS, ventana);
+			}
+		});
+		
 		//manejo ventana
 		ventana.setContentPane(panel);
 		ventana.pack();

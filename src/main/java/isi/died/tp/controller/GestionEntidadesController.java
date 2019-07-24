@@ -16,9 +16,9 @@ public class GestionEntidadesController {
 	private InsumoService insumoService;
 	private RutaService rutaService;
 	private CamionService camionService;
-	private InsumoController insumoController;
-	private PlantaController plantaController;
-	private StockController stockController;
+	public static InsumoController insumoController;
+	public static PlantaController plantaController;
+	public static StockController stockController;
 	
 	public GestionEntidadesController(JFrame ventana) {
 			
