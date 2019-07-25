@@ -16,9 +16,8 @@ public class CamionServiceDefault implements CamionService {
 	}
 	
 	@Override
-	public Camion agregarCamion(Camion camion) {
+	public void agregarCamion(Camion camion) {
 		camionDao.agregarCamion(camion);
-		return null;
 	}
 
 	@Override

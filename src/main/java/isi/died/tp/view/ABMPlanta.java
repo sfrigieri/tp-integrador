@@ -495,8 +495,8 @@ public class ABMPlanta {
 		editor.setClickCountToStart(10000);
 		
 		if (mostrarTablaAcopio) {
+			cambiarTipoPlanta.setText("Ver Plantas de Producción");
 			for (Planta planta : listaPlantasAcopio) {
-				cambiarTipoPlanta.setText("Ver Plantas de Producción");
 				String valorOrigen = "";
 				if (planta.esOrigen())
 					valorOrigen += "SI";

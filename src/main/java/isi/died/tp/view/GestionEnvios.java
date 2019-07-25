@@ -124,7 +124,7 @@ public class GestionEnvios {
 		JPanel panel = new JPanel();
 		panel.add(new JLabel("Factor de Transición (0-1): "));
 		panel.add(field);
-		int result = JOptionPane.showConfirmDialog(null, panel, "Probabilidad de Transición a Planta",
+		int result = JOptionPane.showConfirmDialog(null, panel, "Probabilidad de Transición a otra Planta",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (result == JOptionPane.OK_OPTION) {
@@ -155,7 +155,6 @@ public class GestionEnvios {
 			JPanel panel = new JPanel(new GridBagLayout());
 			popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
 			panel.setPreferredSize( new Dimension(500,500));
-
 			List<Planta> plantas = controller.getPlantasPageRank(factor);
 			if(plantas.isEmpty()) {
 				JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
@@ -165,16 +164,16 @@ public class GestionEnvios {
 
 				PlantaTableModel tmodel = new PlantaTableModel(plantas);
 				JTable table = new JTable(tmodel);
-				GridBagConstraints constraints = new GridBagConstraints();
 				table.setFillsViewportHeight(true);
-				//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-				//table.setPreferredSize(new Dimension(300,350));
+				//table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+				//table.setPreferredSize(new Dimension(400,400));
 
 				JScrollPane scroll = new JScrollPane(table);
-				constraints.anchor=GridBagConstraints.CENTER;
+			
 				panel.add(scroll);
 				popup.setContentPane(panel);
 				popup.pack();
+			//	popup.setSize(550,500);
 				popup.setLocationRelativeTo(ventana);
 				popup.setVisible(true);
 			}

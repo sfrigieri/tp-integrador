@@ -6,7 +6,7 @@ import isi.died.tp.model.Camion;
 
 public interface CamionService {
 	
-	public Camion agregarCamion(Camion camion);
+	public void agregarCamion(Camion camion);
 
 	public List<Camion> listaCamiones();
 
