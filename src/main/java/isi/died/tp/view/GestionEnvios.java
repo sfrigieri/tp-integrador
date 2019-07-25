@@ -149,41 +149,43 @@ public class GestionEnvios {
 
 	public static void mostrarTablaPageRanks() {
 
+		JFrame popup = new JFrame("Page Rank de Plantas en la Red Actual");
+		JPanel panel = new JPanel(new GridBagLayout());
+		JTable table;
+		popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
+		panel.setPreferredSize( new Dimension(500,500));
+
+		if(!controller.existenPlantas()) {
+			JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		else {
 		Double factor = getFactorAmortiguacion();
 		if(factor != null && factor >= 0) {	
-			JFrame popup = new JFrame("Page Rank de Plantas en la Red Actual");
-			JPanel panel = new JPanel(new GridBagLayout());
-			popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
-			panel.setPreferredSize( new Dimension(500,500));
 			List<Planta> plantas = controller.getPlantasPageRank(factor);
-			if(plantas.isEmpty()) {
-				JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
-						JOptionPane.DEFAULT_OPTION,
-						JOptionPane.ERROR_MESSAGE);
-			}else {
-
-				PageRanksTableModel tmodel = new PageRanksTableModel(plantas);
-				JTable table = new JTable(tmodel);
+				table = new PageRanksTableModel();
+				((PageRanksTableModel) table).agregarDatos(plantas);
 				table.setFillsViewportHeight(true);
-				//table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-				//table.setPreferredSize(new Dimension(400,400));
 
 				JScrollPane scroll = new JScrollPane(table);
 			
 				panel.add(scroll);
 				popup.setContentPane(panel);
 				popup.pack();
-			//	popup.setSize(550,500);
 				popup.setLocationRelativeTo(ventana);
 				popup.setVisible(true);
 			}
-		}
+		
 		else 
 			if(factor == null){
-				mostrarTablaPageRanks();
+				return;
 			}
 			else if(factor == -1.0)
 				mostrarMenu();
+		
+		}
 	}
 
 	public static void mostrarFlujoMaximo() {

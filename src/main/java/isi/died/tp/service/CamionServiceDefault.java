@@ -41,4 +41,9 @@ public class CamionServiceDefault implements CamionService {
 		return camionDao.buscarCamion(id);
 	}
 
+	@Override
+	public boolean existenCamiones() {
+		return !camionDao.listaCamiones().isEmpty();
+	}
+
 }

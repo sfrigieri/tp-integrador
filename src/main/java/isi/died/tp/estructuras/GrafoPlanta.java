@@ -284,6 +284,10 @@ public class GrafoPlanta extends Grafo<Planta> {
 		
 	}
 
+	public Boolean existenPlantas() {
+		return ! this.vertices.isEmpty();
+	}
+
 
 
 }

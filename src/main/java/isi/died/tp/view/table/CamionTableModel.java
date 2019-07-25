@@ -1,12 +1,17 @@
 package isi.died.tp.view.table;
 
 import java.awt.Color;
+import java.util.List;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
+import isi.died.tp.model.Camion;
 
 public class CamionTableModel extends JTable {
 
@@ -38,6 +43,25 @@ public class CamionTableModel extends JTable {
 	this.setFillsViewportHeight(true);
 	this.setBorder(new LineBorder(new Color(0, 0, 0)));
 	this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	DefaultCellEditor editor = (DefaultCellEditor) this.getDefaultEditor(Object.class);
+	editor.setClickCountToStart(10000);
+	
+	
+	
+	}
+	
+	public void  agregarDatos(List<Camion> camionesDisponibles) {
+		
+	DefaultTableModel model = (DefaultTableModel) this.getModel();
+	for (Camion c : camionesDisponibles) {
+		String valorApto = "";
+		if (c.getAptoLiquidos())
+			valorApto += "SI";
+		else
+			valorApto += "NO";
+		model.addRow(new Object[]{Integer.toString(c.getId()), c.getMarca(), c.getModelo(),c.getDominio(),
+				Integer.toString(c.getAño()),"$ "+Double.toString(c.getCostoKm()), valorApto,Double.toString(c.getCapacidad())+" Kg" });
+	}
 	}
 	
 }

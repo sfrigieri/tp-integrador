@@ -1,66 +1,58 @@
 package isi.died.tp.view.table;
 
-import javax.swing.table.AbstractTableModel;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 
+import java.awt.Color;
 import java.util.List;
 
-public class PageRanksTableModel extends AbstractTableModel {
+public class PageRanksTableModel extends JTable {
 
-	
-	private List<Planta> plantas;
-	
-	private String[] columns = {"Tipo Planta","Nombre","Page Rank"};
+	public PageRanksTableModel() {
+		super(0,3);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		this.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		this.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		this.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		this.getColumnModel().getColumn(0).setPreferredWidth(50);
+		this.getColumnModel().getColumn(1).setPreferredWidth(90);
+		this.getColumnModel().getColumn(2).setPreferredWidth(20);
+		this.getColumnModel().getColumn(0).setHeaderValue("Tipo Planta");
+		this.getColumnModel().getColumn(1).setHeaderValue("Nombre");
+		this.getColumnModel().getColumn(2).setHeaderValue("Page Rank");
+		this.setFillsViewportHeight(true);
+		this.setBorder(new LineBorder(new Color(0, 0, 0)));
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		DefaultCellEditor editor = (DefaultCellEditor) this.getDefaultEditor(Object.class);
+		editor.setClickCountToStart(10000);
+		this.setFillsViewportHeight(true);
 
-	@Override
-	public String getColumnName(int indice) {
-		return this.columns[indice];
-	}
-	
-
-	
-	public PageRanksTableModel(List<Planta> plantas) {
-		this.plantas = plantas;
-	}
 
 
-	public List<Planta> getPlantas(){
-		return this.plantas;
-	}
-
-	@Override
-	public int getRowCount() {
-		return plantas.size();
 	}
 
-	@Override
-	public int getColumnCount() {
-		return columns.length;
-	}
+	public void  agregarDatos(List<Planta> plantas) {
 
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		Object valor = null;
-		switch (columnIndex) {
-		case 0:
-			valor = this.plantas.get(rowIndex) instanceof PlantaAcopio?"Acopio":"Producción";
-			break;
-		case 1:
-			valor = this.plantas.get(rowIndex).getNombre();
-			break;
-		case 2:
-			valor = (Math.round(this.plantas.get(rowIndex).getPageRank()*Math.pow(10, 2)))/Math.pow(10, 2);
-			break;
-		default:
-			System.out.println("Out of Index");
-			valor = "undetermined";
-			break;
+		DefaultTableModel model = (DefaultTableModel) this.getModel();
+		for (Planta p : plantas) {
+			String valorTipo = "";
+			if (p instanceof PlantaAcopio)
+				valorTipo += "Acopio";
+			else
+				valorTipo += "Producción";
+			model.addRow(new Object[]{valorTipo,p.getNombre(),Double.toString(Math.round((p.getPageRank()*Math.pow(10, 2)))/Math.pow(10, 2)) });
 		}
-		return valor;
 	}
-	
+
 
 }
 

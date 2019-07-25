@@ -167,6 +167,12 @@ public class PlantaDaoDefault implements PlantaDao {
 	public List<Planta> listaPlantas() {
 		return GRAFO_PLANTA.listaVertices();
 	}
+	
+	@Override
+	public Boolean existenPlantas() {
+		return GRAFO_PLANTA.existenPlantas();
+	}
+
 
 
 	@Override
@@ -301,6 +307,7 @@ public class PlantaDaoDefault implements PlantaDao {
 			e1.printStackTrace();
 		}
 	}
+
 
 
 	

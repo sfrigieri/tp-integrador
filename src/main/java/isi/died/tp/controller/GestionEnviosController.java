@@ -67,4 +67,14 @@ public class GestionEnviosController {
 		return pc.flujoMaximoRed(pc.buscarAcopioInicial());
 	}
 
+
+	public Boolean existenPlantas() {
+		return pc.existenPlantas();
+	}
+
+
+	public boolean existenCamiones() {
+		return cc.existenCamiones();
+	}
+
 }

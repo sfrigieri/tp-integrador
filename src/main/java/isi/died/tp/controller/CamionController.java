@@ -38,4 +38,8 @@ public class CamionController {
 		return cs.buscarCamion(id);
 	}
 
+	public boolean existenCamiones() {
+		return cs.existenCamiones();
+	}
+
 }

@@ -15,5 +15,7 @@ public interface CamionService {
 	public void eliminarCamion(Camion camion);
 
 	public Camion buscarCamion(Integer id);
+
+	public boolean existenCamiones();
 	
 }

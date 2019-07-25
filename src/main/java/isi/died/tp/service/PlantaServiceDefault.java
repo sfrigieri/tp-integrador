@@ -117,6 +117,21 @@ public class PlantaServiceDefault implements PlantaService {
 	public PlantaAcopio buscarPlantaAcopio(Integer id) {
 		return plantaDao.buscarPlantaAcopio(id);
 	}
+	
+	@Override
+	public PlantaAcopio buscarAcopioInicial() {
+		return plantaDao.buscarAcopioInicial();
+	}
+
+	@Override
+	public PlantaAcopio buscarAcopioFinal() {
+		return plantaDao.buscarAcopioFinal();
+	}
+
+	@Override
+	public Boolean existenPlantas() {
+		return plantaDao.existenPlantas();
+	}
 
 	// Item 4.2 a)
 	@Override
@@ -444,15 +459,7 @@ public class PlantaServiceDefault implements PlantaService {
 		return listaResultante;
 	}
 
-	@Override
-	public PlantaAcopio buscarAcopioInicial() {
-		return plantaDao.buscarAcopioInicial();
-	}
 
-	@Override
-	public PlantaAcopio buscarAcopioFinal() {
-		return plantaDao.buscarAcopioFinal();
-	}
 
 
 }

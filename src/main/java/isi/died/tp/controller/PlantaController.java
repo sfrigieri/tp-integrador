@@ -112,4 +112,9 @@ public class PlantaController {
 		return ps.existeCamino(inicial, fin);
 	}
 
+
+	public Boolean existenPlantas() {
+		return ps.existenPlantas();
+	}
+
 }
