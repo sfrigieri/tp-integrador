@@ -67,19 +67,19 @@ public class ABMPlanta {
 		List<PlantaAcopio> listaPlantasAcopio = controller.listaPlantasAcopio();
 		
 		//titulo
-		constraints.insets.set(5, 5, 40, 5);
+		constraints.insets.set(0, 20, 145, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 		
 		//labels
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
-		constraints.insets.set(5, 5, 15, 5);
+		constraints.insets.set(5, 225, 15, 5);
 		constraints.gridx=1;
 		constraints.gridwidth=1;
 				
@@ -93,6 +93,7 @@ public class ABMPlanta {
 		panel.add(new JLabel("Es Origen: "), constraints);
 		
 		//combobox tipoPlanta
+		constraints.insets.set(5, 5, 15, 5);
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
 		tipoPlanta.addItem("Acopio");
@@ -130,7 +131,7 @@ public class ABMPlanta {
 		});
 		
 		//botones
-		constraints.insets.set(25,0,0,0);
+		constraints.insets.set(75,0,0,0);
 		constraints.gridy=10;
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
@@ -237,18 +238,19 @@ public class ABMPlanta {
 		JComboBox<String> seleccionarPlanta = new JComboBox<String>();
 		
 		//titulo
+		constraints.insets=new Insets(5, 20, 20, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 		
 		//combobox seleccion
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
-		constraints.insets.set(25, 5, 25, 5);
+		constraints.insets.set(135, 5, 25, 5);
 		constraints.gridx=0;
 		constraints.gridy=1;
 		panel.add(seleccionarPlanta, constraints);
@@ -270,12 +272,12 @@ public class ABMPlanta {
 		constraints.anchor=GridBagConstraints.EAST;
 		
 		constraints.gridx=0;
-		constraints.insets=new Insets(5, 5, 5, 15);
+		constraints.insets=new Insets(105, 5, 5, 15);
 		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		panel.add(volver, constraints);
 				
 		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(5, 15, 5, 5);
+		constraints.insets=new Insets(105, 15, 5, 5);
 		constraints.gridx=0;
 		aceptar.addActionListener(a -> {
 			String stringPlanta = (String)seleccionarPlanta.getSelectedItem();
@@ -318,14 +320,14 @@ public class ABMPlanta {
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		constraints.insets.set(5, 5, 40, 5);
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		constraints.insets.set(0, 20, 125, 5);
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 		
 		//labels
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
-		constraints.insets.set(5, 5, 15, 5);
+		constraints.insets.set(5, 205, 15, 5);
 		constraints.gridx=1;
 		constraints.gridwidth=1;
 		
@@ -379,13 +381,13 @@ public class ABMPlanta {
 		
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridx=2;
-		constraints.insets=new Insets(20, 5, 5, 15);
+		constraints.insets.set(75,0,0,0);
 		volver.addActionListener(a -> this.modificarPlanta());
 		panel.add(volver, constraints);
 		
 		//boton guardarCambios				
-		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(20, 35, 5, 0);
+		//constraints.anchor=GridBagConstraints.WEST;
+		//constraints.insets=new Insets(75, 35, 5, 0);
 		constraints.gridx=1;
 		guardarCambios.addActionListener(a -> {
 			String valorNombre;
@@ -512,12 +514,13 @@ public class ABMPlanta {
 		}
 
 		//titulo
+		constraints.insets.set(0,0,60,0);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 		
 		//botones

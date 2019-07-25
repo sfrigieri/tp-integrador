@@ -68,22 +68,25 @@ public class ABMInsumo {
 		checkboxRefrigerado.add(noRefrigerado);
 
 		//titulo
-		constraints.insets=new Insets(5, 5, 40, 5);
+		constraints.insets=new Insets(5, 35, 40, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 
 		//labels
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
-		constraints.insets.set(5, 5, 15, 5);
+		constraints.insets.set(5, 195, 15, 5);
 		constraints.gridx=1;
 		constraints.gridwidth=1;
 
+		constraints.gridy=1;
+		panel.add(new JLabel("Tipo: "), constraints);
+		
 		constraints.gridy=2;
 		panel.add(new JLabel("Descripción: "), constraints);
 
@@ -100,11 +103,11 @@ public class ABMInsumo {
 		panel.add(new JLabel("Refrigeración: "), constraints);
 
 		constraints.gridy=7;
-		panel.add(new JLabel("Unidad: "), constraints);
+		panel.add(new JLabel("Unidad de Solicitud: "), constraints);
 
 		//checkboxs
 		constraints.gridx=2;
-
+		constraints.insets.set(5, 5, 15, 5);
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridy=1;
 		panel.add(noLiquido, constraints);
@@ -289,18 +292,19 @@ public class ABMInsumo {
 		JComboBox<String> seleccionarInsumo = new JComboBox<String>();
 
 		//titulo
+		constraints.insets=new Insets(5, 10, 10, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 
 		//combobox seleccion
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
-		constraints.insets.set(25, 5, 25, 5);
+		constraints.insets.set(135, 5, 25, 5);
 		constraints.gridx=0;
 		constraints.gridy=1;
 		panel.add(seleccionarInsumo, constraints);
@@ -316,12 +320,12 @@ public class ABMInsumo {
 		constraints.anchor=GridBagConstraints.EAST;
 
 		constraints.gridx=0;
-		constraints.insets=new Insets(5, 5, 5, 15);
+		constraints.insets=new Insets(105, 5, 5, 15);
 		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		panel.add(volver, constraints);
 
 		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(5, 15, 5, 5);
+		constraints.insets=new Insets(105, 15, 5, 5);
 		constraints.gridx=0;
 		aceptar.addActionListener(a -> {
 			String stringInsumo = (String)seleccionarInsumo.getSelectedItem();
@@ -365,21 +369,25 @@ public class ABMInsumo {
 		checkboxRefrigerado.add(noRefrigerado);
 
 		//titulo
+		constraints.insets=new Insets(5, 45, 40, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 
 		//labels
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
-		constraints.insets.set(5, 5, 15, 5);
+		constraints.insets.set(5, 195, 15, 5);
 		constraints.gridx=1;
 		constraints.gridwidth=1;
 
+		constraints.gridy=1;
+		panel.add(new JLabel("Tipo: "), constraints);
+		
 		constraints.gridy=2;
 		panel.add(new JLabel("Descripción: "), constraints);
 
@@ -400,7 +408,7 @@ public class ABMInsumo {
 
 		//checkboxs
 		constraints.gridx=2;
-
+		constraints.insets.set(5, 5, 15, 5);
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridy=1;
 		panel.add(noLiquido, constraints);
@@ -478,13 +486,13 @@ public class ABMInsumo {
 
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridx=2;
-		constraints.insets=new Insets(20, 5, 5, 15);
+		constraints.insets=new Insets(20, 5, 5, 0);
 		volver.addActionListener(a -> this.modificarInsumo());
 		panel.add(volver, constraints);
 
 		//boton guardarCambios				
 		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(20, 35, 5, 0);
+		constraints.insets=new Insets(20, 235, 5, 0);
 		constraints.gridx=1;
 		guardarCambios.addActionListener(a -> {
 			String valorDescripcion;
@@ -707,12 +715,13 @@ public class ABMInsumo {
 		editor.setClickCountToStart(10000);
 
 		//titulo
+		constraints.insets.set(0,0,60,0);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 
 		//botones

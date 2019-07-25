@@ -35,25 +35,25 @@ public class ABMRuta {
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Agregar Nueva Ruta"),
 				errorPlantaFin = new JLabel(), errorDistancia = new JLabel(), errorPesoMax = new JLabel(), errorDuracion = new JLabel();
-		JButton aceptar = new JButton("Aceptar"), cancelar = new JButton("Cancelar");
+		JButton aceptar = new JButton("Aceptar"), volver = new JButton("Volver");
 		JTextField tDistancia = new JTextField(20), tDuracion = new JTextField(20),
 					tPesoMaximo = new JTextField(20);
 		JComboBox<String> plantaInicio = new JComboBox<String>(), plantaFin = new JComboBox<String>();
 			
 		//titulo
-		constraints.insets=new Insets(5, 5, 40, 5);
+		constraints.insets.set(0, 20, 75, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
 		constraints.gridwidth=8;
 		constraints.anchor=GridBagConstraints.NORTH;
-		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 40));
+		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 	
 		//labels
-		constraints.fill=GridBagConstraints.NONE;
-		constraints.anchor=GridBagConstraints.EAST;
-		constraints.insets.set(5, 5, 15, 5);
+		constraints.fill=GridBagConstraints.HORIZONTAL;
+		constraints.anchor=GridBagConstraints.CENTER;
+		constraints.insets.set(5, 175, 15, 0);
 		constraints.gridx=1;
 		constraints.gridwidth=1;
 		
@@ -73,13 +73,11 @@ public class ABMRuta {
 		panel.add(new JLabel("Peso Máximo (Ton): "), constraints);
 		
 		//botones
-		constraints.anchor=GridBagConstraints.CENTER;
-		constraints.gridy=8;
-		panel.add(cancelar, constraints);
-		cancelar.addActionListener(a -> GestionEntidades.mostrarMenu());
-		
+		constraints.insets.set(55,50,0,0);
+		constraints.gridy=10;
+		constraints.fill=GridBagConstraints.NONE;
+
 		constraints.anchor=GridBagConstraints.EAST;
-		constraints.gridx=2;
 		panel.add(aceptar, constraints);
 		aceptar.addActionListener(a -> {
 			Planta inicio;
@@ -139,6 +137,12 @@ public class ABMRuta {
 				}
 			}
 		});
+		constraints.insets.set(55,190,0,90);
+		constraints.anchor=GridBagConstraints.WEST;
+		
+		constraints.gridx=2;
+		panel.add(volver, constraints);
+		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		
 		//esLiquido.addItemListener(esLiquidoListener);
 		
@@ -149,9 +153,9 @@ public class ABMRuta {
 		
 		//comboBoxes plantas	//cambiarlo por un for con getNombre de cada Planta de listaPlantas
 		constraints.fill=GridBagConstraints.HORIZONTAL;
-		constraints.anchor=GridBagConstraints.WEST;
+		constraints.anchor=GridBagConstraints.CENTER;
 		constraints.gridx=2;
-		
+		constraints.insets.set(5, 5, 15, 90);
 		constraints.gridy=2;
 		plantaInicio.addItem("PlantaAcopio1");
 		plantaInicio.addItem("PlantaAcopio2");

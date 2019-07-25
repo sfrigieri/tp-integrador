@@ -68,7 +68,8 @@ public class MejorSeleccionEnvioView {
 		tabla.getColumnModel().getColumn(2).setHeaderValue("Descripción");
 		tabla.getColumnModel().getColumn(3).setHeaderValue("Cantidad");
 		tabla.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(1).setCellRenderer(leftRenderer);
+		tabla.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		tabla.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 	} else {
 		tabla = new JTable(0,8);
 		tabla.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
@@ -111,12 +112,6 @@ public class MejorSeleccionEnvioView {
 	
 	//agregar datos tabla
 	DefaultTableModel model = (DefaultTableModel) tabla.getModel();
-	DefaultTableModel modeloDefecto = new DefaultTableModel() {
-		@Override
-		public boolean isCellEditable(int row, int column) {
-			return false;
-		}
-	};
 	DefaultCellEditor editor = (DefaultCellEditor) tabla.getDefaultEditor(Object.class);
 	editor.setClickCountToStart(10000);
 	
@@ -146,6 +141,7 @@ public class MejorSeleccionEnvioView {
 	}
 
 	//titulo
+	constraints.insets.set(0,0,60,0);
 	constraints.gridx=0;
 	constraints.gridy=0;
 	constraints.gridheight=1;

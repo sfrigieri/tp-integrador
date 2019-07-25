@@ -63,7 +63,7 @@ public class GestionEntidades {
 		opcionSeleccionada.addItem("Stock");
 		opcionSeleccionada.addItem("Ruta");
 		opcionSeleccionada.setSelectedItem("Seleccione");
-		constraints.insets.set(0, 25, 5, 5);
+		constraints.insets.set(0, 75, 5, 5);
 		constraints.gridx = 6;
 		constraints.gridy = 3;
 		constraints.gridwidth=1;
@@ -72,7 +72,7 @@ public class GestionEntidades {
 		//botones ocultos
 		constraints.gridx=7;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
-				
+		constraints.insets.set(0, 80, 5, 70);		
 		constraints.gridy=2;
 		panel.add(agregar, constraints);
 		agregar.setEnabled(false);
@@ -88,7 +88,7 @@ public class GestionEntidades {
 		//boton volver
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.SOUTH;
-		constraints.insets.set(50, 10, 5, 5);
+		constraints.insets.set(90, 10, 5, 5);
 		constraints.gridx = 6;
 		constraints.gridwidth = 2;
 		constraints.gridy=10;
