@@ -30,6 +30,8 @@ import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.model.StockAcopio;
+import isi.died.tp.view.table.CamionTableModel;
+import isi.died.tp.view.table.StockFaltanteTableModel;
 
 public class MejorSeleccionEnvioView {
 	
@@ -51,54 +53,15 @@ public class MejorSeleccionEnvioView {
 	List<StockAcopio> stockFaltante = gec.generarStockFaltante();
 	List<Camion> camionesDisponibles = gec.listaCamiones();
 
-	DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-	centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-	DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
-	leftRenderer.setHorizontalAlignment( JLabel.LEFT );
 	
-	if (mostrarTablaStock) {
-		tabla = new JTable(0,4);
-		tabla.getColumnModel().getColumn(0).setPreferredWidth(60);
-		tabla.getColumnModel().getColumn(1).setPreferredWidth(30);
-		tabla.getColumnModel().getColumn(2).setPreferredWidth(60);
-		tabla.getColumnModel().getColumn(3).setPreferredWidth(20);
-		tabla.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(0).setHeaderValue("Planta");
-		tabla.getColumnModel().getColumn(1).setHeaderValue("Tipo Insumo");
-		tabla.getColumnModel().getColumn(2).setHeaderValue("Descripción");
-		tabla.getColumnModel().getColumn(3).setHeaderValue("Cantidad");
-		tabla.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-	} else {
-		tabla = new JTable(0,8);
-		tabla.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
-		tabla.getColumnModel().getColumn(1).setPreferredWidth(90);
-		tabla.getColumnModel().getColumn(2).setPreferredWidth(90);
-		tabla.getColumnModel().getColumn(3).setPreferredWidth(75);
-		tabla.getColumnModel().getColumn(4).setPreferredWidth(15);
-		tabla.getColumnModel().getColumn(5).setPreferredWidth(30);
-		tabla.getColumnModel().getColumn(6).setPreferredWidth(50);
-		tabla.getColumnModel().getColumn(7).setPreferredWidth(40);
-		tabla.getColumnModel().getColumn(0).setHeaderValue("Id");
-		tabla.getColumnModel().getColumn(1).setHeaderValue("Marca");
-		tabla.getColumnModel().getColumn(2).setHeaderValue("Modelo");
-		tabla.getColumnModel().getColumn(3).setHeaderValue("Dominio");
-		tabla.getColumnModel().getColumn(4).setHeaderValue("Año");
-		tabla.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(5).setHeaderValue("Costo Km");
-		tabla.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(6).setHeaderValue("Apto Líquidos");
-		tabla.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
-		tabla.getColumnModel().getColumn(7).setHeaderValue("Capacidad");
-	}
+	if (mostrarTablaStock)
+		tabla = new StockFaltanteTableModel();
+	else 
+		tabla = new CamionTableModel();
+
 	
 	//tabla
 	constraints.insets=new Insets(5, 5, 0, 5);
-	tabla.setFillsViewportHeight(true);
-	tabla.setBorder(new LineBorder(new Color(0, 0, 0)));
-	tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	JScrollPane scroll = new JScrollPane(tabla,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	scroll.setPreferredSize(new Dimension(700, 197));
 	

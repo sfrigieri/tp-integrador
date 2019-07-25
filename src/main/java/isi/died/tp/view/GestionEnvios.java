@@ -26,7 +26,7 @@ import isi.died.tp.controller.GestionEnviosController;
 import isi.died.tp.controller.OpcionesMenuEnvios;
 import isi.died.tp.controller.PlantaController;
 import isi.died.tp.model.Planta;
-import isi.died.tp.view.table.PlantaTableModel;
+import isi.died.tp.view.table.PageRanksTableModel;
 
 public class GestionEnvios {
 
@@ -61,7 +61,7 @@ public class GestionEnvios {
 
 
 		//botones ocultos
-		constraints.insets.set(0, 170, 20, 5);
+		constraints.insets.set(0, 170, 20, 0);
 		constraints.gridwidth=1;
 		constraints.gridx=6;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
@@ -97,7 +97,7 @@ public class GestionEnvios {
 		//boton volver
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.SOUTH;
-		constraints.insets.set(50, 10, 5, 5);
+		constraints.insets.set(50, 15, 5, 0);
 		constraints.gridx = 6;
 		constraints.gridwidth = 2;
 		constraints.gridy=10;
@@ -162,7 +162,7 @@ public class GestionEnvios {
 						JOptionPane.ERROR_MESSAGE);
 			}else {
 
-				PlantaTableModel tmodel = new PlantaTableModel(plantas);
+				PageRanksTableModel tmodel = new PageRanksTableModel(plantas);
 				JTable table = new JTable(tmodel);
 				table.setFillsViewportHeight(true);
 				//table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

@@ -78,7 +78,7 @@ public class Main {
 		panel.add(encabezado2,constraints);
 		
 		//botones ocultos
-		constraints.insets.set(0, 105, 20, 5);
+		constraints.insets.set(0, 105, 20, 0);
 		constraints.gridwidth=1;
 		constraints.gridx=6;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
@@ -88,7 +88,7 @@ public class Main {
 		
 		constraints.gridy=4;
 		panel.add(gestionLogistica, constraints);
-		
+		constraints.insets.set(0, 105, 140, 0);
 		constraints.gridy=5;
 		panel.add(gestionEnvios, constraints);
 		

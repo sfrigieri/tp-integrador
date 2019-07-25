@@ -7,7 +7,7 @@ import isi.died.tp.model.PlantaAcopio;
 
 import java.util.List;
 
-public class PlantaTableModel extends AbstractTableModel {
+public class PageRanksTableModel extends AbstractTableModel {
 
 	
 	private List<Planta> plantas;
@@ -21,7 +21,7 @@ public class PlantaTableModel extends AbstractTableModel {
 	
 
 	
-	public PlantaTableModel(List<Planta> plantas) {
+	public PageRanksTableModel(List<Planta> plantas) {
 		this.plantas = plantas;
 	}
 
