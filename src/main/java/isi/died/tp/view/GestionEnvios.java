@@ -155,7 +155,7 @@ public class GestionEnvios {
 		JPanel panel = new JPanel(new GridBagLayout());
 		JTable table;
 		popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
-		panel.setPreferredSize( new Dimension(820,300));
+		panel.setPreferredSize( new Dimension(1000,350));
 		
 		if(!controller.existenPlantasAcopio()) {
 			JOptionPane.showConfirmDialog(null,"El Sistema no registra ambas Plantas de Acopio.","Acción Interrumpida",
@@ -192,7 +192,7 @@ public class GestionEnvios {
 				JScrollPane scroll = new JScrollPane(table,
 						JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 						JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-				scroll.setPreferredSize( new Dimension(380,150));
+				scroll.setPreferredSize( new Dimension(420,200));
 				panel.add(scroll, constraints);
 
 
@@ -203,8 +203,8 @@ public class GestionEnvios {
 				constraints.gridwidth=6;
 				constraints.anchor=GridBagConstraints.SOUTH;
 				infoExtra.setFont(new Font(infoExtra.getFont().getName(), infoExtra.getFont().getStyle(), 11));
-				infoExtra.setText("*El PageRank refiere a la importancia de una Planta sobre otra,"
-						+ " que es proporcional a la cantidad de caminos que llegan a ella. ");
+				infoExtra.setText("*El Page Rank refiere a la importancia de una Planta respecto a las demás."
+						+ " Es proporcional a la cantidad de caminos que llegan a ella. ");
 				panel.add(infoExtra,constraints);
 
 				constraints.insets.set(0,0,5,0);
@@ -214,8 +214,8 @@ public class GestionEnvios {
 				constraints.gridwidth=6;
 				constraints.anchor=GridBagConstraints.SOUTH;
 				infoExtra2.setFont(new Font(infoExtra.getFont().getName(), infoExtra.getFont().getStyle(), 11));
-				infoExtra2.setText("*El Factor de Transición/Amortiguación representa la probabilidad existente, en cada instante, de"
-						+ " desplazarse desde una Planta a otra.");
+				infoExtra2.setText("*El Factor de Transición/Amortiguación representa la probabilidad que existe para, desde"
+						+ " cada Planta, desplazarse a otra Planta por uno de los caminos disponibles.");
 				panel.add(infoExtra2,constraints);
 				popup.setContentPane(panel);
 				popup.pack();
