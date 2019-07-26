@@ -1,6 +1,7 @@
 package isi.died.tp.dao;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,18 +56,45 @@ public class InsumoDaoDefault implements InsumoDao {
 	}
 
 	public void cargarListaInsumos() {
-		List<List<String>> insumos = dataSource.readFile("insumos.csv");
-		for(List<String> filaInsumo : insumos) {
-			Insumo aux = new Insumo();
-			//No es necesario guardar id Stock, porque cada Stock guarda el idinsumo, y una vez cargados
-			//los stocks en memoria se llama a InsumoService para asignar a cada insumo su stock correspondiente.
-			aux.loadFromStringRow(filaInsumo);
-			LISTA_INSUMOS.add(aux);
+		List<List<String>> insumos = null;
+
+		try {
+			insumos = dataSource.readFile("insumos.csv");
+		} catch (FileNotFoundException e) {
+			File archivo = new File("insumos.csv");
+			try {
+				archivo.createNewFile();
+
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
+		
+		if(insumos != null)
+			for(List<String> filaInsumo : insumos) {
+				Insumo aux = new Insumo();
+				//No es necesario guardar id Stock, porque cada Stock guarda el idinsumo, y una vez cargados
+				//los stocks en memoria se llama a InsumoService para asignar a cada insumo su stock correspondiente.
+				aux.loadFromStringRow(filaInsumo);
+				LISTA_INSUMOS.add(aux);
+			}
 	}
 
 	public void cargarListaInsumosLiquidos() {
-		List<List<String>> insumosLiquidos = dataSource.readFile("insumosLiquidos.csv");
+		List<List<String>> insumosLiquidos = null;
+		try {
+			insumosLiquidos = dataSource.readFile("insumosLiquidos.csv");
+		} catch (FileNotFoundException e) {
+			File archivo = new File("insumosLiquidos.csv");
+			try {
+				archivo.createNewFile();
+
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		if(insumosLiquidos != null)
 		for(List<String> filaInsumo : insumosLiquidos) {
 			InsumoLiquido aux = new InsumoLiquido();
 			aux.loadFromStringRow(filaInsumo);

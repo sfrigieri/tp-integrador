@@ -1,6 +1,7 @@
 package isi.died.tp.dao;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,26 +42,39 @@ public class RutaDaoDefault implements RutaDao {
 
 	public void cargarListaRutas() {
 
-		List<List<String>> rutas = dataSource.readFile("rutas.csv");
-		for(List<String> filaRuta : rutas) {
-			Ruta aux = new Ruta();
-			aux.loadFromStringRow(filaRuta);
-			Planta p1, p2;
-			if(filaRuta.get(1).matches("P"))
-				p1 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(2)));
-			else
-				p1 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(2)));
+		List<List<String>> rutas = null;
+		try {
+			rutas = dataSource.readFile("rutas.csv");
+		} catch (FileNotFoundException e) {
+			File archivo = new File("rutas.csv");
+			try {
+				archivo.createNewFile();
 
-			if(filaRuta.get(3).matches("P"))
-				p2 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(4)));
-			else
-				p2 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(4)));
-			if(p1 != null & p2 != null) {
-				aux.setInicio(new Vertice<Planta>(p1));
-				aux.setFin(new Vertice<Planta>(p2));
-				LISTA_RUTAS.add(aux);
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
 		}
+
+		if(rutas != null)
+			for(List<String> filaRuta : rutas) {
+				Ruta aux = new Ruta();
+				aux.loadFromStringRow(filaRuta);
+				Planta p1, p2;
+				if(filaRuta.get(1).matches("P"))
+					p1 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(2)));
+				else
+					p1 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(2)));
+
+				if(filaRuta.get(3).matches("P"))
+					p2 = ps.buscarPlantaProduccion(Integer.valueOf(filaRuta.get(4)));
+				else
+					p2 = ps.buscarPlantaAcopio(Integer.valueOf(filaRuta.get(4)));
+				if(p1 != null & p2 != null) {
+					aux.setInicio(new Vertice<Planta>(p1));
+					aux.setFin(new Vertice<Planta>(p2));
+					LISTA_RUTAS.add(aux);
+				}
+			}
 	}
 
 	@Override

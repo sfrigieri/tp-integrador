@@ -8,12 +8,10 @@ import isi.died.tp.model.*;
 public class StockServiceDefault implements StockService {
 
 	private StockDao stockDao;
-	private PlantaService ps;
 
 	public StockServiceDefault(PlantaService ps, InsumoService is) {
 		super();
 		this.stockDao = new StockDaoDefault(ps, is);
-		this.ps = ps;
 	}
 	
 	@Override

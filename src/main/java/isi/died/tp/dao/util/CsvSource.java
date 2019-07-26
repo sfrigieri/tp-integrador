@@ -15,10 +15,9 @@ public class CsvSource {
 	private char separador = ',';
 	private char delimitadorString = '"';
 
-	public List<List<String>> readFile(String fileName) {
+	public List<List<String>> readFile(String fileName) throws FileNotFoundException {
 		List<List<String>> filas = new ArrayList<>();
 		Scanner scanner;
-		try {
 			scanner = new Scanner(new File(fileName));
 
 			while (scanner.hasNext()) {
@@ -26,9 +25,6 @@ public class CsvSource {
 				filas.add(line);
 			}
 			scanner.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 
 		return filas;
 	}
