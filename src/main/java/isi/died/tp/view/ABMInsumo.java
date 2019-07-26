@@ -635,7 +635,7 @@ public class ABMInsumo {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Eliminar Insumo"), errorSeleccion = new JLabel();
-		JButton eliminar = new JButton("Eliminar"), volver = new JButton("Volver"), cambiarTipoInsumo = new JButton("Ver Líquidos");
+		JButton eliminar = new JButton("Eliminar"), volver = new JButton("Volver"), cambiarTipoInsumo = new JButton("Ver Insumos Líquidos");
 		JTable tablaInsumos = new JTable(0,6);
 		List<Insumo> listaInsumosNoLiquidos = new ArrayList<Insumo>();
 		List<Insumo> listaInsumosLiquidos = new ArrayList<Insumo>();
@@ -649,7 +649,7 @@ public class ABMInsumo {
 		tablaInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane scroll = new JScrollPane(tablaInsumos,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroll.setPreferredSize(new Dimension(500, 197));
+		scroll.setPreferredSize(new Dimension(510, 197));
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		tablaInsumos.setDefaultRenderer(String.class, centerRenderer);
@@ -690,7 +690,7 @@ public class ABMInsumo {
 		DefaultTableModel model = (DefaultTableModel) tablaInsumos.getModel();
 		if (mostrarTablaNoLiquidos) {
 			for (Insumo insumo : listaInsumosNoLiquidos) {
-				cambiarTipoInsumo.setText("Ver Líquidos");
+				cambiarTipoInsumo.setText("Ver Insumos Líquidos");
 				tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Unidad");
 				String refrig = "";
 				if (insumo.getEsRefrigerado())
@@ -700,7 +700,7 @@ public class ABMInsumo {
 				model.addRow(new Object[]{Integer.toString(insumo.getId()), insumo.getDescripcion(), Double.toString(insumo.getCosto()), Double.toString(insumo.getPeso()), insumo.getUnidad().toString(), refrig});
 			}
 		} else {
-			cambiarTipoInsumo.setText("Ver No Líquidos");
+			cambiarTipoInsumo.setText("Ver Insumos Generales");
 			tablaInsumos.getColumnModel().getColumn(4).setHeaderValue("Densidad");
 			for (Insumo insumo : listaInsumosLiquidos) {
 				String refrig = "";
@@ -746,7 +746,7 @@ public class ABMInsumo {
 			} else {
 				int id = Integer.valueOf((String)tablaInsumos.getValueAt(numFila, 0));
 				Insumo ins;
-				if (cambiarTipoInsumo.getText() == "Ver Líquidos")
+				if (cambiarTipoInsumo.getText() == "Ver Insumos Líquidos")
 					ins = controller.buscarInsumoNoLiquido(id);
 				else
 					ins = controller.buscarInsumoLiquido(id);
@@ -757,7 +757,7 @@ public class ABMInsumo {
 					}
 					else {
 						if(JOptionPane.showConfirmDialog(ventana, "¿Desea eliminar el insumo seleccionado?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
-							if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
+							if (cambiarTipoInsumo.getText() == "Ver Insumos Líquidos") {
 								if(ins.getStock() != null)
 									sc.eliminarStock(ins.getStock());
 
@@ -784,12 +784,12 @@ public class ABMInsumo {
 		constraints.gridy=2;
 		constraints.gridx=1;
 		constraints.anchor=GridBagConstraints.CENTER;
-		constraints.insets = new Insets(1,5,39,375);
-		cambiarTipoInsumo.setPreferredSize(new Dimension(130, 25));
+		constraints.insets = new Insets(1,5,39,340);
+		cambiarTipoInsumo.setPreferredSize(new Dimension(170, 25));
 		cambiarTipoInsumo.addActionListener(a -> {
-			if (cambiarTipoInsumo.getText() == "Ver Líquidos") {
+			if (cambiarTipoInsumo.getText() == "Ver Insumos Líquidos") {
 				this.eliminarInsumo(false);
-			} else if (cambiarTipoInsumo.getText() == "Ver No Líquidos"){
+			} else if (cambiarTipoInsumo.getText() == "Ver Insumos Generales"){
 				this.eliminarInsumo(true);
 			}
 		});
@@ -797,7 +797,7 @@ public class ABMInsumo {
 
 		//error seleccion
 		constraints.anchor=GridBagConstraints.NORTHWEST;
-		constraints.insets.set(6,280,0,0);
+		constraints.insets.set(6,320,0,0);
 		constraints.gridx=3;
 		constraints.gridy=2;
 		errorSeleccion.setPreferredSize(new Dimension(360, 16));
