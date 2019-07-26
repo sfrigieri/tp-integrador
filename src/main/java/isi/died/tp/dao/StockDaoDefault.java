@@ -71,10 +71,13 @@ public class StockDaoDefault implements StockDao {
 				aux.setPlanta(ps.buscarPlantaProduccion(Integer.valueOf(filaStock.get(5))));
 			else
 				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));
-			LISTA_STOCKS_ACOPIO.add(aux);
+			
+			if(aux.getInsumo() != null & aux.getPlanta() != null)
+				LISTA_STOCKS_ACOPIO.add(aux);
 		}
 		
-		is.setStocksAcopio(LISTA_STOCKS_ACOPIO);
+		if(!LISTA_STOCKS_ACOPIO.isEmpty())
+			is.setStocksAcopio(LISTA_STOCKS_ACOPIO);
 	}
 	public void cargarListaStocksProduccion() {
 		List<List<String>> stocksProduccion = dataSource.readFile("stocksProduccion.csv");
@@ -89,10 +92,13 @@ public class StockDaoDefault implements StockDao {
 				aux.setPlanta(ps.buscarPlantaProduccion(Integer.valueOf(filaStock.get(5))));
 			else
 				aux.setPlanta(ps.buscarPlantaAcopio(Integer.valueOf(filaStock.get(5))));
+		
+			if(aux.getInsumo() != null & aux.getPlanta() != null)
 			LISTA_STOCKS_PRODUCCION.add(aux);
 		}
 		
-		ps.setStocksProduccion(LISTA_STOCKS_PRODUCCION);
+		if(!LISTA_STOCKS_PRODUCCION.isEmpty())
+			ps.setStocksProduccion(LISTA_STOCKS_PRODUCCION);
 	}
 
 

@@ -23,10 +23,8 @@ public class RutaServiceDefault implements RutaService {
 		this.rutaDao = new RutaDaoDefault(ps);
 		this.ps = ps;
 		this.cs = cs;
-		//Cuando paso la lista, la otra lista tendrá una referencia a cada uno de los objetos.
-		//Aunque elimine, modifique, etc objetos en esta lista, la otra seguirá apuntando a esos objetos
-		//por lo que es necesario volver a actualizar la lista Completa.
-		ps.setRutas(rutaDao.listaRutas());
+		if(!rutaDao.listaRutas().isEmpty())
+			ps.setRutas(rutaDao.listaRutas());
 		ps.setRutaService(this);
 		if(!ps.listaPlantas().isEmpty()) {/*
 			for (Recorrido r : ps.buscarCaminosInfo(ps.buscarAcopioInicial(), ps.buscarPlantaProduccion(2))) {
@@ -62,29 +60,6 @@ public class RutaServiceDefault implements RutaService {
 				for(Ruta ruta : r.getRecorrido())
 					System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
 				System.out.println(" ");
-				System.out.println(" ");
-			}
-			 int cant = 0;
-			System.out.println("Stock Faltante Disponible:");
-			for(StockAcopio s : ps.generarStockFaltanteDisponible()) {
-				cant++;
-				System.out.println(" "+cant);
-				System.out.println("Stock Insumo: "+s.getInsumo().getDescripcion()+" Cantidad: "+s.getCantidad());
-				System.out.println("Precio: "+s.getInsumo().getCosto()*s.getCantidad());
-				System.out.println("Planta destino: "+s.getPlanta().getNombre());
-				System.out.println("Peso: "+s.getCantidad()*s.getInsumo().getPeso());
-				System.out.println(" ");
-			}
-			cant = 0;
-			System.out.println(" ");
-			System.out.println("Mejor Seleccion Envio:");
-			for (StockAcopio s : ps.generarMejorSeleccionEnvio(cs.buscarCamion(3), ps.generarStockFaltanteDisponible())) {
-				cant++;
-				System.out.println(" "+cant);
-				System.out.println("Stock Insumo: "+s.getInsumo().getDescripcion()+" Cantidad: "+s.getCantidad());
-				System.out.println("Precio: "+s.getInsumo().getCosto()*s.getCantidad());
-				System.out.println("Planta destino: "+s.getPlanta().getNombre());
-				System.out.println("Peso: "+s.getCantidad()*s.getInsumo().getPeso());
 				System.out.println(" ");
 			}
 		*/	

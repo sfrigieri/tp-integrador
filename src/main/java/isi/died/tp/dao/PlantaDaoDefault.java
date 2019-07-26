@@ -78,7 +78,24 @@ public class PlantaDaoDefault implements PlantaDao {
 		return GRAFO_PLANTA.getRutas();
 	}
 
+	@Override
+	public PlantaAcopio buscarAcopioInicial() {
+		for(PlantaAcopio p : this.listaPlantasAcopio()) {
+			if(p.esOrigen())
+				return p;
+		}
+		return null;
+	}
 	
+	
+	@Override
+	public PlantaAcopio buscarAcopioFinal() {
+		for(PlantaAcopio p : this.listaPlantasAcopio()) {
+			if(!p.esOrigen())
+				return p;
+		}
+		return null;
+	}
 	
 	@Override
 	public PlantaProduccion buscarPlantaProduccion(Integer id) {
@@ -210,25 +227,6 @@ public class PlantaDaoDefault implements PlantaDao {
 			if(plantaOrigen != null)
 				plantaOrigen.addInsumos(lista);
 		}	
-	}
-
-	@Override
-	public PlantaAcopio buscarAcopioInicial() {
-		for(PlantaAcopio p : this.listaPlantasAcopio()) {
-			if(p.esOrigen())
-				return p;
-		}
-		return null;
-	}
-	
-	
-	@Override
-	public PlantaAcopio buscarAcopioFinal() {
-		for(PlantaAcopio p : this.listaPlantasAcopio()) {
-			if(!p.esOrigen())
-				return p;
-		}
-		return null;
 	}
 	
 	

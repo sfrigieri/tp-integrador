@@ -9,6 +9,7 @@ import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.model.Insumo;
 import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.StockAcopio;
+import isi.died.tp.service.PlantaService;
 
 public class InsumoDaoDefault implements InsumoDao {
 
@@ -19,14 +20,18 @@ public class InsumoDaoDefault implements InsumoDao {
 
 	private CsvSource dataSource;
 
-	public InsumoDaoDefault() {
+	public InsumoDaoDefault(PlantaService ps) {
 		LISTA_INSUMOS = new ArrayList<Insumo>();
 		LISTA_INSUMOS_LIQUIDOS = new ArrayList<Insumo>();
-		dataSource = new CsvSource();
-		if(LISTA_INSUMOS.isEmpty())
-			this.cargarListaInsumos();
-		if (LISTA_INSUMOS_LIQUIDOS.isEmpty())
-			this.cargarListaInsumosLiquidos();
+
+		if(ps.buscarAcopioInicial() != null) {
+			dataSource = new CsvSource();
+			if(LISTA_INSUMOS.isEmpty())
+				this.cargarListaInsumos();
+			if (LISTA_INSUMOS_LIQUIDOS.isEmpty())
+				this.cargarListaInsumosLiquidos();
+		}
+
 		ULTIMO_ID_NO_LIQUIDOS = this.maxIDNoLiquidos();
 		ULTIMO_ID_LIQUIDOS = this.maxIDLiquidos();
 	}
@@ -59,7 +64,7 @@ public class InsumoDaoDefault implements InsumoDao {
 			LISTA_INSUMOS.add(aux);
 		}
 	}
-	
+
 	public void cargarListaInsumosLiquidos() {
 		List<List<String>> insumosLiquidos = dataSource.readFile("insumosLiquidos.csv");
 		for(List<String> filaInsumo : insumosLiquidos) {
@@ -86,129 +91,129 @@ public class InsumoDaoDefault implements InsumoDao {
 		}
 	}
 
-		@Override
-		public Insumo buscarInsumoNoLiquido(Integer id) {
-			for(Insumo actual : LISTA_INSUMOS)
-				if(actual.getId() == id)
-					return actual;
-			return null;
-		}
-		@Override
-		public InsumoLiquido buscarInsumoLiquido(Integer id) {
-			for(Insumo actual : LISTA_INSUMOS_LIQUIDOS)
-				if(actual.getId() == id)
-					return (InsumoLiquido) actual;
-			return null;
-		}
+	@Override
+	public Insumo buscarInsumoNoLiquido(Integer id) {
+		for(Insumo actual : LISTA_INSUMOS)
+			if(actual.getId() == id)
+				return actual;
+		return null;
+	}
+	@Override
+	public InsumoLiquido buscarInsumoLiquido(Integer id) {
+		for(Insumo actual : LISTA_INSUMOS_LIQUIDOS)
+			if(actual.getId() == id)
+				return (InsumoLiquido) actual;
+		return null;
+	}
 
-		@Override
-		public void agregarInsumo(Insumo insumo) {
-			if (insumo instanceof InsumoLiquido) {
-				insumo.setId(++ULTIMO_ID_LIQUIDOS);
-				LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
-				try {
-					dataSource.agregarFilaAlFinal("insumosLiquidos.csv", insumo);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}else {
-				insumo.setId(++ULTIMO_ID_NO_LIQUIDOS);
-				LISTA_INSUMOS.add(insumo);	
-				try {
-					dataSource.agregarFilaAlFinal("insumos.csv", insumo);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		@Override
-		public void editarInsumoNoLiquido(Insumo insumo) {
-			Insumo old;
-			old = buscarInsumoNoLiquido(insumo.getId());
-
-			if(old != null)
-				LISTA_INSUMOS.remove(old); 
-
-			//No es necesario asignar un id nuevo, 
-			//creo otro objeto con los nuevos datos pero mantengo el id
-			LISTA_INSUMOS.add(insumo);
-
-			this.actualizarArchivo();
-		}
-
-		@Override
-		public void editarInsumoLiquido(Insumo insumo) {
-			InsumoLiquido old;
-			old = buscarInsumoLiquido(insumo.getId());
-
-			if(old != null)
-				LISTA_INSUMOS_LIQUIDOS.remove(old); 
-
-			//No es necesario asignar un id nuevo, 
-			//creo otro objeto con los nuevos datos pero mantengo el id
-			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido) insumo);
-
-			this.actualizarArchivoLiquido();
-		}
-
-		@Override
-		public void eliminarInsumo(Insumo insumo) {
-			if (insumo instanceof InsumoLiquido) {
-				LISTA_INSUMOS_LIQUIDOS.remove(insumo);
-				actualizarArchivoLiquido();
-			} else {
-				LISTA_INSUMOS.remove(insumo);
-				actualizarArchivo();
-			}
-
-
-		}
-
-		@Override
-		public List<Insumo> listaInsumos() {
-			return LISTA_INSUMOS;
-		}
-		@Override
-		public List<Insumo> listaInsumosLiquidos() {
-			return LISTA_INSUMOS_LIQUIDOS;
-		}
-
-		private void actualizarArchivo() {
-			File archivoInsumos = new File("insumos.csv");
-			archivoInsumos.delete();
+	@Override
+	public void agregarInsumo(Insumo insumo) {
+		if (insumo instanceof InsumoLiquido) {
+			insumo.setId(++ULTIMO_ID_LIQUIDOS);
+			LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido)insumo);
 			try {
-				archivoInsumos.createNewFile();
-				for(Insumo actual: LISTA_INSUMOS) {
-					try {
-						dataSource.agregarFilaAlFinal("insumos.csv", actual);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				dataSource.agregarFilaAlFinal("insumosLiquidos.csv", insumo);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-		}
-
-		private void actualizarArchivoLiquido() {
-			File archivoInsumos = new File("insumosLiquidos.csv");
-			archivoInsumos.delete();
+		}else {
+			insumo.setId(++ULTIMO_ID_NO_LIQUIDOS);
+			LISTA_INSUMOS.add(insumo);	
 			try {
-				archivoInsumos.createNewFile();
-				for(Insumo actual: LISTA_INSUMOS_LIQUIDOS) {
-					try {
-						dataSource.agregarFilaAlFinal("insumosLiquidos.csv", actual);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				dataSource.agregarFilaAlFinal("insumos.csv", insumo);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+		}
+	}
+
+	@Override
+	public void editarInsumoNoLiquido(Insumo insumo) {
+		Insumo old;
+		old = buscarInsumoNoLiquido(insumo.getId());
+
+		if(old != null)
+			LISTA_INSUMOS.remove(old); 
+
+		//No es necesario asignar un id nuevo, 
+		//creo otro objeto con los nuevos datos pero mantengo el id
+		LISTA_INSUMOS.add(insumo);
+
+		this.actualizarArchivo();
+	}
+
+	@Override
+	public void editarInsumoLiquido(Insumo insumo) {
+		InsumoLiquido old;
+		old = buscarInsumoLiquido(insumo.getId());
+
+		if(old != null)
+			LISTA_INSUMOS_LIQUIDOS.remove(old); 
+
+		//No es necesario asignar un id nuevo, 
+		//creo otro objeto con los nuevos datos pero mantengo el id
+		LISTA_INSUMOS_LIQUIDOS.add((InsumoLiquido) insumo);
+
+		this.actualizarArchivoLiquido();
+	}
+
+	@Override
+	public void eliminarInsumo(Insumo insumo) {
+		if (insumo instanceof InsumoLiquido) {
+			LISTA_INSUMOS_LIQUIDOS.remove(insumo);
+			actualizarArchivoLiquido();
+		} else {
+			LISTA_INSUMOS.remove(insumo);
+			actualizarArchivo();
 		}
 
 
 	}
+
+	@Override
+	public List<Insumo> listaInsumos() {
+		return LISTA_INSUMOS;
+	}
+	@Override
+	public List<Insumo> listaInsumosLiquidos() {
+		return LISTA_INSUMOS_LIQUIDOS;
+	}
+
+	private void actualizarArchivo() {
+		File archivoInsumos = new File("insumos.csv");
+		archivoInsumos.delete();
+		try {
+			archivoInsumos.createNewFile();
+			for(Insumo actual: LISTA_INSUMOS) {
+				try {
+					dataSource.agregarFilaAlFinal("insumos.csv", actual);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+	}
+
+	private void actualizarArchivoLiquido() {
+		File archivoInsumos = new File("insumosLiquidos.csv");
+		archivoInsumos.delete();
+		try {
+			archivoInsumos.createNewFile();
+			for(Insumo actual: LISTA_INSUMOS_LIQUIDOS) {
+				try {
+					dataSource.agregarFilaAlFinal("insumosLiquidos.csv", actual);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+
+}

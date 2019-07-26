@@ -150,13 +150,22 @@ public class GestionEnvios {
 	public static void mostrarTablaPageRanks() {
 
 		JFrame popup = new JFrame("Page Rank de Plantas en la Red Actual");
+		JLabel infoExtra = new JLabel(), infoExtra2 = new JLabel();
+		GridBagConstraints constraints = new GridBagConstraints();
 		JPanel panel = new JPanel(new GridBagLayout());
 		JTable table;
 		popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
-		panel.setPreferredSize( new Dimension(500,500));
-
-		if(!controller.existenPlantas()) {
-			JOptionPane.showConfirmDialog(null,"Aún no se registran Plantas en el Sistema.","Acción Interrumpida",
+		panel.setPreferredSize( new Dimension(820,300));
+		
+		if(!controller.existenPlantasAcopio()) {
+			JOptionPane.showConfirmDialog(null,"El Sistema no registra ambas Plantas de Acopio.","Acción Interrumpida",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		if(!controller.hayCaminoDisponible()) {
+			JOptionPane.showConfirmDialog(null,"No se registran caminos entre las Plantas de Acopio.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE);
 			return;
@@ -166,29 +175,61 @@ public class GestionEnvios {
 				JOptionPane.showConfirmDialog(null,"Aún no se registran Rutas en el Sistema.","Advertencia",
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.WARNING_MESSAGE);
-		Double factor = getFactorAmortiguacion();
-		if(factor != null && factor >= 0) {	
-			List<Planta> plantas = controller.getPlantasPageRank(factor);
+			Double factor = getFactorAmortiguacion();
+			if(factor != null && factor >= 0) {	
+				constraints.insets=new Insets(5, 5, 20, 5);
+				constraints.gridx=0;
+				constraints.gridy=0;
+				constraints.gridheight=1;
+				constraints.gridwidth=3;
+				constraints.weightx=1;
+
+				List<Planta> plantas = controller.getPlantasPageRank(factor);
 				table = new PageRanksTableModel();
 				((PageRanksTableModel) table).agregarDatos(plantas);
 				table.setFillsViewportHeight(true);
 
-				JScrollPane scroll = new JScrollPane(table);
-			
-				panel.add(scroll);
+				JScrollPane scroll = new JScrollPane(table,
+						JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+						JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				scroll.setPreferredSize( new Dimension(380,150));
+				panel.add(scroll, constraints);
+
+
+				constraints.insets.set(0,0,5,0);
+				constraints.gridx=0;
+				constraints.gridy=1;
+				constraints.gridheight=1;
+				constraints.gridwidth=6;
+				constraints.anchor=GridBagConstraints.SOUTH;
+				infoExtra.setFont(new Font(infoExtra.getFont().getName(), infoExtra.getFont().getStyle(), 11));
+				infoExtra.setText("*El PageRank refiere a la importancia de una Planta sobre otra,"
+						+ " que es proporcional a la cantidad de caminos que llegan a ella. ");
+				panel.add(infoExtra,constraints);
+
+				constraints.insets.set(0,0,5,0);
+				constraints.gridx=0;
+				constraints.gridy=2;
+				constraints.gridheight=1;
+				constraints.gridwidth=6;
+				constraints.anchor=GridBagConstraints.SOUTH;
+				infoExtra2.setFont(new Font(infoExtra.getFont().getName(), infoExtra.getFont().getStyle(), 11));
+				infoExtra2.setText("*El Factor de Transición/Amortiguación representa la probabilidad existente, en cada instante, de"
+						+ " desplazarse desde una Planta a otra.");
+				panel.add(infoExtra2,constraints);
 				popup.setContentPane(panel);
 				popup.pack();
 				popup.setLocationRelativeTo(ventana);
 				popup.setVisible(true);
 			}
-		
-		else 
-			if(factor == null){
-				return;
-			}
-			else if(factor == -1.0)
-				mostrarMenu();
-		
+
+			else 
+				if(factor == null){
+					return;
+				}
+				else if(factor == -1.0)
+					mostrarMenu();
+
 		}
 	}
 
@@ -197,17 +238,25 @@ public class GestionEnvios {
 			Integer flujo = controller.flujoMaximoRed();
 
 			if(flujo == 0) {
-				JOptionPane.showConfirmDialog(null,"No existe flujo disponible.","Advertencia",
+				JOptionPane.showConfirmDialog(null,"No se registra flujo disponible entre ambas Plantas de Acopio.","Advertencia",
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 			}else {
-				JOptionPane.showConfirmDialog(null,"El Flujo Máximo posible es de: "+flujo+" Toneladas.","Flujo en la Red Actual",
+				JOptionPane.showConfirmDialog(null,"El Flujo Máximo entre ambas Plantas de Acopio es de: "+flujo+" Toneladas.","Flujo en la Red Actual",
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		else {
-			JOptionPane.showConfirmDialog(null,"No hay caminos disponibles.","Error",
+			
+			if(!controller.existenPlantasAcopio()) {
+				JOptionPane.showConfirmDialog(null,"El Sistema no registra ambas Plantas de Acopio.","Acción Interrumpida",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else
+			JOptionPane.showConfirmDialog(null,"No se registran caminos entre las Plantas de Acopio.","Error",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE);
 		}

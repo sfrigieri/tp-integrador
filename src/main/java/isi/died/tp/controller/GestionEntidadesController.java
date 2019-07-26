@@ -29,7 +29,6 @@ public class GestionEntidadesController {
 		insumoService = new InsumoServiceDefault(plantaService);
 		insumoController = new InsumoController(insumoService);
 		stockService = new StockServiceDefault(plantaService, insumoService);
-		insumoService.setStockService(stockService);
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		stockController = new StockController(stockService);

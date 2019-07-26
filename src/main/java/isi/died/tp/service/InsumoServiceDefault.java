@@ -11,11 +11,10 @@ public class InsumoServiceDefault implements InsumoService {
 
 	private InsumoDao insumoDao;
 	private PlantaService ps;
-	private StockService ss;
 	
 	public InsumoServiceDefault(PlantaService ps) {
 		super();
-		this.insumoDao = new InsumoDaoDefault();
+		this.insumoDao = new InsumoDaoDefault(ps);
 		this.ps = ps;
 		ps.addInsumos(insumoDao.listaInsumos());
 		ps.addInsumos(insumoDao.listaInsumosLiquidos());
@@ -70,9 +69,4 @@ public class InsumoServiceDefault implements InsumoService {
 		
 	}
 
-	@Override
-	public void setStockService(StockService stockService) {
-		this.ss = stockService;
-		
-	}
 }

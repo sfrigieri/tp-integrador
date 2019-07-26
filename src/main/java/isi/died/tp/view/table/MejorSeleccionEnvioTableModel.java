@@ -36,9 +36,9 @@ public class MejorSeleccionEnvioTableModel extends JTable {
 	this.getColumnModel().getColumn(3).setHeaderValue("Cantidad");
 	this.getColumnModel().getColumn(4).setHeaderValue("Precio");
 	this.getColumnModel().getColumn(5).setHeaderValue("Peso");
-	this.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+	this.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
 	this.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-	this.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+	this.getColumnModel().getColumn(2).setCellRenderer(leftRenderer);
 	this.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
 	this.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
 	this.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);

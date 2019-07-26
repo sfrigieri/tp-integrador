@@ -17,7 +17,7 @@ public class GestionEnviosController {
 	private static PlantaController pc;
 	private static CamionController cc;
 	private MejorSeleccionEnvioView mseView;
-	
+
 	public GestionEnviosController(JFrame ventana) {
 		pc = GestionEntidadesController.plantaController;
 		cc = GestionEntidadesController.camionController;
@@ -32,7 +32,7 @@ public class GestionEnviosController {
 		case MEJOR_SELECCION_ENVIO: mseView.calcularMejorSeleccion(true); break;
 		}
 	}
-	
+
 
 	public Camion buscarCamion(int id) {
 		return cc.buscarCamion(id);
@@ -41,7 +41,7 @@ public class GestionEnviosController {
 	public List<Camion> listaCamiones() {
 		return cc.listaCamiones();
 	}
-	
+
 	public List<StockAcopio> generarStockFaltante() {
 		return pc.generarStockFaltante();
 	}
@@ -50,13 +50,12 @@ public class GestionEnviosController {
 		List<Planta> plantas = pc.generarPageRanks(factor);
 		return plantas;
 	}
-	
-	
+
+
 	public Boolean hayCaminoDisponible() {
 		PlantaAcopio inicial = pc.buscarAcopioInicial();
 		PlantaAcopio fin = pc.buscarAcopioFinal();
 		if(inicial != null && fin != null) {
-			//System.out.println(inicial.getNombre()+" "+fin.getNombre());
 			if(pc.existeCamino(inicial, fin))
 				return true;
 		}	
@@ -64,6 +63,15 @@ public class GestionEnviosController {
 	}
 
 
+	public Boolean existenPlantasAcopio() {
+		PlantaAcopio inicial = pc.buscarAcopioInicial();
+		PlantaAcopio fin = pc.buscarAcopioFinal();
+		if(inicial == null || fin == null)
+			return false;
+		return true;
+	}
+
+	
 	public Integer flujoMaximoRed() {
 		return pc.flujoMaximoRed(pc.buscarAcopioInicial());
 	}
@@ -77,7 +85,6 @@ public class GestionEnviosController {
 	public boolean existenCamiones() {
 		return cc.existenCamiones();
 	}
-
 
 
 	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> stocks) {
@@ -106,9 +113,9 @@ public class GestionEnviosController {
 		double costoTotal = 0;
 		for(StockAcopio s : mejorSeleccion)
 			costoTotal+= s.getCantidad()*s.getInsumo().getCosto();
-		
+
 		costoTotal = Math.round(costoTotal);
-		
+
 		return costoTotal;
 	}
 
@@ -117,9 +124,9 @@ public class GestionEnviosController {
 		double pesoTotal = 0;
 		for(StockAcopio s : mejorSeleccion)
 			pesoTotal+= s.getCantidad()*s.getInsumo().getPeso();
-		
+
 		pesoTotal = Math.round(pesoTotal);
-		
+
 		return pesoTotal;
 	}
 

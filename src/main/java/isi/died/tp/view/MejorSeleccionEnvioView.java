@@ -105,7 +105,7 @@ public class MejorSeleccionEnvioView {
 		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 
-	
+
 		constraints.gridy=3;
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
@@ -161,11 +161,11 @@ public class MejorSeleccionEnvioView {
 	}
 
 	public static void mostrarTablaMejorSeleccion(int idCamion) {
-		
+
 
 		List<StockAcopio> stocks = gec.generarStockFaltanteDisponible();
 		if(stocks.isEmpty()){
-			JOptionPane.showConfirmDialog(null,"En este momento no hay Stock disponible.","Acción Interrumpida",
+			JOptionPane.showConfirmDialog(null,"En este momento no se registra Stock disponible en el Sistema.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.INFORMATION_MESSAGE);
 			return;
@@ -226,10 +226,10 @@ public class MejorSeleccionEnvioView {
 							JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 							JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 					scroll.setPreferredSize(new Dimension(650,200));
-					
-					
 
-					
+
+
+
 					constraints.insets=new Insets(5, 5, 30, 5);
 					constraints.gridx=1;
 					constraints.gridy=1;
@@ -237,7 +237,7 @@ public class MejorSeleccionEnvioView {
 					constraints.gridwidth=3;
 					constraints.weightx=1;
 					panel.add(scroll, constraints);
-					
+
 
 					constraints.insets.set(0,0,60,0);
 					constraints.gridx=0;
@@ -247,7 +247,7 @@ public class MejorSeleccionEnvioView {
 					constraints.anchor=GridBagConstraints.NORTH;
 					encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 					panel.add(encabezado,constraints);
-					
+
 					constraints.insets.set(0,0,5,0);
 					constraints.gridx=0;
 					constraints.gridy=0;
@@ -259,8 +259,8 @@ public class MejorSeleccionEnvioView {
 							"        Peso Stock Seleccionado: "+Double.toString(gec.pesoTotalEnvio(mejorSeleccion))+" Kg."+
 							"        Costo Total: $"+Double.toString(gec.costoTotalEnvio(mejorSeleccion)));
 					panel.add(infoExtra,constraints);
-					
-					
+
+
 					constraints.insets.set(20,100,10,0);
 					constraints.gridx=0;
 					constraints.gridy=3;
@@ -269,7 +269,7 @@ public class MejorSeleccionEnvioView {
 					constraints.anchor=GridBagConstraints.WEST;
 					encabezado2.setFont(new Font(encabezado2.getFont().getName(), encabezado2.getFont().getStyle(), 20));
 					panel.add(encabezado2,constraints);
-					
+
 					table2 = new MejorSeleccionEnvioTableModel();
 					((MejorSeleccionEnvioTableModel) table2).agregarDatos(gec.stockRemanente(stocks, mejorSeleccion));
 					//table2.setFillsViewportHeight(true);
@@ -277,9 +277,9 @@ public class MejorSeleccionEnvioView {
 							JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 							JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 					scroll2.setPreferredSize(new Dimension(650,150));
-					
 
-					
+
+
 					constraints.insets=new Insets(5, 100, 40, 5);
 					constraints.gridx=1;
 					constraints.gridy=4;
@@ -291,8 +291,8 @@ public class MejorSeleccionEnvioView {
 					popup.pack();
 					popup.setLocationRelativeTo(ventana);
 					popup.setVisible(true);
-					
-					
+
+
 				}
 
 
