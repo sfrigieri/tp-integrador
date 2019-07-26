@@ -238,7 +238,7 @@ public class ABMPlanta {
 		JComboBox<String> seleccionarPlanta = new JComboBox<String>();
 		
 		//titulo
-		constraints.insets=new Insets(5, 20, 20, 5);
+		constraints.insets=new Insets(2, 20, 20, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
@@ -267,17 +267,17 @@ public class ABMPlanta {
 		}
 		
 		//botones
-		constraints.gridy=2;
+		constraints.gridy=8;
 		constraints.fill=GridBagConstraints.NONE;
-		constraints.anchor=GridBagConstraints.EAST;
 		
-		constraints.gridx=0;
-		constraints.insets=new Insets(105, 5, 5, 15);
+		constraints.anchor=GridBagConstraints.EAST;
+		constraints.gridx=2;
+		constraints.insets.set(105,50,0,0);
 		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		panel.add(volver, constraints);
 				
 		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(105, 15, 5, 5);
+		constraints.insets=new Insets(105, 0, 0, 50);
 		constraints.gridx=0;
 		aceptar.addActionListener(a -> {
 			String stringPlanta = (String)seleccionarPlanta.getSelectedItem();
@@ -381,13 +381,11 @@ public class ABMPlanta {
 		
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridx=2;
-		constraints.insets.set(75,0,0,0);
+		constraints.insets.set(75,0,0,10);
 		volver.addActionListener(a -> this.modificarPlanta());
 		panel.add(volver, constraints);
 		
-		//boton guardarCambios				
-		//constraints.anchor=GridBagConstraints.WEST;
-		//constraints.insets=new Insets(75, 35, 5, 0);
+		constraints.insets.set(75,200,0,0);
 		constraints.gridx=1;
 		guardarCambios.addActionListener(a -> {
 			String valorNombre;

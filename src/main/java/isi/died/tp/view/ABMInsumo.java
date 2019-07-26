@@ -304,7 +304,7 @@ public class ABMInsumo {
 		//combobox seleccion
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
-		constraints.insets.set(135, 5, 25, 5);
+		constraints.insets.set(165, 5, 35, 5);
 		constraints.gridx=0;
 		constraints.gridy=1;
 		panel.add(seleccionarInsumo, constraints);
@@ -315,17 +315,17 @@ public class ABMInsumo {
 			seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": " + ins.getDescripcion() + " (L)");
 
 		//botones
-		constraints.gridy=2;
+		constraints.gridy=8;
 		constraints.fill=GridBagConstraints.NONE;
+		
 		constraints.anchor=GridBagConstraints.EAST;
-
-		constraints.gridx=0;
-		constraints.insets=new Insets(105, 5, 5, 15);
+		constraints.gridx=2;
+		constraints.insets.set(105,30,0,0);
 		volver.addActionListener(a -> GestionEntidades.mostrarMenu());
 		panel.add(volver, constraints);
 
 		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets=new Insets(105, 15, 5, 5);
+		constraints.insets=new Insets(105, 0, 0, 0);
 		constraints.gridx=0;
 		aceptar.addActionListener(a -> {
 			String stringInsumo = (String)seleccionarInsumo.getSelectedItem();
@@ -369,7 +369,7 @@ public class ABMInsumo {
 		checkboxRefrigerado.add(noRefrigerado);
 
 		//titulo
-		constraints.insets=new Insets(5, 45, 40, 5);
+		constraints.insets=new Insets(23, 10, 40, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
@@ -486,7 +486,7 @@ public class ABMInsumo {
 
 		constraints.anchor=GridBagConstraints.EAST;
 		constraints.gridx=2;
-		constraints.insets=new Insets(20, 5, 5, 0);
+		constraints.insets=new Insets(20, 0, 5, 20);
 		volver.addActionListener(a -> this.modificarInsumo());
 		panel.add(volver, constraints);
 
@@ -597,9 +597,10 @@ public class ABMInsumo {
 		});
 		panel.add(guardarCambios,constraints);
 
+
 		//errores
-		constraints.anchor=GridBagConstraints.NORTHWEST;
 		constraints.insets.set(5,0,3,0);
+		constraints.anchor=GridBagConstraints.NORTHWEST;
 		constraints.gridx=3;
 		constraints.gridy=2;
 		errorDescripcion.setPreferredSize(new Dimension(230, 16));
