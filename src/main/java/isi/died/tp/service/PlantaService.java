@@ -60,5 +60,7 @@ public interface PlantaService {
 
 	public Boolean existenPlantas();
 
+	public boolean existenRutas();
+
 
 }

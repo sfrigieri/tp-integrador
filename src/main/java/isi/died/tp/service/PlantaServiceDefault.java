@@ -132,6 +132,11 @@ public class PlantaServiceDefault implements PlantaService {
 	public Boolean existenPlantas() {
 		return plantaDao.existenPlantas();
 	}
+	
+	@Override
+	public boolean existenRutas() {
+		return !rs.listaRutas().isEmpty();
+	}
 
 	// Item 4.2 a)
 	@Override
@@ -455,11 +460,12 @@ public class PlantaServiceDefault implements PlantaService {
 					}
 				}
 			}
+			
+			listaResultante.sort((s1,s2) -> s1.getPlanta().getNombre().compareTo(s2.getPlanta().getNombre()));
 		}
 		return listaResultante;
 	}
 
-
-
+	
 
 }

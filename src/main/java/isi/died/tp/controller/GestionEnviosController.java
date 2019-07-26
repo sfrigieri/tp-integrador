@@ -1,6 +1,7 @@
 package isi.died.tp.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 
@@ -76,5 +77,56 @@ public class GestionEnviosController {
 	public boolean existenCamiones() {
 		return cc.existenCamiones();
 	}
+
+
+
+	public List<StockAcopio> generarMejorSeleccionEnvio(Camion camion, List<StockAcopio> stocks) {
+		return pc.generarMejorSeleccionEnvio(camion, stocks);
+	}
+
+
+	public List<StockAcopio> generarStockFaltanteDisponible() {
+		return pc.generarStockFaltanteDisponible();
+	}
+
+	public List<StockAcopio> stockRemanente(List<StockAcopio> stockDisponible, List<StockAcopio> stockResultado) {
+		List<StockAcopio> listaAux = stockDisponible.stream().collect(Collectors.toList());
+		for(StockAcopio s1 : stockDisponible) {
+			for(StockAcopio s2 : stockResultado)
+				if(s2.getInsumo().equals(s1.getInsumo()) && s2.getPlanta().equals(s1.getPlanta()))
+					listaAux.remove(s1);
+		}
+		listaAux.sort((s1,s2) -> Double.valueOf((s1.getCantidad()*s1.getInsumo().getPeso()))
+				.compareTo(Double.valueOf((s2.getCantidad()*s2.getInsumo().getPeso()))));
+		return listaAux;
+	}
+
+
+	public double costoTotalEnvio(List<StockAcopio> mejorSeleccion) {
+		double costoTotal = 0;
+		for(StockAcopio s : mejorSeleccion)
+			costoTotal+= s.getCantidad()*s.getInsumo().getCosto();
+		
+		costoTotal = Math.round(costoTotal);
+		
+		return costoTotal;
+	}
+
+
+	public double pesoTotalEnvio(List<StockAcopio> mejorSeleccion) {
+		double pesoTotal = 0;
+		for(StockAcopio s : mejorSeleccion)
+			pesoTotal+= s.getCantidad()*s.getInsumo().getPeso();
+		
+		pesoTotal = Math.round(pesoTotal);
+		
+		return pesoTotal;
+	}
+
+
+	public boolean existenRutas() {
+		return pc.existenRutas();
+	}
+
 
 }

@@ -73,7 +73,7 @@ public class PlantaProduccion extends Planta {
 	@Override
 	public Stock getStock(Insumo ins) {
 		for(Stock stock : this.listaDeStock) {
-			if(stock.getInsumo().equals(ins)) return stock;				
+			if(stock.getInsumo() != null && stock.getInsumo().equals(ins)) return stock;				
 			}
 		return null;
 		

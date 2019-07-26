@@ -156,12 +156,16 @@ public class GestionEnvios {
 		panel.setPreferredSize( new Dimension(500,500));
 
 		if(!controller.existenPlantas()) {
-			JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
+			JOptionPane.showConfirmDialog(null,"Aún no se registran Plantas en el Sistema.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		else {
+			if(!controller.existenRutas())
+				JOptionPane.showConfirmDialog(null,"Aún no se registran Rutas en el Sistema.","Advertencia",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.WARNING_MESSAGE);
 		Double factor = getFactorAmortiguacion();
 		if(factor != null && factor >= 0) {	
 			List<Planta> plantas = controller.getPlantasPageRank(factor);

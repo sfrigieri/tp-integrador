@@ -1,6 +1,5 @@
 package isi.died.tp.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -20,46 +19,48 @@ import javax.swing.WindowConstants;
 
 import isi.died.tp.controller.GestionEnviosController;
 import isi.died.tp.model.Camion;
+import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.StockAcopio;
 import isi.died.tp.view.table.CamionTableModel;
+import isi.died.tp.view.table.MejorSeleccionEnvioTableModel;
 import isi.died.tp.view.table.StockFaltanteTableModel;
 
 public class MejorSeleccionEnvioView {
 
 	private static JFrame ventana;
-	private GestionEnviosController gec;
+	private static GestionEnviosController gec;
 
-	public MejorSeleccionEnvioView(JFrame v, GestionEnviosController gec) {
+	public MejorSeleccionEnvioView(JFrame v, GestionEnviosController gecontroller) {
 		ventana = v;
-		this.gec = gec;
+		gec = gecontroller;
 	}
 
 	public void calcularMejorSeleccion(Boolean mostrarTablaStock) {
-		
+
 		if(!gec.existenPlantas()) {
-			JOptionPane.showConfirmDialog(null,"Aún no existen Plantas en el Sistema.","Acción Interrumpida",
+			JOptionPane.showConfirmDialog(null,"Aún no se registran Plantas en el Sistema.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 		if(!gec.existenCamiones()) {
-			JOptionPane.showConfirmDialog(null,"Aún no existen Camiones en el Sistema.","Acción Interrumpida",
+			JOptionPane.showConfirmDialog(null,"Aún no se registran Camiones en el Sistema.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 		if(gec.generarStockFaltante().isEmpty()) {
 			JOptionPane.showConfirmDialog(null,"El Sistema no registra falta de Insumos.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
-					JOptionPane.ERROR_MESSAGE);
+					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
-		
+
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
-		JLabel encabezado = new JLabel("Insumos Faltantes"), errorSeleccion = new JLabel();
+		JLabel encabezado = new JLabel("Insumos Faltantes");
 		JButton generarSolucion = new JButton("Generar Solución"), volver = new JButton("Volver"),
 				cambiarTabla = new JButton("Ver Camiones Disponibles");
 		JTable tabla;
@@ -95,9 +96,6 @@ public class MejorSeleccionEnvioView {
 		panel.add(scroll, constraints);
 
 
-
-
-		//titulo
 		constraints.insets.set(0,0,60,0);
 		constraints.gridx=0;
 		constraints.gridy=0;
@@ -107,7 +105,7 @@ public class MejorSeleccionEnvioView {
 		encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
 		panel.add(encabezado,constraints);
 
-		//botones
+	
 		constraints.gridy=3;
 		constraints.fill=GridBagConstraints.NONE;
 		constraints.anchor=GridBagConstraints.EAST;
@@ -121,7 +119,6 @@ public class MejorSeleccionEnvioView {
 		constraints.insets=new Insets(5, 250, 5, 5);
 		constraints.gridx=2;
 		generarSolucion.addActionListener(a -> {
-			errorSeleccion.setText("");
 			int numFila = tabla.getSelectedRow();
 			if (numFila == -1 || mostrarTablaStock) {
 				JOptionPane.showConfirmDialog(null,"Debes seleccionar un camión.","Error",
@@ -129,18 +126,12 @@ public class MejorSeleccionEnvioView {
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			} else {
-				if (!mostrarTablaStock) {
-					int idCamion = Integer.valueOf((String)tabla.getValueAt(numFila, 0));
-					JOptionPane.showConfirmDialog(null,"El resultado estará sujeto al stock disponible.","Verificando Disponibilidad",
-							JOptionPane.DEFAULT_OPTION,
-							JOptionPane.INFORMATION_MESSAGE);
-					mostrarTablaMejorSeleccion(idCamion);
-				}
-				else {
+				if (!mostrarTablaStock)
+					mostrarTablaMejorSeleccion(Integer.valueOf((String)tabla.getValueAt(numFila, 0)));
+				else
 					JOptionPane.showConfirmDialog(null,"Debes seleccionar un camión.","Error",
 							JOptionPane.DEFAULT_OPTION,
 							JOptionPane.ERROR_MESSAGE);
-				}
 			}
 		});
 		panel.add(generarSolucion,constraints);
@@ -159,14 +150,6 @@ public class MejorSeleccionEnvioView {
 		});
 		panel.add(cambiarTabla, constraints);
 
-		//error seleccion
-		constraints.anchor=GridBagConstraints.NORTHWEST;
-		constraints.insets.set(6,350,0,0);
-		errorSeleccion.setPreferredSize(new Dimension(360, 16));
-		constraints.gridx=3;
-		constraints.gridy=2;
-		errorSeleccion.setForeground(Color.red);
-		panel.add(errorSeleccion,constraints);
 
 		ventana.setContentPane(panel);
 		ventana.pack();
@@ -177,5 +160,147 @@ public class MejorSeleccionEnvioView {
 		ventana.setVisible(true);
 	}
 
-	public static void mostrarTablaMejorSeleccion(int idCamion) {};
+	public static void mostrarTablaMejorSeleccion(int idCamion) {
+		
+
+		List<StockAcopio> stocks = gec.generarStockFaltanteDisponible();
+		if(stocks.isEmpty()){
+			JOptionPane.showConfirmDialog(null,"En este momento no hay Stock disponible.","Acción Interrumpida",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}	
+		else {
+			Camion camion = gec.buscarCamion(idCamion);
+			if(camion == null){
+				JOptionPane.showConfirmDialog(null,"El Camión seleccionado no está disponible.","Acción Interrumpida",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else {
+				if(!camion.getAptoLiquidos()) {
+					JOptionPane.showConfirmDialog(null,"Camión seleccionado no apto para Insumos líquidos.","Advertencia",
+							JOptionPane.DEFAULT_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+
+					Boolean soloLiquidos = true;
+					for(StockAcopio s : stocks) {
+						if(!(s.getInsumo() instanceof InsumoLiquido))
+							soloLiquidos = false;
+					}
+
+					if(soloLiquidos) {						
+						JOptionPane.showConfirmDialog(null,"No se dispone de Stock apto para el Camión seleccionado.","Acción Interrumpida",
+								JOptionPane.DEFAULT_OPTION,
+								JOptionPane.INFORMATION_MESSAGE);
+						return;
+					}
+				}
+
+				JOptionPane.showConfirmDialog(null,"El resultado estará sujeto al Stock disponible.","Verificando Disponibilidad",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE);
+
+				List<StockAcopio> mejorSeleccion = gec.generarMejorSeleccionEnvio(camion, stocks);
+
+				if(mejorSeleccion.isEmpty()) {
+					JOptionPane.showConfirmDialog(null,"El Stock mínimo solicitado excede la Capacidad del Camión.","Acción Interrumpida",
+							JOptionPane.DEFAULT_OPTION,
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				else {
+					GridBagConstraints constraints = new GridBagConstraints();
+					JLabel encabezado = new JLabel("Mejor Selección de Envío"), infoExtra = new JLabel(),
+							encabezado2 = new JLabel("Stock Faltante Remanente");
+					JFrame popup = new JFrame("Mejor selección disponible para Envío");
+					JPanel panel = new JPanel(new GridBagLayout());
+					JTable table, table2;
+					popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
+					panel.setPreferredSize( new Dimension(850,650));
+					table = new MejorSeleccionEnvioTableModel();
+					((MejorSeleccionEnvioTableModel) table).agregarDatos(mejorSeleccion);
+					table.setFillsViewportHeight(true);
+					JScrollPane scroll = new JScrollPane(table,
+							JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+							JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					scroll.setPreferredSize(new Dimension(650,200));
+					
+					
+
+					
+					constraints.insets=new Insets(5, 5, 30, 5);
+					constraints.gridx=1;
+					constraints.gridy=1;
+					constraints.gridheight=1;
+					constraints.gridwidth=3;
+					constraints.weightx=1;
+					panel.add(scroll, constraints);
+					
+
+					constraints.insets.set(0,0,60,0);
+					constraints.gridx=0;
+					constraints.gridy=0;
+					constraints.gridheight=1;
+					constraints.gridwidth=8;
+					constraints.anchor=GridBagConstraints.NORTH;
+					encabezado.setFont(new Font(encabezado.getFont().getName(), encabezado.getFont().getStyle(), 30));
+					panel.add(encabezado,constraints);
+					
+					constraints.insets.set(0,0,5,0);
+					constraints.gridx=0;
+					constraints.gridy=0;
+					constraints.gridheight=1;
+					constraints.gridwidth=8;
+					constraints.anchor=GridBagConstraints.SOUTH;
+					infoExtra.setFont(new Font(infoExtra.getFont().getName(), infoExtra.getFont().getStyle(), 13));
+					infoExtra.setText("Capacidad Camión: "+camion.getCapacidad()+" Kg."+
+							"        Peso Stock Seleccionado: "+Double.toString(gec.pesoTotalEnvio(mejorSeleccion))+" Kg."+
+							"        Costo Total: $"+Double.toString(gec.costoTotalEnvio(mejorSeleccion)));
+					panel.add(infoExtra,constraints);
+					
+					
+					constraints.insets.set(20,100,10,0);
+					constraints.gridx=0;
+					constraints.gridy=3;
+					constraints.gridheight=1;
+					constraints.gridwidth=8;
+					constraints.anchor=GridBagConstraints.WEST;
+					encabezado2.setFont(new Font(encabezado2.getFont().getName(), encabezado2.getFont().getStyle(), 20));
+					panel.add(encabezado2,constraints);
+					
+					table2 = new MejorSeleccionEnvioTableModel();
+					((MejorSeleccionEnvioTableModel) table2).agregarDatos(gec.stockRemanente(stocks, mejorSeleccion));
+					//table2.setFillsViewportHeight(true);
+					JScrollPane scroll2 = new JScrollPane(table2,
+							JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+							JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					scroll2.setPreferredSize(new Dimension(650,150));
+					
+
+					
+					constraints.insets=new Insets(5, 100, 40, 5);
+					constraints.gridx=1;
+					constraints.gridy=4;
+					constraints.gridheight=1;
+					constraints.gridwidth=3;
+					constraints.weightx=1;
+					panel.add(scroll2, constraints);
+					popup.setContentPane(panel);
+					popup.pack();
+					popup.setLocationRelativeTo(ventana);
+					popup.setVisible(true);
+					
+					
+				}
+
+
+			}
+
+		}
+
+	}
+
+
 }

@@ -117,4 +117,9 @@ public class PlantaController {
 		return ps.existenPlantas();
 	}
 
+
+	public boolean existenRutas() {
+		return ps.existenRutas();
+	}
+
 }

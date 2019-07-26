@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import isi.died.tp.dao.util.CsvSource;
 import isi.died.tp.model.Camion;
@@ -87,7 +88,9 @@ public class CamionDaoDefault implements CamionDao {
 	
 	@Override
 	public List<Camion> listaCamiones() {
-		return LISTA_CAMIONES;
+		List<Camion> listAux = LISTA_CAMIONES.stream().collect(Collectors.toList());
+		listAux.sort((c1,c2) -> (Double.valueOf(c1.getCapacidad())).compareTo((Double.valueOf(c2.getCapacidad()))));
+		return listAux;
 	}
 	
 
