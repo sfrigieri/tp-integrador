@@ -168,10 +168,11 @@ public class StockDaoDefault implements StockDao {
 			}
 		}
 
-		if(stock.getPlanta() instanceof PlantaProduccion) 
-			ps.buscarPlantaProduccion(stock.getPlanta().getId()).addStock(stock);
-		else
-			ps.buscarPlantaAcopio(stock.getPlanta().getId()).addStock(stock);
+		if(stock.getPlanta() != null)
+			if(stock.getPlanta() instanceof PlantaProduccion) 
+				ps.buscarPlantaProduccion(stock.getPlanta().getId()).addStock(stock);
+			else
+				ps.buscarPlantaAcopio(stock.getPlanta().getId()).addStock(stock);
 
 	}
 
@@ -194,10 +195,11 @@ public class StockDaoDefault implements StockDao {
 			this.actualizarArchivoAcopio();
 		}
 
-		if(stock.getPlanta() instanceof PlantaProduccion) 
-			ps.buscarPlantaProduccion(stock.getPlanta().getId()).addStock(stock);
-		else
-			ps.buscarPlantaAcopio(stock.getPlanta().getId()).addStock(stock);
+		if(stock.getPlanta() != null)
+			if(stock.getPlanta() instanceof PlantaProduccion) 
+				ps.buscarPlantaProduccion(stock.getPlanta().getId()).addStock(stock);
+			else
+				ps.buscarPlantaAcopio(stock.getPlanta().getId()).addStock(stock);
 
 	}
 
@@ -207,10 +209,11 @@ public class StockDaoDefault implements StockDao {
 
 		//Si es stockProduccion, debo buscar la Planta correspondiente y eliminarlo de listaDeStocks
 		//Si es stockAcopio, lo mismo, pero se eliminará del insumo correspondiente.
-		if(stock.getPlanta() instanceof PlantaProduccion) 
-			ps.buscarPlantaProduccion(stock.getPlanta().getId()).removeStock(stock.getInsumo());
-		else
-			ps.buscarPlantaAcopio(stock.getPlanta().getId()).removeStock(stock.getInsumo());
+		if(stock.getPlanta() != null)
+			if(stock.getPlanta() instanceof PlantaProduccion) 
+				ps.buscarPlantaProduccion(stock.getPlanta().getId()).removeStock(stock.getInsumo());
+			else
+				ps.buscarPlantaAcopio(stock.getPlanta().getId()).removeStock(stock.getInsumo());
 
 		if (stock instanceof StockProduccion) {
 			LISTA_STOCKS_PRODUCCION.remove(stock);
