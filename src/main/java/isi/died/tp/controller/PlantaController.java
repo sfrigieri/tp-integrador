@@ -108,7 +108,7 @@ public class PlantaController {
 	}
 
 
-	public boolean existeCamino(PlantaAcopio inicial, PlantaAcopio fin) {
+	public boolean existeCamino(Planta inicial, Planta fin) {
 		return ps.existeCamino(inicial, fin);
 	}
 

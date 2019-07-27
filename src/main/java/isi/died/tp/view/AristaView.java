@@ -11,10 +11,10 @@ import java.awt.geom.Point2D;
 import isi.died.tp.view.VerticeView;
 
 
-public class AristaView {
+public class AristaView<T> {
 
-    private VerticeView origen;
-    private VerticeView destino;
+    private VerticeView<T> origen;
+    private VerticeView<T> destino;
     private Shape linea;
     private Stroke formatoLinea;
     private Paint color;

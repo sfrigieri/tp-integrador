@@ -20,7 +20,7 @@ public class GestionEntidadesController {
 	public static PlantaController plantaController;
 	public static StockController stockController;
 	public static CamionController camionController;
-	
+	public static RutaController rutaController;
 	
 	public GestionEntidadesController(JFrame ventana) {
 			
@@ -35,7 +35,7 @@ public class GestionEntidadesController {
 		camionService = new CamionServiceDefault();
 		rutaService = new RutaServiceDefault(plantaService, camionService);
 		camionController = new CamionController(camionService);
-		
+		rutaController = new RutaController(rutaService);
 		
 		interfazInsumo = new ABMInsumo(ventana, insumoController, stockController);
 

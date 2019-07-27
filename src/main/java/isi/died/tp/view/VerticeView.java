@@ -7,7 +7,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 
-public class VerticeView {
+public class VerticeView<T> {
     private Paint color;
     private Color colorBase;
 
@@ -18,6 +18,7 @@ public class VerticeView {
 
     private String nombre;
     private Integer id;
+    private T valor;
 
     public VerticeView() {
     }
@@ -96,6 +97,14 @@ public class VerticeView {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public T getValor() {
+		return valor;
+	}
+
+	public void setValor(T valor) {
+		this.valor = valor;
 	}
 
 	@Override

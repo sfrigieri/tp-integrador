@@ -42,4 +42,9 @@ private RutaService rs;
 	public Ruta buscarRuta(Integer id) {
 		return rs.buscarRuta(id);
 	}
+
+	public void agregarRuta(Planta origen, Planta destino) {
+		// TODO Auto-generated method stub
+		
+	}
 }
