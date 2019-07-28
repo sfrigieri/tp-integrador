@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,26 +14,23 @@ import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.view.AristaView;
-import isi.died.tp.view.ControlPanel;
 import isi.died.tp.view.GrafoPanel;
 import isi.died.tp.view.VerticeView;
 
 public class GrafoPlantaController {
 
-	private GrafoPanel vistaGrafo;
-	private ControlPanel vistaControl;
-	private PlantaController pc;
-	private RutaController rc;
+	private static GrafoPanel grafoView;
+	private static PlantaController pc;
+	private static RutaController rc;
 	private List<Planta> plantas;
 	private List<VerticeView<Planta>> verticesDibujados;
 
 
-	public GrafoPlantaController(GrafoPanel panelGrf) {
-		this.vistaGrafo = panelGrf;
-		this.pc = GestionEntidadesController.plantaController;
-		this.rc = GestionEntidadesController.rutaController;
-		this.vistaGrafo.setController(this);
-		//this.vistaControl.buscarCaminos(pc.listaPlantas());
+	public GrafoPlantaController(JFrame framePadre) {
+		grafoView = GestionLogisticaController.grafoPanel;
+		pc = GestionEntidadesController.plantaController;
+		rc = GestionEntidadesController.rutaController;
+		//GestionLogistica.getPlantasBuscarCaminos(pc.listaPlantas());
 		this.verticesDibujados = new ArrayList<VerticeView<Planta>>();
 	}
 
@@ -42,9 +40,8 @@ public class GrafoPlantaController {
 		v.setId(mc.getId());
 		v.setNombre(mc.getNombre());
 		this.verticesDibujados.add(v);
-		this.vistaGrafo.agregar(v);
-		this.vistaGrafo.repaint();
-		//		this.plantas.remove(mc);
+		grafoView.agregar(v);
+		grafoView.repaint();
 	}
 
 	public void crearRuta(AristaView<Planta> arista) {
@@ -66,8 +63,8 @@ public class GrafoPlantaController {
 							distanciaKm, Double.valueOf(duracionViajeMin), pesoMax);
 			}
 		}
-		this.vistaGrafo.agregar(arista);
-		this.vistaGrafo.repaint();
+		grafoView.agregar(arista);
+		grafoView.repaint();
 	}
 
 	private Integer getValor(String string) {
@@ -84,10 +81,10 @@ public class GrafoPlantaController {
 				if (Integer.valueOf(field.getText()) > 0) {
 					return Integer.valueOf(field.getText());
 				}else {
-					JOptionPane.showConfirmDialog(this.vistaGrafo.getParent(), "El valor debe ser positivo.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showConfirmDialog(grafoView.getParent(), "El valor debe ser positivo.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 				} }
 			catch(NumberFormatException nfex) {
-				JOptionPane.showConfirmDialog(this.vistaGrafo.getParent(), "El valor debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showConfirmDialog(grafoView.getParent(), "El valor debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 			}
 
 
@@ -100,11 +97,11 @@ public class GrafoPlantaController {
 	public void buscarMejorCamino(List<PlantaProduccion> plantas) {
 		Recorrido camino = pc.mejorCaminoEnvio(plantas);
 		if(camino != null) {
-			this.vistaGrafo.caminoPintar(camino);
-			this.vistaGrafo.repaint();
+			grafoView.caminoPintar(camino);
+			grafoView.repaint();
 		}
 		else
-			JOptionPane.showConfirmDialog(this.vistaGrafo.getParent(), "No existe un Camino que incluya a todas las Plantas.", "Información", 
+			JOptionPane.showConfirmDialog(grafoView.getParent(), "No existe un Camino que incluya a todas las Plantas.", "Información", 
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -112,11 +109,11 @@ public class GrafoPlantaController {
 		List<Recorrido> caminos = pc.buscarCaminosInfo(p1, p2);
 		if(caminos != null) {
 			for(Recorrido camino : caminos)
-				this.vistaGrafo.caminoPintar(camino);
-			this.vistaGrafo.repaint();
+				grafoView.caminoPintar(camino);
+			grafoView.repaint();
 		}
 		else
-			JOptionPane.showConfirmDialog(this.vistaGrafo.getParent(), "No existen Caminos que unan ambas Plantas.", "Información", 
+			JOptionPane.showConfirmDialog(grafoView.getParent(), "No existen Caminos que unan ambas Plantas.", "Información", 
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 	}
 

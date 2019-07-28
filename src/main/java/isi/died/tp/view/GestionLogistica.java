@@ -6,25 +6,31 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JComboBox;
 import javax.swing.WindowConstants;
 
 import isi.died.tp.app.Main;
 import isi.died.tp.controller.GestionLogisticaController;
+import isi.died.tp.controller.GrafoPlantaController;
 import isi.died.tp.controller.OpcionesMenuLogistica;
+import isi.died.tp.model.Planta;
+
 
 public class GestionLogistica {
 	private static JFrame ventana;
 	public static GestionLogisticaController controller;
-
+	private static GrafoPlantaController grafoController;
 
 	public GestionLogistica(JFrame v) {
 		ventana = v;
 		controller = new GestionLogisticaController(v);
+		grafoController = GestionLogisticaController.grafoController;
 	}
 
 	public static void mostrarMenu() {
@@ -105,5 +111,29 @@ public class GestionLogistica {
 
 
 	}
+	
+    public void getPlantasBuscarCaminos( List<Planta> listaPlantas){
+    	
+        JComboBox<Planta> opPlantaOrigen;
+        JComboBox<Planta> opPlantaDestino;
+        JButton buscar;
+        JPanel panel = new JPanel();
+    	opPlantaOrigen = new JComboBox<Planta>((Planta[]) listaPlantas.toArray()); 
+    	opPlantaDestino = new JComboBox<Planta>((Planta[]) listaPlantas.toArray());  
+    	buscar = new JButton("Buscar Caminos");
+    	buscar.addActionListener(
+                e -> { 
+                    Planta origen = listaPlantas.get(opPlantaOrigen.getSelectedIndex());
+                    Planta destino = listaPlantas.get(opPlantaDestino.getSelectedIndex());
+                    grafoController.buscarCaminos(origen,destino); 
+                }
+        );
+        panel.add(new JLabel("Planta Origen"));        
+        panel.add(opPlantaOrigen);
+        panel.add(new JLabel("Planta Destino"));
+        panel.add(opPlantaDestino);      
+        panel.add(buscar);        
+    }
+
 }	
 	

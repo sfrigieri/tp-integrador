@@ -42,9 +42,9 @@ import isi.died.tp.view.VerticeView;
 
 public class GrafoPanel extends JPanel {
 
-	private static JFrame framePadre;
+	public static JFrame framePadre;
 	private Queue<Color> colaColores;
-	private GrafoPlantaController controller;
+	private static GrafoPlantaController controller;
 
 	private List<VerticeView<Planta>> vertices;
 	private List<AristaView<Planta>> aristas;
@@ -65,7 +65,7 @@ public class GrafoPanel extends JPanel {
 		this.vertices = new ArrayList<VerticeView<Planta>>();
 		this.aristas = new ArrayList<AristaView<Planta>>();
 		glc = GestionLogistica.controller;
-
+		controller = GestionLogisticaController.grafoController;
 		this.colaColores = new LinkedList<Color>();
 		this.colaColores.add(Color.RED);
 		this.colaColores.add(Color.BLUE);
@@ -75,8 +75,59 @@ public class GrafoPanel extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-
-
+				/*if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2 && !event.isConsumed()) {
+					event.consume();
+					Object[] plantas = controller.listaVertices().toArray();
+					Object verticeMatSeleccionado;
+					try {
+						verticeMatSeleccionado = JOptionPane.showInputDialog(framePadre, 
+								"¿Qué material corresponde con el vertice?",
+								"Agregar Vertice",
+								JOptionPane.QUESTION_MESSAGE, 
+								null, 
+								plantas, 
+								plantas[0]);
+						if (verticeMatSeleccionado != null & !controller.existeVertice((Planta)verticeMatSeleccionado)) {
+							Color aux = ((Planta)verticeMatSeleccionado).esLibro()?Color.RED:Color.BLUE;
+							controller.crearVertice(event.getX(), event.getY(), aux,(Planta) verticeMatSeleccionado);
+							//Confirmo que no haya una arista existente
+							//	                        if (rutaAux!=null) {
+							//	                        	if (controller.existeArista(rutaAux.getOrigen().getId(),((Planta)verticeMatSeleccionado).getId())) {
+							//		                        	AristaView<Planta> existente = new AristaView<Planta>();
+							//		                        	existente.setOrigen(rutaAux.getOrigen());
+							//		                        	existente.setDestino(controller.buscarVertice((Planta)verticeMatSeleccionado));
+							//		                        	controller.dibujarAristaExistente(existente);
+							//		                        	if(controller.existeArista(existente.getDestino().getId(), existente.getOrigen().getId())) {
+							//		                        		VerticeView<Planta> auxV = existente.getDestino();
+							//		                        		existente.setDestino(existente.getOrigen());
+							//		                        		existente.setOrigen(auxV);
+							//		                        		controller.dibujarAristaExistente(existente);
+							//		                        	}
+							//		                        }
+							//		                    }
+						}else {
+							JOptionPane.showConfirmDialog(framePadre, "Ese material ya fue añadido", "Material existente", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (ArrayIndexOutOfBoundsException e) {
+						JOptionPane.showConfirmDialog(framePadre, "No quedan más plantas para agregar", "Sin plantas", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					}  
+					//					System.out.println("vertices: "+vertices);
+				}else {
+					if(event.getButton() == MouseEvent.BUTTON3 && event.getClickCount() == 1 && !event.isConsumed()) {
+						event.consume();
+						//                		System.out.println("Mostrar Menu");
+						JPopupMenu menu = new JPopupMenu();
+						JMenuItem menuItem;
+						menuItem = new JMenuItem("Agregar Planta Producción");
+						menuItem.addActionListener(a -> glc.opcion(OpcionesMenuLogistica.AGREGAR_PLANTA_PRODUCCION));
+						menu.add(menuItem);
+						menuItem = new JMenuItem("Agregar Ruta");
+						menuItem.addActionListener(a -> glc.opcion(OpcionesMenuLogistica.AGREGAR_RUTA));
+						menu.add(menuItem);
+						menu.show(event.getComponent(), event.getX(), event.getY());
+					}                	
+				}
+*/
 			}
 
 			@Override
