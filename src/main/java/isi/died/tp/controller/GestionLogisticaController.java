@@ -7,8 +7,8 @@ import isi.died.tp.view.GrafoPanel;
 
 public class GestionLogisticaController {
 
-	private static GrafoPlantaController grafoController;
-	private static GrafoPanel grafoPanel;
+	public static GrafoPlantaController grafoController;
+	public static GrafoPanel grafoPanel;
 	
 	public GestionLogisticaController(JFrame v) {
 		grafoPanel = new GrafoPanel(v);

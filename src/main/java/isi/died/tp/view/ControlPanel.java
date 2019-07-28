@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import isi.died.tp.controller.GestionLogisticaController;
 import isi.died.tp.controller.GrafoPlantaController;
 import isi.died.tp.model.Planta;
 
@@ -18,7 +19,7 @@ public class ControlPanel extends JPanel {
     private JComboBox<Planta> cmbVertice2; 
     private JTextField txtLongitudCamino; 
     private JButton btnBuscarCamino; 
-    private GrafoPlantaController controller;
+    private static GrafoPlantaController glc = GestionLogisticaController.grafoController;
     private List<Planta> listaVertices;
         
 
@@ -32,7 +33,7 @@ public class ControlPanel extends JPanel {
                 e -> { 
                     Planta origen = this.listaVertices.get(cmbVertice1.getSelectedIndex());
                     Planta destino = this.listaVertices.get(cmbVertice2.getSelectedIndex());
-                    controller.buscarCaminos(origen,destino); 
+                    glc.buscarCaminos(origen,destino); 
                 }
         );
         this.add(new JLabel("Vertice Origen"));        
@@ -44,13 +45,6 @@ public class ControlPanel extends JPanel {
     	this.add(btnBuscarCamino);        
     }
 
-    public GrafoPlantaController getController() {
-        return controller;
-    }
-
-    public void setController(GrafoPlantaController controller) {
-        this.controller = controller;
-    }
 
     
 }

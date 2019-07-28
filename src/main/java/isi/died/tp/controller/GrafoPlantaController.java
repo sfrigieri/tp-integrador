@@ -32,8 +32,7 @@ public class GrafoPlantaController {
 		this.pc = GestionEntidadesController.plantaController;
 		this.rc = GestionEntidadesController.rutaController;
 		this.vistaGrafo.setController(this);
-		this.vistaControl.setController(this);
-		this.vistaControl.buscarCaminos(pc.listaPlantas());
+		//this.vistaControl.buscarCaminos(pc.listaPlantas());
 		this.verticesDibujados = new ArrayList<VerticeView<Planta>>();
 	}
 
