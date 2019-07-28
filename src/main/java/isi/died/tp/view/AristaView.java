@@ -18,11 +18,22 @@ public class AristaView<T> {
     private Shape linea;
     private Stroke formatoLinea;
     private Paint color;
+    private Integer valor;
 
     public AristaView() {
     }
 
-    /**
+	public AristaView(VerticeView<T> ini,VerticeView<T> fin,Integer val){
+		this(ini,fin);
+		this.valor= val;
+	}
+
+	public AristaView(VerticeView<T> ini,VerticeView<T> fin){
+		this();
+		this.origen = ini;
+		this.destino = fin;
+	}
+	/**
      * Define que el color de la linea es un degradado (color) 
  desde la coordenada origen de la linea, tomando como base el color origen de la linea
  hacia la coordenada destino de la linea, tomando como base el color destino de la linea
@@ -70,28 +81,62 @@ public class AristaView<T> {
         this.formatoLinea = formatoLinea;
     }
 
-    public VerticeView getOrigen() {
+    public VerticeView<T> getOrigen() {
         return origen;
     }
 
-    public void setOrigen(VerticeView origen) {
+    public void setOrigen(VerticeView<T> origen) {
         this.origen = origen;
     }
 
-    public VerticeView getDestino() {
+    public VerticeView<T> getDestino() {
         return destino;
     }
 
-    public void setDestino(VerticeView destino) {
+    public void setDestino(VerticeView<T> destino) {
         this.destino = destino;
     }
 
+	public Integer getValor() {
+		return valor;
+	}
+
+	public void setValor(Integer valor) {
+		this.valor = valor;
+	}
     @Override
     public String toString() {
         return "Arista{" + "origen=" + origen + ", destino=" + destino + ", linea=" + linea + ", formatoLinea=" + formatoLinea + ", gradiente=" + color + '}';
     }
 
+	public double getDuracionViajeMin() {
+		return 0;
+	}
 
+
+	public void setDuracionViajeMin(double duracionViajeMin) {
+	}
+
+
+	public int getPesoMaxTon() {
+		return 0;
+	}
+
+
+
+	public void setPesoMax(int pesoMaxTon) {
+		
+	}
+
+
+	public int getPesoEnCurso() {
+		return 0;
+	}
+
+
+	public void setPesoEnCurso(int pesoEnCursoTon) {
+
+	}
 
 }
 

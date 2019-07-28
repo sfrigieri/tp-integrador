@@ -76,6 +76,17 @@ public class RutaDaoDefault implements RutaDao {
 				}
 			}
 	}
+	
+
+	@Override
+	public boolean existeRuta(Planta inicio, Planta fin) {
+		for(Ruta r : LISTA_RUTAS) {
+			if(r.getInicio().getValor().equals(inicio) && r.getFin().getValor().equals(fin))
+				return true;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public Ruta buscarRuta(Integer id) {
@@ -152,4 +163,5 @@ public class RutaDaoDefault implements RutaDao {
 		this.actualizarArchivo();
 
 	}
+
 }

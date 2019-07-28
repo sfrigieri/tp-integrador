@@ -19,4 +19,6 @@ public interface RutaDao {
 	public Ruta buscarRuta(Integer id);
 
 	public void setRutas(List<Arista<Planta>> listaRutas);
+
+	public boolean existeRuta(Planta inicio, Planta fin);
 }

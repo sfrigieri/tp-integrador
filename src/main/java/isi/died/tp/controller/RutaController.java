@@ -43,8 +43,13 @@ private RutaService rs;
 		return rs.buscarRuta(id);
 	}
 
-	public void agregarRuta(Planta origen, Planta destino) {
-		// TODO Auto-generated method stub
-		
+	public void agregarRuta(Planta plantaOrigen, Planta plantaFin, int distancia, double duracion, int pesoMax) {
+		Vertice<Planta> vertPlantaOrigen = new Vertice<Planta>(plantaOrigen);
+		Vertice<Planta> vertPlantaFin = new Vertice<Planta>(plantaFin);
+		rs.agregarRuta(new Ruta(vertPlantaOrigen, vertPlantaFin, distancia, duracion, pesoMax));
+	}
+
+	public boolean existeRuta(Planta inicio, Planta fin) {
+		return rs.existeRuta(inicio, fin);
 	}
 }

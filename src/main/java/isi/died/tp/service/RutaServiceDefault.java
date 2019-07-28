@@ -102,4 +102,9 @@ public class RutaServiceDefault implements RutaService {
 		rutaDao.setRutas(listaRutas);
 
 	}
+
+	@Override
+	public boolean existeRuta(Planta inicio, Planta fin){
+		return rutaDao.existeRuta(inicio, fin);
+	}
 }
