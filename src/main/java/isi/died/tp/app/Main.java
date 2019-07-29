@@ -105,6 +105,12 @@ public class Main {
 			}
 		});
 		
+		gestionLogistica.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.opcion(OpcionesMenu.GESTION_LOGISTICA, ventana);
+			}
+		});
+		
 		//manejo ventana
 		ventana.setContentPane(panel);
 		ventana.pack();

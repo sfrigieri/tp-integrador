@@ -61,7 +61,6 @@ public class GrafoPanel extends JPanel {
 	public GrafoPanel(JFrame fp) {
 
 		framePadre = fp;
-
 		this.vertices = new ArrayList<VerticeView<Planta>>();
 		this.aristas = new ArrayList<AristaView<Planta>>();
 		glc = GestionLogistica.controller;
@@ -228,20 +227,18 @@ public class GrafoPanel extends JPanel {
 		return new Dimension(900, 400);
 	}
 
-	public GrafoPlantaController getController() {
-		return controller;
-	}
 
 	public void setAuxiliarOrigen(VerticeView<Planta> v) {
 		this.rutaAux = new AristaView<Planta>();
 		this.rutaAux.setOrigen(v);
 	}
-
-	public void setController(GrafoPlantaController controller) {
-		this.controller = controller;
+	
+	public List<VerticeView<Planta>> plantasEnPanel() {
+		return this.vertices;
 	}
 
-	public void buscarCamino() {
+
+	public void buscarCaminos() {
 		JFrame popup = new JFrame("Buscar Caminos");
 		JPanel panel = new JPanel(new GridBagLayout());
 		List<Planta> plantas = new ArrayList<Planta>();

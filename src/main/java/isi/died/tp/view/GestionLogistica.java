@@ -38,7 +38,7 @@ public class GestionLogistica {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Gestión de Logística");
-		JButton flujoMaximo = new JButton("Gestión Red de Plantas"),
+		JButton flujoMaximo = new JButton("Gestión Visual Red de Plantas"),
 				pageRanks = new JButton("Mejor Camino para Envío"),
 				mejorSeleccion = new JButton("Caminos entre Plantas"),
 				volver = new JButton("Volver");
@@ -55,7 +55,7 @@ public class GestionLogistica {
 
 
 		//botones ocultos
-		constraints.insets.set(0, 170, 20, 0);
+		constraints.insets.set(0, 105, 20, 0);
 		constraints.gridwidth=1;
 		constraints.gridx=6;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
@@ -105,7 +105,7 @@ public class GestionLogistica {
 		ventana.pack();
 		ventana.setSize(800, 600);
 		ventana.setLocationRelativeTo(null);
-		ventana.setTitle("Gestión General de Envíos");
+		ventana.setTitle("Gestión de Logística");
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
 

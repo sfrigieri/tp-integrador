@@ -9,9 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.model.Planta;
+import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.view.AristaView;
 import isi.died.tp.view.GrafoPanel;
@@ -23,7 +25,7 @@ public class GrafoPlantaController {
 	private static PlantaController pc;
 	private static RutaController rc;
 	private List<Planta> plantas;
-	private List<VerticeView<Planta>> verticesDibujados;
+	private List<VerticeView<Planta>> plantasEnPanel;
 
 
 	public GrafoPlantaController(JFrame framePadre) {
@@ -31,15 +33,75 @@ public class GrafoPlantaController {
 		pc = GestionEntidadesController.plantaController;
 		rc = GestionEntidadesController.rutaController;
 		//GestionLogistica.getPlantasBuscarCaminos(pc.listaPlantas());
-		this.verticesDibujados = new ArrayList<VerticeView<Planta>>();
+		this.plantasEnPanel = new ArrayList<VerticeView<Planta>>();
 	}
 
-
+	public void setPlantas() {
+		
+		PlantaAcopio origen = pc.buscarAcopioInicial();
+		PlantaAcopio fin = pc.buscarAcopioFinal();
+		VerticeView<Planta> v;
+		if(origen != null) {
+			v = new VerticeView<Planta>(20,250,Color.BLACK);
+			v.setId(origen.getId());
+			v.setNombre(origen.getNombre());
+			v.setValor(origen);
+			grafoView.agregar(v);
+			grafoView.repaint();
+		}
+		
+		if(fin != null) {
+			v = new VerticeView<Planta>(650,250,Color.BLACK);
+			v.setId(fin.getId());
+			v.setNombre(fin.getNombre());
+			v.setValor(fin);
+			grafoView.agregar(v);
+			grafoView.repaint();
+		}
+			
+		List<PlantaProduccion> lista = pc.listaPlantasProduccion();
+		
+		if(!lista.isEmpty()) {
+		int y = 0;
+		int x = 0;
+		int i = 1;
+		for(Planta p : lista){
+			
+			if(x > 650)
+				x= 0;
+			
+			x +=60;
+			if(i == 1) {
+				y =100;	
+			}
+			if(i == 2) {
+				y =400;	
+			}
+			if(i == 3) {
+				y =200;
+				i = 1;
+			}
+			
+			i++;
+			v = new VerticeView<Planta>(x,y,Color.DARK_GRAY);
+			v.setId(p.getId());
+			v.setNombre(p.getNombre());
+			v.setValor(p);
+			grafoView.agregar(v);
+			grafoView.repaint();
+		}
+			
+		}
+		
+		this.plantasEnPanel.addAll(grafoView.plantasEnPanel());
+	}
+	
+	
 	public void crearVertice(Integer coordenadaX, Integer coordenadaY, Color color, Planta mc) {
 		VerticeView<Planta> v = new VerticeView<Planta>(coordenadaX, coordenadaY, color);
 		v.setId(mc.getId());
 		v.setNombre(mc.getNombre());
-		this.verticesDibujados.add(v);
+		this.plantasEnPanel.add(v);
 		grafoView.agregar(v);
 		grafoView.repaint();
 	}
@@ -123,8 +185,8 @@ public class GrafoPlantaController {
 
 
 	public boolean existeVertice(Planta p) {
-		if(!this.verticesDibujados.isEmpty()) {
-			for(VerticeView<Planta> v : this.verticesDibujados) {
+		if(!this.plantasEnPanel.isEmpty()) {
+			for(VerticeView<Planta> v : this.plantasEnPanel) {
 				if(v.getValor().equals(p)) return true;
 			}
 		}
@@ -132,8 +194,8 @@ public class GrafoPlantaController {
 	}
 
 	public VerticeView<Planta> buscarVertice(Planta p) {
-		if(!this.verticesDibujados.isEmpty()) {
-			for(VerticeView<Planta> v : this.verticesDibujados) {
+		if(!this.plantasEnPanel.isEmpty()) {
+			for(VerticeView<Planta> v : this.plantasEnPanel) {
 				if(v.getValor().equals(p)) return v;
 			}
 		}

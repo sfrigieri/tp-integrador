@@ -121,7 +121,7 @@ public class MejorSeleccionEnvioView {
 		generarSolucion.addActionListener(a -> {
 			int numFila = tabla.getSelectedRow();
 			if (numFila == -1 || mostrarTablaStock) {
-				JOptionPane.showConfirmDialog(null,"Debes seleccionar un camión.","Error",
+				JOptionPane.showConfirmDialog(null,"Debes seleccionar un Camión.","Error",
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.ERROR_MESSAGE);
 				return;
@@ -129,7 +129,7 @@ public class MejorSeleccionEnvioView {
 				if (!mostrarTablaStock)
 					mostrarTablaMejorSeleccion(Integer.valueOf((String)tabla.getValueAt(numFila, 0)));
 				else
-					JOptionPane.showConfirmDialog(null,"Debes seleccionar un camión.","Error",
+					JOptionPane.showConfirmDialog(null,"Debes seleccionar un Camión.","Error",
 							JOptionPane.DEFAULT_OPTION,
 							JOptionPane.ERROR_MESSAGE);
 			}
