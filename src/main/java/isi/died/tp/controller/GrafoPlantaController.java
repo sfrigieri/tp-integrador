@@ -17,6 +17,7 @@ import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.view.AristaView;
+import isi.died.tp.view.GestionLogistica;
 import isi.died.tp.view.GrafoPanel;
 import isi.died.tp.view.RutaView;
 import isi.died.tp.view.VerticeView;
@@ -26,18 +27,31 @@ public class GrafoPlantaController {
 	private static GrafoPanel grafoView;
 	private static PlantaController pc;
 	private static RutaController rc;
+	private static GestionLogisticaController glc;
 	private List<VerticeView<Planta>> plantasEnPanel;
 	private List<AristaView<Planta>> rutasEnPanel;
 
-	public GrafoPlantaController(JFrame framePadre) {
-		grafoView = GestionLogisticaController.grafoPanel;
+	public GrafoPlantaController(JFrame framePadre, GestionLogisticaController glcontroller) {
 		pc = GestionEntidadesController.plantaController;
 		rc = GestionEntidadesController.rutaController;
+		glc = glcontroller;
 		//GestionLogistica.getPlantasBuscarCaminos(pc.listaPlantas());
 		this.plantasEnPanel = new ArrayList<VerticeView<Planta>>();
 		this.rutasEnPanel = new ArrayList<AristaView<Planta>>();
 	}
+	
+	public void setGrafoPanel(GrafoPanel gw) {
+		grafoView = gw;
+	}
 
+	public void setRutasEnPanel(List<AristaView<Planta>> lista) {
+		this.rutasEnPanel = lista;
+	}
+	
+	public void setPlantasEnPanel(List<VerticeView<Planta>> lista) {
+		this.plantasEnPanel = lista;
+	}
+	
 	public void setPlantas() {
 		
 		PlantaAcopio origen = pc.buscarAcopioInicial();
@@ -53,7 +67,7 @@ public class GrafoPlantaController {
 		}
 		
 		if(fin != null) {
-			v = new VerticeView<Planta>(650,250,Color.BLACK);
+			v = new VerticeView<Planta>(700,250,Color.BLACK);
 			v.setId(fin.getId());
 			v.setNombre(fin.getNombre());
 			v.setValor(fin);
@@ -70,17 +84,17 @@ public class GrafoPlantaController {
 		for(Planta p : lista){
 			
 			if(x > 650)
-				x= 0;
+				x= 30;
 			
-			x +=70;
+			x +=90;
 			if(i == 1) {
 				y =100;	
 			}
 			if(i == 2) {
-				y =150;	
+				y =350;	
 			}
 			if(i == 3) {
-				y =350;
+				y =150;
 				i = 1;
 			}
 			
@@ -111,10 +125,10 @@ public class GrafoPlantaController {
 	}
 	
 	
-	public void crearVertice(Integer coordenadaX, Integer coordenadaY, Color color, Planta mc) {
+	public void crearVertice(Integer coordenadaX, Integer coordenadaY, Color color, Planta p) {
 		VerticeView<Planta> v = new VerticeView<Planta>(coordenadaX, coordenadaY, color);
-		v.setId(mc.getId());
-		v.setNombre(mc.getNombre());
+		v.setId(p.getId());
+		v.setNombre(p.getNombre());
 		this.plantasEnPanel.add(v);
 		grafoView.agregar(v);
 		grafoView.repaint();
@@ -215,6 +229,7 @@ public class GrafoPlantaController {
 		}
 		return null;
 	}
+
 
 }
 

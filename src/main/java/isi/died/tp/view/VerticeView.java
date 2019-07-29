@@ -49,16 +49,18 @@ public class VerticeView<T> {
         return coordenadaX;
     }
 
-    public void setCoordenadaX(Integer coordenadaX) {
-        this.coordenadaX = coordenadaX;
+    public void setCoordenadaX(Integer coordX) {
+        this.coordenadaX = coordX;
+        this.nodo = new Ellipse2D.Double(coordX,this.coordenadaY,this.RADIO,this.RADIO);
     }
 
     public Integer getCoordenadaY() {
         return coordenadaY;
     }
 
-    public void setCoordenadaY(Integer coordenadaY) {
-        this.coordenadaY = coordenadaY;
+    public void setCoordenadaY(Integer coordY) {
+    	 this.coordenadaY = coordY;
+         this.nodo = new Ellipse2D.Double(this.coordenadaX,coordY,this.RADIO,this.RADIO);
     }
 
     public Shape getNodo() {

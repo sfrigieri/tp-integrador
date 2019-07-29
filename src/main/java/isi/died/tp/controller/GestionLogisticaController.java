@@ -4,19 +4,21 @@ import javax.swing.JFrame;
 
 import isi.died.tp.controller.GrafoPlantaController;
 import isi.died.tp.view.GrafoPanel;
-import isi.died.tp.view.MejorSeleccionEnvioView;
 import isi.died.tp.view.RedPlantasView;
 
 public class GestionLogisticaController {
 	
 	public static GrafoPlantaController grafoController;
 	public static GrafoPanel grafoPanel;
-	private RedPlantasView redPlantasView;
+	private static RedPlantasView redPlantasView;
+	private static JFrame framePadre;
 	
 	public GestionLogisticaController(JFrame v) {
+		grafoController = new GrafoPlantaController(v, this);
 		grafoPanel = new GrafoPanel(v);
-		grafoController = new GrafoPlantaController(v);
+		grafoController.setGrafoPanel(grafoPanel);
 		redPlantasView = new RedPlantasView(v, this);
+		framePadre = v;
 	}
 	
 

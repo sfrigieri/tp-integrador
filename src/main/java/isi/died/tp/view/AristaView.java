@@ -18,7 +18,7 @@ public class AristaView<T> {
     private Shape linea;
     private Stroke formatoLinea;
     private Paint color;
-    private Integer valor;
+    protected Integer valor;
 
     public AristaView() {
     }
@@ -60,7 +60,7 @@ public class AristaView<T> {
      * @return 
      */
     public Shape getLinea() {
-        if(this.linea==null)  this.linea = new Line2D.Double(origen.getCoordenadaX() + 10, origen.getCoordenadaY() + 10, destino.getCoordenadaX() + 10, destino.getCoordenadaY() + 10);
+        this.linea = new Line2D.Double(origen.getCoordenadaX() + 10, origen.getCoordenadaY() + 10, destino.getCoordenadaX() + 10, destino.getCoordenadaY() + 10);
         return linea;
     }
 
@@ -73,7 +73,7 @@ public class AristaView<T> {
      * @return 
      */
     public Stroke getFormatoLinea() {
-        if(this.formatoLinea==null)  this.formatoLinea = new BasicStroke(5.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);       
+        if(this.formatoLinea==null)  this.formatoLinea = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);       
         return formatoLinea;
     }
 
@@ -136,6 +136,10 @@ public class AristaView<T> {
 
 	public void setPesoEnCurso(int pesoEnCursoTon) {
 
+	}
+
+	public String etiqueta() {
+		return "";
 	}
 
 }

@@ -62,5 +62,9 @@ public class RutaView extends AristaView<Planta>{
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public String etiqueta() {
+		return ""+this.valor+"Km., "+this.duracionViajeMin+"min."; //+this.pesoMaxTon+" Ton.
+	}
 
 }

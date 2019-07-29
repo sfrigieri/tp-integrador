@@ -11,11 +11,14 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -51,14 +54,17 @@ public class GrafoPanel extends JPanel {
 	private List<AristaView<Planta>> aristas;
 
 	private AristaView<Planta> rutaAux;
+	private VerticeView<Planta> plantaAux;
 	private static GestionLogisticaController glc;
-	private Boolean agregarRuta;
-	private Boolean agregarPlanta;
-	private Boolean eliminarPlanta;
-	private Boolean insumoSeleccionado;
-	private Boolean buscarCaminos;
-	private Boolean buscarMejorCamino;
-
+	private Boolean agregarRuta = false;
+	private Boolean agregarPlanta = false;
+	private Boolean eliminarPlanta = false;
+	private Boolean insumoSeleccionado = false;
+	private Boolean buscarCaminos = false;
+	private Boolean buscarMejorCamino = false;
+	private Boolean moverPlanta = true;
+	private Boolean repaint = false;
+	
 	public GrafoPanel(JFrame fp) {
 
 		framePadre = fp;
@@ -71,11 +77,19 @@ public class GrafoPanel extends JPanel {
 		this.colaColores.add(Color.BLUE);
 		this.colaColores.add(Color.ORANGE);
 		this.colaColores.add(Color.CYAN);
-
+		rutaAux = null;
+		plantaAux = null;
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				/*if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2 && !event.isConsumed()) {
+				/*if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 && !event.isConsumed()) {
+					event.consume();
+					if(moverPlanta) {
+						VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
+						if(vPlanta != null)
+					}
+				}
+				if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2 && !event.isConsumed()) {
 					event.consume();
 					Object[] plantas = controller.listaVertices().toArray();
 					Object verticeMatSeleccionado;
@@ -127,12 +141,33 @@ public class GrafoPanel extends JPanel {
 						menu.show(event.getComponent(), event.getX(), event.getY());
 					}                	
 				}
-*/
+				 */
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent event) {
-				VerticeView<Planta> vDestino = clicEnUnNodo(event.getPoint());
+				if(moverPlanta) {
+					Point point = event.getPoint();
+					VerticeView<Planta> vPlanta = clicEnUnNodo(point);
+					if(plantaAux != null && vPlanta == null) {
+						plantaAux.setCoordenadaX(point.x);
+						plantaAux.setCoordenadaY(point.y);
+						controller.setPlantasEnPanel(vertices);
+						//controller.setPlantasEnPanel(vertices.stream().collect(Collectors.toList()));
+						//controller.setRutasEnPanel(aristas.stream().collect(Collectors.toList()));
+						//vertices.removeAll(vertices);
+						//aristas.removeAll(aristas);
+						//paintComponent(plantaAux);
+						revalidate();
+						repaint = true;
+						repaint();
+						plantaAux = null;
+						//controller.repaint();
+						//revalidate();
+					}
+					
+				}
+				/*VerticeView<Planta> vDestino = clicEnUnNodo(event.getPoint());
 				if (rutaAux!=null && vDestino != null) {
 					//                	if (!controller.existeArista(rutaAux.getOrigen().getId(),vDestino.getId())) {
 					rutaAux.setDestino(vDestino);
@@ -141,19 +176,25 @@ public class GrafoPanel extends JPanel {
 					//                	}else {
 					//                		controller.dibujarAristaExistente(rutaAux);
 					//                	}
-				}
+				}*/
 			}
 
-		});
+		} );
 
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent event) {
-				VerticeView<Planta> vOrigen = clicEnUnNodo(event.getPoint());
+				if(moverPlanta) {
+					VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
+					if(vPlanta != null) {
+						plantaAux = vPlanta;
+					}
+				}
+				/*VerticeView<Planta> vOrigen = clicEnUnNodo(event.getPoint());
 				if (rutaAux==null && vOrigen != null) {
 					rutaAux = new AristaView<Planta>();                    
 					rutaAux.setOrigen(vOrigen);
-				}
+				}*/
 			}
 		});
 	}
@@ -182,28 +223,109 @@ public class GrafoPanel extends JPanel {
 
 	private void dibujarVertices(Graphics2D g2d) {
 		for (VerticeView<Planta> v : this.vertices) {
-			//            g2d.setPaint(Color.BLUE);
-			g2d.drawString(v.etiqueta(),v.getCoordenadaX()-5,v.getCoordenadaY()-5);
+			g2d.setPaint(Color.RED);
+			g2d.drawString(v.etiqueta(),v.getCoordenadaX()-5,v.getCoordenadaY()-7);
 			g2d.setPaint(v.getColor());
 			g2d.fill(v.getNodo());
 		}
 	}
 
 	private void dibujarRutas(Graphics2D g2d) {
-		//        System.out.println(this.aristas);
+
+		AffineTransform tx = new AffineTransform();
+		List<Planta> apuntadas = new ArrayList<Planta>();
+
 		for (AristaView<Planta> a : this.aristas) {
+			g2d.setPaint(Color.DARK_GRAY);
+			g2d.drawString(a.etiqueta(),((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2));
 			g2d.setPaint(a.getColor());
 			g2d.setStroke ( a.getFormatoLinea());
 			g2d.draw(a.getLinea());
-			//dibujo una flecha al final
-			// con el color del origen para que se note
-			g2d.setPaint(Color.CYAN);
-			Polygon flecha = new Polygon();  
-			flecha.addPoint(a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY()+7);
-			flecha.addPoint(a.getDestino().getCoordenadaX()+20, a.getDestino().getCoordenadaY()+10);
-			flecha.addPoint(a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY()+18);
-			g2d.fillPolygon(flecha);
+
+			Line2D.Double line = new Line2D.Double(a.getOrigen().getCoordenadaX(), a.getOrigen().getCoordenadaY(), a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY());
+
+			Polygon arrowHead = new Polygon();  
+			arrowHead.addPoint( 0,5);
+			arrowHead.addPoint( -5, -5);
+			arrowHead.addPoint( 5,-5);
+			tx.setToIdentity();
+
+			double angle = Math.atan2(line.y2-line.y1, line.x2-line.x1);
+			int y = getCordY(angle);
+			int x = getCordX(angle);
+			if(!repaint)
+				tx.translate(line.x2+x, line.y2+y);
+			else
+				tx.translate(line.x2+x, line.y2+10);
+			tx.rotate((angle-Math.PI/2d)); 
+			//System.out.println(angle);
+			Color c = getArrowHeadColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
+			g2d.setPaint(c);
+
+			Graphics2D g = (Graphics2D) g2d.create();
+			g.setTransform(tx);   
+			g.fill(arrowHead);
+			g.dispose();
+
+			apuntadas.add(a.getDestino().getValor());
+
 		}
+	}
+
+	private int getCordX(double angle) {
+		if(angle < -1 && angle > -1.5)
+			return 8;
+		if(angle <= -1.5 && angle > -2.2)
+			return 11;
+		if(angle > 0.5 && angle < 1)
+			return 6;
+		if(angle < -0.5 && angle >= -1)
+			return 3;
+		if(angle <= -2 && angle > -3)
+			return 11;
+		if(angle <= -3 && angle > -4)
+			return 11;
+		if(angle >= 1 && angle < 2)
+			return 10;
+		if(angle >= 2 && angle < 3)
+			return 13;
+		return 7;
+	}
+
+	private int getCordY(double angle) {
+		if(angle < -1 && angle > -1.5)
+			return 39;
+		if(angle <= -1.5 && angle > -2.2)
+			return 37;
+		if(angle > 0.5 && angle < 1)
+			return 30;
+		if(angle < -0.5 && angle >= -1)
+			return 38;
+		if(angle <= -2 && angle > -3)
+			return 36;
+		if(angle <= -3 && angle > -4)
+			return 31;
+		if(angle >= 1 && angle < 2)
+			return 29;
+		if(angle >= 2 && angle < 3)
+			return 36;
+		return 32;
+	}
+
+	private Color getArrowHeadColor(long count) {
+		int i = (int) count;
+		if(i == 0)
+			return Color.magenta;
+		if(i == 1)
+			return Color.cyan;
+		if(i == 2)
+			return Color.GRAY;
+		if(i == 3)
+			return Color.YELLOW;
+		if(i == 4)
+			return Color.GREEN;
+
+		return Color.red;
 	}
 
 	private VerticeView<Planta> clicEnUnNodo(Point p) {
@@ -233,7 +355,7 @@ public class GrafoPanel extends JPanel {
 		this.rutaAux = new AristaView<Planta>();
 		this.rutaAux.setOrigen(v);
 	}
-	
+
 	public List<VerticeView<Planta>> plantasEnPanel() {
 		return this.vertices;
 	}
