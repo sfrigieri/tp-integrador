@@ -30,7 +30,8 @@ public class RedPlantasView {
 		//grafoController.crearVertice(300, 200,Color.BLUE,p);
 		//grafoView.setAuxiliarOrigen(grafoController.buscarVertice(p));
 		grafoController.setPlantas();
-		panel.add(new JLabel("Doble click: agregar nodo, Click secundario: ver opciones, Arrastrar y soltar: agregar arista."), BorderLayout.SOUTH);
+		grafoController.setRutas();
+		//panel.add(new JLabel("Doble click: agregar nodo, Click secundario: ver opciones, Arrastrar y soltar: agregar arista."), BorderLayout.NORTH);
 		panel.add(grafoView, BorderLayout.CENTER);
 		
 		ventana.setContentPane(panel);

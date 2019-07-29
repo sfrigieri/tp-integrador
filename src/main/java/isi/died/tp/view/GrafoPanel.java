@@ -12,6 +12,7 @@ import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -196,7 +197,7 @@ public class GrafoPanel extends JPanel {
 			g2d.draw(a.getLinea());
 			//dibujo una flecha al final
 			// con el color del origen para que se note
-			g2d.setPaint(Color.BLACK);
+			g2d.setPaint(Color.CYAN);
 			Polygon flecha = new Polygon();  
 			flecha.addPoint(a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY()+7);
 			flecha.addPoint(a.getDestino().getCoordenadaX()+20, a.getDestino().getCoordenadaY()+10);
@@ -237,6 +238,9 @@ public class GrafoPanel extends JPanel {
 		return this.vertices;
 	}
 
+	public List<AristaView<Planta>> rutasEnPanel() {
+		return this.aristas;
+	}
 
 	public void buscarCaminos() {
 		JFrame popup = new JFrame("Buscar Caminos");

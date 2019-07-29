@@ -12,11 +12,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import isi.died.tp.estructuras.Recorrido;
+import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.view.AristaView;
 import isi.died.tp.view.GrafoPanel;
+import isi.died.tp.view.RutaView;
 import isi.died.tp.view.VerticeView;
 
 public class GrafoPlantaController {
@@ -24,9 +26,8 @@ public class GrafoPlantaController {
 	private static GrafoPanel grafoView;
 	private static PlantaController pc;
 	private static RutaController rc;
-	private List<Planta> plantas;
 	private List<VerticeView<Planta>> plantasEnPanel;
-
+	private List<AristaView<Planta>> rutasEnPanel;
 
 	public GrafoPlantaController(JFrame framePadre) {
 		grafoView = GestionLogisticaController.grafoPanel;
@@ -34,6 +35,7 @@ public class GrafoPlantaController {
 		rc = GestionEntidadesController.rutaController;
 		//GestionLogistica.getPlantasBuscarCaminos(pc.listaPlantas());
 		this.plantasEnPanel = new ArrayList<VerticeView<Planta>>();
+		this.rutasEnPanel = new ArrayList<AristaView<Planta>>();
 	}
 
 	public void setPlantas() {
@@ -70,20 +72,20 @@ public class GrafoPlantaController {
 			if(x > 650)
 				x= 0;
 			
-			x +=60;
+			x +=70;
 			if(i == 1) {
 				y =100;	
 			}
 			if(i == 2) {
-				y =400;	
+				y =150;	
 			}
 			if(i == 3) {
-				y =200;
+				y =350;
 				i = 1;
 			}
 			
 			i++;
-			v = new VerticeView<Planta>(x,y,Color.DARK_GRAY);
+			v = new VerticeView<Planta>(x,y,Color.BLUE);
 			v.setId(p.getId());
 			v.setNombre(p.getNombre());
 			v.setValor(p);
@@ -94,6 +96,18 @@ public class GrafoPlantaController {
 		}
 		
 		this.plantasEnPanel.addAll(grafoView.plantasEnPanel());
+	}
+	
+	public void setRutas() {
+		List<Ruta> rutas = rc.listaRutas();
+		
+		for(Ruta r : rutas) {
+			grafoView.agregar(new RutaView(r.getId(),this.buscarVertice(r.getInicio().getValor()),
+					this.buscarVertice(r.getFin().getValor()), r.getValor(),r.getDuracionViajeMin(),r.getPesoMaxTon()));
+		}
+		
+		this.rutasEnPanel.addAll(grafoView.rutasEnPanel());
+		grafoView.repaint();
 	}
 	
 	
