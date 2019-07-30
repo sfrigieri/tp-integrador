@@ -16,11 +16,11 @@ public class RutaView extends AristaView<Planta>{
 		this.pesoEnCursoTon = 0;
 	}
 	
-	public RutaView(int id, VerticeView<Planta> ini, VerticeView<Planta> fin, int distanciaKm, double duracionViaje, int pesoMax) {
+	public RutaView(int id, VerticeView<Planta> ini, VerticeView<Planta> fin, int distanciaKm, double duracionViaje, int pesoMax, int pesoEnCurso) {
 		super(ini, fin, distanciaKm);
 		this.duracionViajeMin = duracionViaje;
 		this.pesoMaxTon = pesoMax;
-		this.pesoEnCursoTon = 0;
+		this.pesoEnCursoTon = pesoEnCurso;
 		this.id = id;
 	}
 

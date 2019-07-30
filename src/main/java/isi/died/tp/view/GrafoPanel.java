@@ -57,23 +57,22 @@ public class GrafoPanel extends JPanel {
 	private List<AristaView<Planta>> aristasPintadas;
 	private AristaView<Planta> rutaAux;
 	private VerticeView<Planta> plantaAux;
-	private static GestionLogisticaController glc;
 	private Boolean agregarRuta = false;
 	private Boolean agregarPlanta = false;
 	private Boolean eliminarPlanta = false;
 	private Boolean buscarCaminos = false;
+	private Boolean mostrarFlujo = false;
 	private Boolean buscarMejorCamino = false;
 	private Boolean moverPlanta = true;
 	private Boolean repaint = false;
 
-	public GrafoPanel(JFrame fp) {
+	public GrafoPanel(JFrame fp, GrafoPlantaController grafoController) {
 
 		framePadre = fp;
 		this.vertices = new ArrayList<VerticeView<Planta>>();
 		this.aristas = new ArrayList<AristaView<Planta>>();
 		this.aristasPintadas = new ArrayList<AristaView<Planta>>();
-		glc = GestionLogistica.controller;
-		controller = GestionLogisticaController.grafoController;
+		controller = grafoController;
 		this.colaColores = new LinkedList<Color>();
 		this.colaColores.add(Color.RED);
 		this.colaColores.add(Color.BLUE);
@@ -84,7 +83,8 @@ public class GrafoPanel extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				/*if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 && !event.isConsumed()) {
+				/* && !mostrarFlujo
+				 * if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 && !event.isConsumed()) {
 					event.consume();
 					if(moverPlanta) {
 						VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
@@ -155,17 +155,10 @@ public class GrafoPanel extends JPanel {
 						plantaAux.setCoordenadaX(point.x);
 						plantaAux.setCoordenadaY(point.y);
 						controller.setPlantasEnPanel(vertices);
-						//controller.setPlantasEnPanel(vertices.stream().collect(Collectors.toList()));
-						//controller.setRutasEnPanel(aristas.stream().collect(Collectors.toList()));
-						//vertices.removeAll(vertices);
-						//aristas.removeAll(aristas);
-						//paintComponent(plantaAux);
 						revalidate();
 						repaint = true;
 						repaint();
 						plantaAux = null;
-						//controller.repaint();
-						//revalidate();
 					}
 
 				}
@@ -201,6 +194,16 @@ public class GrafoPanel extends JPanel {
 		});
 	}
 
+	public void resetPlantas() {
+		this.vertices = new ArrayList<VerticeView<Planta>>();
+	}
+
+	public void resetRutas() {
+		this.aristas = new ArrayList<AristaView<Planta>>();
+		this.aristasPintadas = new ArrayList<AristaView<Planta>>();
+	}
+
+
 	public void agregar(AristaView<Planta> arista){
 		this.aristas.add(arista);
 	}    
@@ -224,7 +227,7 @@ public class GrafoPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	public void marcarCamino(Recorrido camino){
 
 		for(Ruta r : camino.getRecorrido()) {
@@ -282,7 +285,6 @@ public class GrafoPanel extends JPanel {
 	}
 
 	private void dibujarRutas(Graphics2D g2d) {
-
 		AffineTransform tx = new AffineTransform();
 		List<Planta> apuntadas = new ArrayList<Planta>();
 
@@ -412,8 +414,13 @@ public class GrafoPanel extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g.create();
 		dibujarVertices(g2d);
-		dibujarRutas(g2d);
+		if(!mostrarFlujo)
+			dibujarRutas(g2d);
+		else
+			marcarFlujo(g2d);
 	}
+
+
 
 	@Override
 	public Dimension getPreferredSize() {
@@ -500,6 +507,66 @@ public class GrafoPanel extends JPanel {
 		popup.setVisible(true);
 	}
 
+	public void marcarFlujoActual() {
+		this.mostrarFlujo = true;
+		repaint = true;
+		repaint();
+	}
 
+	private void marcarFlujo(Graphics2D g2d) {
+		AffineTransform tx = new AffineTransform();
+		List<Planta> apuntadas = new ArrayList<Planta>();
+
+		for (AristaView<Planta> a : this.aristas) {
+			g2d.setPaint(Color.DARK_GRAY);
+
+			if(a.getPesoEnCurso() == a.getPesoMaxTon())
+				g2d.setPaint(Color.RED);
+			else if(a.getPesoEnCurso() != 0)
+				g2d.setPaint(Color.blue);
+			if(this.getReversed(a) == null)
+				g2d.drawString("En curso: "+a.getPesoEnCurso()+", Resto: "+(a.getPesoMaxTon()-a.getPesoEnCurso()),((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-40,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2));
+			else if(!this.aristasPintadas.contains(this.getReversed(a)) && this.getReversed(a).getPesoEnCurso() == 0) {
+				this.aristasPintadas.add(a);
+				g2d.drawString("En curso: "+a.getPesoEnCurso()+", Resto: "+(a.getPesoMaxTon()-a.getPesoEnCurso()),
+						((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-40,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2));
+			}
+
+			if(this.getReversed(a) == null || (!this.aristasPintadas.contains(this.getReversed(a)) && this.getReversed(a).getPesoEnCurso() == 0)) {
+				g2d.setPaint(a.getColor());
+				g2d.setStroke ( a.getFormatoLinea());
+				g2d.draw(a.getLinea());
+
+				Line2D.Double line = new Line2D.Double(a.getOrigen().getCoordenadaX(), a.getOrigen().getCoordenadaY(), a.getDestino().getCoordenadaX(), a.getDestino().getCoordenadaY());
+
+				Polygon arrowHead = new Polygon();  
+				arrowHead.addPoint( 0,5);
+				arrowHead.addPoint( -5, -5);
+				arrowHead.addPoint( 5,-5);
+				tx.setToIdentity();
+
+				double angle = Math.atan2(line.y2-line.y1, line.x2-line.x1);
+				int y = getCordY(angle);
+				int x = getCordX(angle);
+				if(!repaint)
+					tx.translate(line.x2+x, line.y2+y+20);
+				else
+					tx.translate(line.x2+x, line.y2+10);
+				tx.rotate((angle-Math.PI/2d)); 
+				//System.out.println(angle);
+				Color c = getArrowHeadColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
+				g2d.setPaint(c);
+
+				Graphics2D g = (Graphics2D) g2d.create();
+				g.setTransform(tx);   
+				g.fill(arrowHead);
+				g.dispose();
+
+				apuntadas.add(a.getDestino().getValor());
+			}
+		}
+
+		this.aristasPintadas.clear();
+	}
 
 }

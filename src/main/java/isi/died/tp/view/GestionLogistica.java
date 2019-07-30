@@ -29,7 +29,7 @@ public class GestionLogistica {
 
 	public GestionLogistica(JFrame v) {
 		ventana = v;
-		controller = new GestionLogisticaController(v);
+		controller = new GestionLogisticaController(ventana);
 		grafoController = GestionLogisticaController.grafoController;
 	}
 

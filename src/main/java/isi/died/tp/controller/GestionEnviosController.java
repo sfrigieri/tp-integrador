@@ -10,24 +10,33 @@ import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.StockAcopio;
 import isi.died.tp.view.GestionEnvios;
+import isi.died.tp.view.GrafoPanel;
 import isi.died.tp.view.MejorSeleccionEnvioView;
 
 public class GestionEnviosController {
 
 	private static PlantaController pc;
 	private static CamionController cc;
+	public static GrafoPlantaController grafoController;
+	public static GrafoPanel grafoPanel;
+	private static JFrame framePadre; 
 	private MejorSeleccionEnvioView mseView;
 
 	public GestionEnviosController(JFrame ventana) {
 		pc = GestionEntidadesController.plantaController;
 		cc = GestionEntidadesController.camionController;
+		framePadre = ventana;
 		mseView = new MejorSeleccionEnvioView(ventana, this);
 	}
 
 
 	public void opcion(OpcionesMenuEnvios op) {
 		switch(op) {
-		case FLUJO_MAXIMO: GestionEnvios.mostrarFlujoMaximo(); break;
+		case FLUJO_MAXIMO: 
+			grafoController = new GrafoPlantaController(framePadre);
+			grafoPanel = new GrafoPanel(framePadre, grafoController);
+			grafoController.setGrafoPanel(grafoPanel);
+			GestionEnvios.mostrarFlujoMaximo(); break;
 		case PAGE_RANKS: GestionEnvios.mostrarTablaPageRanks(); break;
 		case MEJOR_SELECCION_ENVIO: mseView.calcularMejorSeleccion(true); break;
 		}

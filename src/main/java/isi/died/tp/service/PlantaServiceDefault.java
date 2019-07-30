@@ -117,7 +117,7 @@ public class PlantaServiceDefault implements PlantaService {
 	public PlantaAcopio buscarPlantaAcopio(Integer id) {
 		return plantaDao.buscarPlantaAcopio(id);
 	}
-	
+
 	@Override
 	public PlantaAcopio buscarAcopioInicial() {
 		return plantaDao.buscarAcopioInicial();
@@ -132,7 +132,7 @@ public class PlantaServiceDefault implements PlantaService {
 	public Boolean existenPlantas() {
 		return plantaDao.existenPlantas();
 	}
-	
+
 	@Override
 	public boolean existenRutas() {
 		return !rs.listaRutas().isEmpty();
@@ -146,7 +146,7 @@ public class PlantaServiceDefault implements PlantaService {
 		for(PlantaProduccion p : this.listaPlantasProduccion())
 			if(p.necesitaInsumo(ins))
 				lista.add(p);
-		
+
 		return lista;
 	}
 
@@ -239,19 +239,22 @@ public class PlantaServiceDefault implements PlantaService {
 	public int flujoMaximoRed(Planta origen){
 
 		int flujoMaximo = 0;
-		int flujoActual = Integer.MAX_VALUE;
+		if(origen != null) {
+			int flujoActual = Integer.MAX_VALUE;
 
-		while(flujoActual > 0) {
-			flujoActual = this.plantaDao.buscarProximoFlujoDisponible(new Vertice<Planta>(origen));
-			flujoMaximo = flujoMaximo + flujoActual;
+			while(flujoActual > 0) {
+				flujoActual = this.plantaDao.buscarProximoFlujoDisponible(new Vertice<Planta>(origen));
+				flujoMaximo = flujoMaximo + flujoActual;
 
+			}
 		}
-
-		plantaDao.resetFlujo();
-
 		return flujoMaximo;
 	}
 
+	@Override
+	public void resetFlujo() {
+		plantaDao.resetFlujo();
+	}
 
 	// Item 5.2
 	@Override
@@ -282,13 +285,13 @@ public class PlantaServiceDefault implements PlantaService {
 		/*for(int i = 0; i < plantas.size(); i++) {
 			System.out.println(plantas.get(i).getNombre()+" - Page Rank: "+plantas.get(i).getPageRank());
 		}*/
-		
+
 		plantas.sort((p1,p2) -> p2.getPageRank().compareTo(p1.getPageRank()));
-		
+
 		return plantas;
 	}
 
-	
+
 	private void resetPageRanks() {
 		plantaDao.resetPageRanks();
 	}
@@ -460,12 +463,12 @@ public class PlantaServiceDefault implements PlantaService {
 					}
 				}
 			}
-			
+
 			listaResultante.sort((s1,s2) -> s1.getPlanta().getNombre().compareTo(s2.getPlanta().getNombre()));
 		}
 		return listaResultante;
 	}
 
-	
+
 
 }

@@ -18,7 +18,6 @@ import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.view.AristaView;
-import isi.died.tp.view.GestionLogistica;
 import isi.died.tp.view.GrafoPanel;
 import isi.died.tp.view.RutaView;
 import isi.died.tp.view.VerticeView;
@@ -28,15 +27,12 @@ public class GrafoPlantaController {
 	private static GrafoPanel grafoView;
 	private static PlantaController pc;
 	private static RutaController rc;
-	private static GestionLogisticaController glc;
 	private List<VerticeView<Planta>> plantasEnPanel;
 	private List<AristaView<Planta>> rutasEnPanel;
 
-	public GrafoPlantaController(JFrame framePadre, GestionLogisticaController glcontroller) {
+	public GrafoPlantaController(JFrame framePadre) {
 		pc = GestionEntidadesController.plantaController;
 		rc = GestionEntidadesController.rutaController;
-		glc = glcontroller;
-
 		this.plantasEnPanel = new ArrayList<VerticeView<Planta>>();
 		this.rutasEnPanel = new ArrayList<AristaView<Planta>>();
 	}
@@ -58,6 +54,7 @@ public class GrafoPlantaController {
 		PlantaAcopio origen = pc.buscarAcopioInicial();
 		PlantaAcopio fin = pc.buscarAcopioFinal();
 		VerticeView<Planta> v;
+		grafoView.resetPlantas();
 		if(origen != null) {
 			v = new VerticeView<Planta>(20,150,Color.BLACK);
 			v.setId(origen.getId());
@@ -105,10 +102,10 @@ public class GrafoPlantaController {
 
 	public void setRutas() {
 		List<Ruta> rutas = rc.listaRutas();
-
+		grafoView.resetRutas();
 		for(Ruta r : rutas) {
 			grafoView.agregar(new RutaView(r.getId(),this.buscarVertice(r.getInicio().getValor()),
-					this.buscarVertice(r.getFin().getValor()), r.getValor(),r.getDuracionViajeMin(),r.getPesoMaxTon()));
+					this.buscarVertice(r.getFin().getValor()), r.getValor(),r.getDuracionViajeMin(),r.getPesoMaxTon(), r.getPesoEnCurso()));
 		}
 
 		this.rutasEnPanel.addAll(grafoView.rutasEnPanel());
@@ -187,7 +184,7 @@ public class GrafoPlantaController {
 	public void desmarcarPlantas() {
 
 		grafoView.desmarcarVertices();
-
+		
 	}
 
 	public void buscarMejorCamino(Recorrido camino, List<PlantaProduccion> plantas) {
@@ -197,6 +194,12 @@ public class GrafoPlantaController {
 		}
 	}
 
+	public void marcarFlujoActual() {
+		this.setPlantas();
+		this.setRutas();
+		grafoView.marcarFlujoActual();
+	}
+	
 	public void buscarCaminos(Planta p1, Planta p2) {
 		List<Recorrido> caminos = pc.buscarCaminosInfo(p1, p2);
 		if(caminos != null) {

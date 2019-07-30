@@ -62,5 +62,7 @@ public interface PlantaService {
 
 	public boolean existenRutas();
 
+	public void resetFlujo();
+
 
 }

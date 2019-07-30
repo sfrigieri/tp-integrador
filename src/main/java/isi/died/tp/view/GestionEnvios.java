@@ -1,5 +1,6 @@
 package isi.died.tp.view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -7,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import javax.swing.JOptionPane;
 import isi.died.tp.app.Main;
 import isi.died.tp.controller.GestionEntidadesController;
 import isi.died.tp.controller.GestionEnviosController;
+import isi.died.tp.controller.GestionLogisticaController;
 import isi.died.tp.controller.OpcionesMenuEnvios;
 import isi.died.tp.controller.PlantaController;
 import isi.died.tp.model.Planta;
@@ -156,14 +159,14 @@ public class GestionEnvios {
 		JTable table;
 		popup.setDefaultCloseOperation(WindowConstants. DISPOSE_ON_CLOSE);
 		panel.setPreferredSize( new Dimension(1000,350));
-		
+
 		if(!controller.existenPlantasAcopio()) {
 			JOptionPane.showConfirmDialog(null,"El Sistema no registra ambas Plantas de Acopio.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 		if(!controller.hayCaminoDisponible()) {
 			JOptionPane.showConfirmDialog(null,"No se registran caminos entre las Plantas de Acopio.","Acción Interrumpida",
 					JOptionPane.DEFAULT_OPTION,
@@ -242,13 +245,11 @@ public class GestionEnvios {
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 			}else {
-				JOptionPane.showConfirmDialog(null,"El Flujo Máximo entre ambas Plantas de Acopio es de: "+flujo+" Toneladas.","Flujo en la Red Actual",
-						JOptionPane.DEFAULT_OPTION,
-						JOptionPane.INFORMATION_MESSAGE);
+				mostrarGrafoFlujo(flujo);
 			}
 		}
 		else {
-			
+
 			if(!controller.existenPlantasAcopio()) {
 				JOptionPane.showConfirmDialog(null,"El Sistema no registra ambas Plantas de Acopio.","Acción Interrumpida",
 						JOptionPane.DEFAULT_OPTION,
@@ -256,11 +257,35 @@ public class GestionEnvios {
 				return;
 			}
 			else
-			JOptionPane.showConfirmDialog(null,"No se registran caminos entre las Plantas de Acopio.","Error",
-					JOptionPane.DEFAULT_OPTION,
-					JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showConfirmDialog(null,"No se registran Caminos entre las Plantas de Acopio.","Error",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
+	private static void mostrarGrafoFlujo(int flujo) {
+		JFrame popup = new JFrame("Flujo Máximo en la Red Actual");
+		JPanel panel = new JPanel(new BorderLayout());
+		popup.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		popup.setPreferredSize(new Dimension(800,450));
+		panel.setPreferredSize( new Dimension(700,450));
+		GestionEnviosController.grafoController.marcarFlujoActual();
+		panel.add(GestionEnviosController.grafoPanel, BorderLayout.CENTER);
+		popup.setContentPane(panel);
+		popup.pack();
+		popup.setLocationRelativeTo(ventana);
+		popup.setVisible(true);
+		popup.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+        		GestionEntidadesController.plantaController.resetFlujo();
+            }
+        } );
 
+		JOptionPane.showConfirmDialog(null,"El Flujo Máximo entre ambas Plantas de Acopio es de: "+flujo+" Toneladas.","Flujo en la Red Actual",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.INFORMATION_MESSAGE);
+
+
+
+	}
 }

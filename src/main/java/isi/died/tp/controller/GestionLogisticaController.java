@@ -35,8 +35,8 @@ public class GestionLogisticaController {
 	public void opcion(OpcionesMenuLogistica op) {
 		switch(op) {
 		case GESTION_RED_PLANTAS: 
-			grafoController = new GrafoPlantaController(framePadre, this);
-			grafoPanel = new GrafoPanel(framePadre);
+			grafoController = new GrafoPlantaController(framePadre);
+			grafoPanel = new GrafoPanel(framePadre, grafoController);
 			grafoController.setGrafoPanel(grafoPanel);
 			redPlantasView = new RedPlantasView(framePadre, this);
 			redPlantasView.setRedPlantas(firstTime); 

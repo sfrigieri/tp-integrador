@@ -73,6 +73,10 @@ public class PlantaController {
 	public int flujoMaximoRed(Planta origen){
 		return ps.flujoMaximoRed(origen);
 	}
+	
+	public void resetFlujo() {
+		ps.resetFlujo();
+	}
 
 
 	// Item 5.2
