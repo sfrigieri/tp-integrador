@@ -53,7 +53,7 @@ public class GrafoPanel extends JPanel {
 
 	private List<VerticeView<Planta>> vertices;
 	private List<AristaView<Planta>> aristas;
-
+	private List<AristaView<Planta>> aristasPintadas;
 	private AristaView<Planta> rutaAux;
 	private VerticeView<Planta> plantaAux;
 	private static GestionLogisticaController glc;
@@ -70,6 +70,7 @@ public class GrafoPanel extends JPanel {
 		framePadre = fp;
 		this.vertices = new ArrayList<VerticeView<Planta>>();
 		this.aristas = new ArrayList<AristaView<Planta>>();
+		this.aristasPintadas = new ArrayList<AristaView<Planta>>();
 		glc = GestionLogistica.controller;
 		controller = GestionLogisticaController.grafoController;
 		this.colaColores = new LinkedList<Color>();
@@ -235,20 +236,20 @@ public class GrafoPanel extends JPanel {
 
 	public void desmarcarVertices(){
 
-			for(VerticeView<Planta> v : this.vertices) {
-				if(v.getValor() instanceof PlantaProduccion && v.getColor().equals(Color.RED) ) {
-					v.setColor(Color.BLUE);
-				}
-		repaint = true;		
-		repaint();
+		for(VerticeView<Planta> v : this.vertices) {
+			if(v.getValor() instanceof PlantaProduccion && v.getColor().equals(Color.RED) ) {
+				v.setColor(Color.BLUE);
+			}
+			repaint = true;		
+			repaint();
 		}
-		
+
 	}
 
 	private void dibujarVertices(Graphics2D g2d) {
 		for (VerticeView<Planta> v : this.vertices) {
 			g2d.setPaint(Color.RED);
-			g2d.drawString(v.etiqueta(),v.getCoordenadaX()-5,v.getCoordenadaY()-7);
+			g2d.drawString(v.etiqueta(),v.getCoordenadaX()-5,v.getCoordenadaY()-5);
 			g2d.setPaint(v.getColor());
 			g2d.fill(v.getNodo());
 		}
@@ -261,7 +262,12 @@ public class GrafoPanel extends JPanel {
 
 		for (AristaView<Planta> a : this.aristas) {
 			g2d.setPaint(Color.DARK_GRAY);
-			g2d.drawString(a.etiqueta(),((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2));
+			if(this.getReversed(a) == null || (this.getReversed(a) != null  && !this.aristasPintadas.contains(this.getReversed(a)))) {
+				this.aristasPintadas.add(a);
+				g2d.drawString(a.etiqueta(),((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2));
+			}
+			else
+				g2d.drawString(a.etiqueta(),((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2)+13);
 			g2d.setPaint(a.getColor());
 			g2d.setStroke ( a.getFormatoLinea());
 			g2d.draw(a.getLinea());
@@ -294,6 +300,16 @@ public class GrafoPanel extends JPanel {
 			apuntadas.add(a.getDestino().getValor());
 
 		}
+		
+		this.aristasPintadas.clear();
+	}
+
+	private AristaView<Planta> getReversed(AristaView<Planta> a) {
+		for (AristaView<Planta> b : this.aristas) {
+			if(b.getOrigen().getValor().equals(a.getDestino().getValor()) && b.getDestino().getValor().equals(a.getOrigen().getValor()))
+				return b;
+		}
+		return null;
 	}
 
 	private int getCordX(double angle) {
