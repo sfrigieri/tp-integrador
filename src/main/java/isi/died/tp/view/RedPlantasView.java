@@ -80,6 +80,7 @@ public class RedPlantasView {
 				break;
 			default:
 				glc.refrescarGrafo();
+				seleccionado.clear();
 				if(glc.buscarFaltante(lista.get(seleccionarInsumo.getSelectedIndex()-1))) {
 					info.setText("          El Sistema registra faltantes de Stock.");
 					seleccionado.add(lista.get(seleccionarInsumo.getSelectedIndex()-1));
@@ -87,7 +88,6 @@ public class RedPlantasView {
 				}else {
 					info.setText(" ");
 					mejorCamino.setEnabled(false);
-					seleccionado.clear();
 				}
 				break;
 			}
