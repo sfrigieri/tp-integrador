@@ -209,13 +209,27 @@ public class GrafoPanel extends JPanel {
 		this.vertices.add(vert);
 	}
 
-	public void caminoPintar(Recorrido camino){
+	public void marcarCamino(Recorrido camino, List<PlantaProduccion> plantas){
 
 		for(Ruta r : camino.getRecorrido()) {
 			for(AristaView<Planta> a : this.aristas) {
 				if(a.getOrigen().getValor().equals(r.getInicio().getValor()) && a.getDestino().getValor().equals(r.getFin().getValor())) {
-					a.getOrigen().setColor(Color.GREEN);
-					a.getDestino().setColor(Color.GREEN);
+					if(plantas.contains(a.getOrigen().getValor()))
+						a.getOrigen().setColor(Color.GREEN);
+					if(plantas.contains(a.getDestino().getValor()))
+						a.getDestino().setColor(Color.GREEN);
+					a.setColor(Color.GREEN);
+					a.setFormatoLinea(new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+				}
+			}
+		}
+	}
+	
+	public void marcarCamino(Recorrido camino){
+
+		for(Ruta r : camino.getRecorrido()) {
+			for(AristaView<Planta> a : this.aristas) {
+				if(a.getOrigen().getValor().equals(r.getInicio().getValor()) && a.getDestino().getValor().equals(r.getFin().getValor())) {
 					a.setColor(Color.GREEN);
 					a.setFormatoLinea(new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 				}
@@ -225,14 +239,14 @@ public class GrafoPanel extends JPanel {
 
 	public void desmarcarCaminos(){
 
-			for(AristaView<Planta> a : this.aristas) {
-					a.getOrigen().setColor(Color.BLUE);
-					a.getDestino().setColor(Color.BLUE);
-					a.setColor(Color.DARK_GRAY);
-					a.setFormatoLinea(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
-			}
+		for(AristaView<Planta> a : this.aristas) {
+			a.getOrigen().setColor(Color.BLUE);
+			a.getDestino().setColor(Color.BLUE);
+			a.setColor(Color.DARK_GRAY);
+			a.setFormatoLinea(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+		}
 	}
-	
+
 	public void marcarVertices(List<PlantaProduccion> lista){
 
 		for(Planta p : lista) {
@@ -274,12 +288,16 @@ public class GrafoPanel extends JPanel {
 
 		for (AristaView<Planta> a : this.aristas) {
 			g2d.setPaint(Color.DARK_GRAY);
-			if(this.getReversed(a) == null || (this.getReversed(a) != null  && !this.aristasPintadas.contains(this.getReversed(a)))) {
-				this.aristasPintadas.add(a);
+			if(this.getReversed(a) == null)
 				g2d.drawString(a.etiqueta(),((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2));
+			else if(!this.aristasPintadas.contains(this.getReversed(a))) {
+				this.aristasPintadas.add(a);
+				g2d.drawString(a.etiqueta()+", "+a.getOrigen().getValor().getId()+" a "+a.getDestino().getValor().getId(),
+						((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2));
 			}
 			else
-				g2d.drawString(a.etiqueta(),((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2)+13);
+				g2d.drawString(a.etiqueta()+", "+a.getOrigen().getValor().getId()+" a "+a.getDestino().getValor().getId()
+						,((a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2)-30,((a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2)+13);
 			g2d.setPaint(a.getColor());
 			g2d.setStroke ( a.getFormatoLinea());
 			g2d.draw(a.getLinea());
@@ -312,7 +330,7 @@ public class GrafoPanel extends JPanel {
 			apuntadas.add(a.getDestino().getValor());
 
 		}
-		
+
 		this.aristasPintadas.clear();
 	}
 

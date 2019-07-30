@@ -12,6 +12,8 @@ import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.view.GrafoPanel;
 import isi.died.tp.view.RedPlantasView;
 import isi.died.tp.model.Insumo;
+import isi.died.tp.model.Planta;
+import isi.died.tp.model.PlantaProduccion;
 public class GestionLogisticaController {
 	
 	public static GrafoPlantaController grafoController;
@@ -71,7 +73,8 @@ public class GestionLogisticaController {
 
 
 	public boolean buscarMejorCamino(Insumo seleccionado) {
-		Recorrido recorrido = pc.mejorCaminoEnvio(pc.buscarPlantasNecesitanInsumo(seleccionado));
+		List<PlantaProduccion> plantas = pc.buscarPlantasNecesitanInsumo(seleccionado);
+		Recorrido recorrido = pc.mejorCaminoEnvio(plantas);
 		if(recorrido != null) {
 				System.out.println("Mejor Camino para Envío Insumo: "+seleccionado.getDescripcion());
 				System.out.println("Distancia Total: "+recorrido.getDistanciaTotal()+"Km");
@@ -81,7 +84,8 @@ public class GestionLogisticaController {
 					System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
 				System.out.println(" ");
 				System.out.println(" ");
-			grafoController.buscarMejorCamino(recorrido);
+				
+			grafoController.buscarMejorCamino(recorrido, plantas);
 			JOptionPane.showConfirmDialog(framePadre,"Mejor Camino con Distancia: "+recorrido.getDistanciaTotal()+
 					"Km y Duración Aprox: "+(Double.valueOf(recorrido.getDuracionTotal()/60)).intValue()+"h "+Math.round(((BigDecimal.valueOf(recorrido.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" min.", "Información",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);

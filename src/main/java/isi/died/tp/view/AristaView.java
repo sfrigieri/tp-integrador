@@ -21,6 +21,7 @@ public class AristaView<T> {
     protected Integer valor;
 
     public AristaView() {
+		this(null,null);
     }
 
 	public AristaView(VerticeView<T> ini,VerticeView<T> fin,Integer val){
@@ -29,9 +30,10 @@ public class AristaView<T> {
 	}
 
 	public AristaView(VerticeView<T> ini,VerticeView<T> fin){
-		this();
+		super();
 		this.origen = ini;
 		this.destino = fin;
+		this.valor = null;
 	}
 	/**
      * Define que el color de la linea es un degradado (color) 
@@ -139,7 +141,7 @@ public class AristaView<T> {
 	}
 
 	public String etiqueta() {
-		return "";
+		return " ";
 	}
 
 }

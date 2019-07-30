@@ -60,9 +60,13 @@ public class RedPlantasView {
 			else
 				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion()+ " | Tipo: Líquido | Cantidad Disponible: 0 ");
 		}
+		if(lista.isEmpty())
+			seleccionarInsumo.setEnabled(false);
+		
+		seleccionarInsumo.setSelectedItem("Seleccione");
 		constraints.gridx=0;
 		constraints.gridy=2;
-		seleccionarInsumo.setSelectedItem("Seleccione");
+
 		panelInterior.add(seleccionarInsumo,constraints);
 
 		List<Insumo> seleccionado = new ArrayList<Insumo>();
@@ -77,7 +81,7 @@ public class RedPlantasView {
 			default:
 				glc.refrescarGrafo();
 				if(glc.buscarFaltante(lista.get(seleccionarInsumo.getSelectedIndex()-1))) {
-					info.setText("El Sistema registra faltantes de Stock.");
+					info.setText("          El Sistema registra faltantes de Stock.");
 					seleccionado.add(lista.get(seleccionarInsumo.getSelectedIndex()-1));
 					mejorCamino.setEnabled(true);
 				}else {
@@ -128,8 +132,12 @@ public class RedPlantasView {
 
 		ventana.setVisible(true);
 
-		if(firstTime)
+		if(firstTime && !lista.isEmpty())
 			JOptionPane.showConfirmDialog(ventana, "Seleccione un Insumo para verificar si existen faltantes.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+		else
+			if(lista.isEmpty())
+			JOptionPane.showConfirmDialog(ventana, "No se registran Insumos en el Sistema.", "Información",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }

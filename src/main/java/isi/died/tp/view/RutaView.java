@@ -24,7 +24,14 @@ public class RutaView extends AristaView<Planta>{
 		this.id = id;
 	}
 
-	public RutaView() {}
+	public RutaView() {
+		super(null, null, null);
+		this.duracionViajeMin = 0;
+		this.pesoMaxTon = 0;
+		this.pesoEnCursoTon = 0;
+		this.id = -1;
+	}
+	
 	@Override
 	public double getDuracionViajeMin() {
 		return duracionViajeMin;
@@ -64,7 +71,12 @@ public class RutaView extends AristaView<Planta>{
 	}
 	
 	public String etiqueta() {
-		return ""+this.valor+"Km., "+this.duracionViajeMin+"min."; //+this.pesoMaxTon+" Ton.
-	}
+		if(this.valor != null && this.duracionViajeMin != 0)
+			return ""+this.valor+"Km., "+this.duracionViajeMin+"min.";
+		else
+			if(this.valor == null && this.duracionViajeMin != 0)
+				return "Dist. no disponible, "+this.duracionViajeMin+"min.";
+		
+			return "Distancia y Duración no disponibles";	}
 
 }

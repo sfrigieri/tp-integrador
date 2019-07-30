@@ -190,9 +190,9 @@ public class GrafoPlantaController {
 
 	}
 
-	public void buscarMejorCamino(Recorrido camino) {
+	public void buscarMejorCamino(Recorrido camino, List<PlantaProduccion> plantas) {
 		if(camino != null) {
-			grafoView.caminoPintar(camino);
+			grafoView.marcarCamino(camino, plantas);
 			grafoView.repaint();
 		}
 	}
@@ -201,7 +201,7 @@ public class GrafoPlantaController {
 		List<Recorrido> caminos = pc.buscarCaminosInfo(p1, p2);
 		if(caminos != null) {
 			for(Recorrido camino : caminos)
-				grafoView.caminoPintar(camino);
+				grafoView.marcarCamino(camino);
 			grafoView.repaint();
 		}
 		else
