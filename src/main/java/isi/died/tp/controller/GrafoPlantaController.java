@@ -174,12 +174,14 @@ public class GrafoPlantaController {
 	}
 
 
-	public void marcarPlantas(Insumo ins) {
+	public boolean marcarPlantas(Insumo ins) {
 		grafoView.desmarcarVertices();
 		List<PlantaProduccion> lista = pc.buscarPlantasNecesitanInsumo(ins);
 		if(!lista.isEmpty()) {
 			grafoView.marcarVertices(lista);
+			return true;
 		}
+		return false;
 	}
 
 	public void desmarcarPlantas() {
@@ -188,15 +190,11 @@ public class GrafoPlantaController {
 
 	}
 
-	public void buscarMejorCamino(List<PlantaProduccion> plantas) {
-		Recorrido camino = pc.mejorCaminoEnvio(plantas);
+	public void buscarMejorCamino(Recorrido camino) {
 		if(camino != null) {
 			grafoView.caminoPintar(camino);
 			grafoView.repaint();
 		}
-		else
-			JOptionPane.showConfirmDialog(grafoView.getParent(), "No existe un Camino que incluya a todas las Plantas.", "Información", 
-					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void buscarCaminos(Planta p1, Planta p2) {
@@ -232,6 +230,10 @@ public class GrafoPlantaController {
 			}
 		}
 		return null;
+	}
+
+	public void desmarcarCaminos() {
+		grafoView.desmarcarCaminos();
 	}
 
 

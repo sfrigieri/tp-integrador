@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,56 +39,87 @@ public class RedPlantasView {
 		JPanel panel = new JPanel(new BorderLayout()), panelInterior = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JComboBox<String> seleccionarInsumo = new JComboBox<String>();
-		JButton volver = new JButton("Volver");
+		JLabel info = new JLabel(" ");
+		JButton volver = new JButton("Volver"), mejorCamino = new JButton("Buscar Mejor Camino para Envío");
 		List<Insumo> lista = new ArrayList<Insumo>();
-		
+
 		constraints.fill=GridBagConstraints.HORIZONTAL;
-		//constraints.anchor=GridBagConstraints.WEST;
 
 		lista.addAll(glc.listaInsumos());
 		seleccionarInsumo.addItem("Seleccione");
 		for (Insumo ins : lista) {
 			if(ins.getStock() != null)
-			seleccionarInsumo.addItem(Integer.toString(ins.getId()) + " : Descripción:  " + ins.getDescripcion()+ "       |       Tipo: General       |       Cantidad Disponible: "+ins.getStock().getCantidad()+"       ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion()+ " | Tipo: General | Cantidad Disponible: "+ins.getStock().getCantidad()+" ");
 			else
-				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + " : Descripción:  " + ins.getDescripcion()+ "       |       Tipo: General       |       Cantidad Disponible: 0       ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion()+ " | Tipo: General | Cantidad Disponible: 0 ");
 		}
 		lista.addAll(glc.listaInsumosLiquidos());
 		for (Insumo ins : glc.listaInsumosLiquidos()) {
 			if(ins.getStock() != null)
-			seleccionarInsumo.addItem(Integer.toString(ins.getId()) + " : Descripción:  " + ins.getDescripcion() + "       |       Tipo: Líquido       |       Cantidad Disponible: "+ins.getStock().getCantidad()+"       ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion() + " | Tipo: Líquido | Cantidad Disponible: "+ins.getStock().getCantidad()+" ");
 			else
-				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + " : Descripción:  " + ins.getDescripcion()+ "       |       Tipo: Líquido       |       Cantidad Disponible: 0       ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion()+ " | Tipo: Líquido | Cantidad Disponible: 0 ");
 		}
-		
+		constraints.gridx=0;
+		constraints.gridy=2;
 		seleccionarInsumo.setSelectedItem("Seleccione");
 		panelInterior.add(seleccionarInsumo,constraints);
-		
-		
+
+		List<Insumo> seleccionado = new ArrayList<Insumo>();
 		seleccionarInsumo.addActionListener (a -> {
 			switch(seleccionarInsumo.getSelectedIndex()){
 			case 0:
+				mejorCamino.setEnabled(false);
+				seleccionado.clear();
 				glc.refrescarGrafo();
+				info.setText(" ");
 				break;
 			default:
-				glc.buscarFaltante(lista.get(seleccionarInsumo.getSelectedIndex()-1));
+				glc.refrescarGrafo();
+				if(glc.buscarFaltante(lista.get(seleccionarInsumo.getSelectedIndex()-1))) {
+					info.setText("El Sistema registra faltantes de Stock.");
+					seleccionado.add(lista.get(seleccionarInsumo.getSelectedIndex()-1));
+					mejorCamino.setEnabled(true);
+				}else {
+					info.setText(" ");
+					mejorCamino.setEnabled(false);
+					seleccionado.clear();
+				}
 				break;
 			}
 		});
-		
-		
+		constraints.gridx=1;
+		constraints.gridy=2;
+		mejorCamino.addActionListener(a -> {
+				if(!glc.buscarMejorCamino(seleccionado.get(0)))
+					JOptionPane.showConfirmDialog(ventana, "El Sistema no registra un Camino que incluya a todas las Plantas.", "Información",
+							JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			mejorCamino.setEnabled(false);
+			seleccionado.clear();
+		});
+		constraints.insets.set(0, 20, 0,0);
+		mejorCamino.setEnabled(false);
 		volver.addActionListener(a -> GestionLogistica.mostrarMenu());
 		constraints.anchor=GridBagConstraints.EAST;
 
-		constraints.insets.set(0, 240, 0,0);
+		constraints.insets.set(0, 30, 0,0);
+		panelInterior.add(mejorCamino,constraints);
+		constraints.gridx=2;
+		constraints.gridy=2;
 		panelInterior.add(volver,constraints);
-		panelInterior.setPreferredSize(new Dimension(800,30));
+		constraints.anchor=GridBagConstraints.NORTHEAST;
+		info.setForeground(Color.red);
+		constraints.gridx=1;
+		constraints.gridy=1;
+		constraints.insets=new Insets(0, 0, 5, 0);
+		panelInterior.add(info,constraints);
+		panelInterior.setPreferredSize(new Dimension(800,50));
 
 
 		grafoController.setPlantas();
 		grafoController.setRutas();
 
-		panel.add(new JLabel("Clic en cada Planta para desplazar. Clic derecho: demás opciones."), BorderLayout.NORTH);
+		panel.add(new JLabel("Reubicar Plantas: Clic + Arrastrar  | Clic derecho para demás opciones."), BorderLayout.NORTH);
 		panel.add(grafoView, BorderLayout.CENTER);
 		panel.add(panelInterior, BorderLayout.SOUTH);
 		ventana.setContentPane(panel);

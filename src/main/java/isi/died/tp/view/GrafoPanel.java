@@ -1,5 +1,6 @@
 package isi.died.tp.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -211,16 +212,27 @@ public class GrafoPanel extends JPanel {
 	public void caminoPintar(Recorrido camino){
 
 		for(Ruta r : camino.getRecorrido()) {
-			for(AristaView<Planta> av : this.aristas) {
-				if(av.getOrigen().equals(r.getInicio().getValor()) && av.getDestino().equals(r.getFin().getValor())) {
-					av.setColor(Color.RED);
-					av.getOrigen().setColor(Color.GREEN);
-					av.getDestino().setColor(Color.GREEN);
+			for(AristaView<Planta> a : this.aristas) {
+				if(a.getOrigen().getValor().equals(r.getInicio().getValor()) && a.getDestino().getValor().equals(r.getFin().getValor())) {
+					a.getOrigen().setColor(Color.GREEN);
+					a.getDestino().setColor(Color.GREEN);
+					a.setColor(Color.GREEN);
+					a.setFormatoLinea(new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 				}
 			}
 		}
 	}
 
+	public void desmarcarCaminos(){
+
+			for(AristaView<Planta> a : this.aristas) {
+					a.getOrigen().setColor(Color.BLUE);
+					a.getDestino().setColor(Color.BLUE);
+					a.setColor(Color.DARK_GRAY);
+					a.setFormatoLinea(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+			}
+	}
+	
 	public void marcarVertices(List<PlantaProduccion> lista){
 
 		for(Planta p : lista) {

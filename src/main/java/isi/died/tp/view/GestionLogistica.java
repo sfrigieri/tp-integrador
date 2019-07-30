@@ -38,13 +38,12 @@ public class GestionLogistica {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Gestión de Logística");
-		JButton flujoMaximo = new JButton("Gestión Visual Red de Plantas"),
-				pageRanks = new JButton("Mejor Camino para Envío"),
-				mejorSeleccion = new JButton("Caminos entre Plantas"),
+		JButton gestionVisual = new JButton("Gestión Visual Red de Plantas"),
+				buscarCaminos = new JButton("Caminos entre Plantas"),
 				volver = new JButton("Volver");
 
 		//titulo
-		constraints.insets=new Insets(5, 5, 100, 5);
+		constraints.insets=new Insets(5, 5, 120, 5);
 		constraints.gridx=0;
 		constraints.gridy=0;
 		constraints.gridheight=1;
@@ -55,38 +54,30 @@ public class GestionLogistica {
 
 
 		//botones ocultos
-		constraints.insets.set(0, 105, 20, 0);
+		constraints.insets.set(0, 105, 30, 0);
 		constraints.gridwidth=1;
 		constraints.gridx=6;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 
 		constraints.gridy=3;
-		panel.add(flujoMaximo, constraints);
-
-		constraints.gridy=4;
-		panel.add(pageRanks, constraints);
+		panel.add(gestionVisual, constraints);
 
 		constraints.gridy=5;
-		panel.add(mejorSeleccion, constraints);
+		panel.add(buscarCaminos, constraints);
 
 
-		flujoMaximo.addActionListener(new ActionListener() {
+		gestionVisual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.opcion(OpcionesMenuLogistica.GESTION_RED_PLANTAS);
 			}
 		});
 
-		mejorSeleccion.addActionListener(new ActionListener() {
+		buscarCaminos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.opcion(OpcionesMenuLogistica.MEJOR_CAMINO_ENVIO);
 			}
 		});
 
-		pageRanks.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.opcion(OpcionesMenuLogistica.BUSCAR_CAMINOS);
-			}
-		});
 
 		//boton volver
 		constraints.fill=GridBagConstraints.NONE;

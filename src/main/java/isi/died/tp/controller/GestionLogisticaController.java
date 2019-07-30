@@ -1,10 +1,14 @@
 package isi.died.tp.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import isi.died.tp.controller.GrafoPlantaController;
+import isi.died.tp.estructuras.Recorrido;
+import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.view.GrafoPanel;
 import isi.died.tp.view.RedPlantasView;
 import isi.died.tp.model.Insumo;
@@ -13,6 +17,7 @@ public class GestionLogisticaController {
 	public static GrafoPlantaController grafoController;
 	public static GrafoPanel grafoPanel;
 	public static InsumoController ic;
+	public static PlantaController pc;
 	private static RedPlantasView redPlantasView;
 	private static JFrame framePadre;
 	private Boolean firstTime; 
@@ -21,6 +26,7 @@ public class GestionLogisticaController {
 		framePadre = v;
 		firstTime = true;
 		ic = GestionEntidadesController.insumoController;
+		pc = GestionEntidadesController.plantaController;
 	}
 	
 
@@ -54,13 +60,37 @@ public class GestionLogisticaController {
 
 	public void refrescarGrafo() {
 		grafoController.desmarcarPlantas();
+		grafoController.desmarcarCaminos();
 	}
 
 
-	public void buscarFaltante(Insumo insumo) {
-		grafoController.marcarPlantas(insumo);
+	public boolean buscarFaltante(Insumo insumo) {
+		return grafoController.marcarPlantas(insumo);
 		
 	}
+
+
+	public boolean buscarMejorCamino(Insumo seleccionado) {
+		Recorrido recorrido = pc.mejorCaminoEnvio(pc.buscarPlantasNecesitanInsumo(seleccionado));
+		if(recorrido != null) {
+				System.out.println("Mejor Camino para Envío Insumo: "+seleccionado.getDescripcion());
+				System.out.println("Distancia Total: "+recorrido.getDistanciaTotal()+"Km");
+				System.out.println("Duración Viaje: "+recorrido.getDuracionTotal()+" minutos");
+				System.out.println("Recorrido:");
+				for(Ruta ruta : recorrido.getRecorrido())
+					System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
+				System.out.println(" ");
+				System.out.println(" ");
+			grafoController.buscarMejorCamino(recorrido);
+			JOptionPane.showConfirmDialog(framePadre,"Mejor Camino con Distancia: "+recorrido.getDistanciaTotal()+
+					"Km y Duración Aprox: "+(Double.valueOf(recorrido.getDuracionTotal()/60)).intValue()+"h "+Math.round(((BigDecimal.valueOf(recorrido.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" min.", "Información",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			return true;
+		}
+		return false;
+	}
+
+
 
 
 	
