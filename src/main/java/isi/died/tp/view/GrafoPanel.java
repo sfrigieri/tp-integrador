@@ -38,6 +38,7 @@ import isi.died.tp.controller.GestionLogisticaController;
 import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.model.Planta;
+import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.app.Main;
 import isi.died.tp.view.AristaView;
 import isi.died.tp.view.VerticeView;
@@ -59,12 +60,11 @@ public class GrafoPanel extends JPanel {
 	private Boolean agregarRuta = false;
 	private Boolean agregarPlanta = false;
 	private Boolean eliminarPlanta = false;
-	private Boolean insumoSeleccionado = false;
 	private Boolean buscarCaminos = false;
 	private Boolean buscarMejorCamino = false;
 	private Boolean moverPlanta = true;
 	private Boolean repaint = false;
-	
+
 	public GrafoPanel(JFrame fp) {
 
 		framePadre = fp;
@@ -165,7 +165,7 @@ public class GrafoPanel extends JPanel {
 						//controller.repaint();
 						//revalidate();
 					}
-					
+
 				}
 				/*VerticeView<Planta> vDestino = clicEnUnNodo(event.getPoint());
 				if (rutaAux!=null && vDestino != null) {
@@ -220,6 +220,30 @@ public class GrafoPanel extends JPanel {
 		}
 	}
 
+	public void marcarVertices(List<PlantaProduccion> lista){
+
+		for(Planta p : lista) {
+			for(VerticeView<Planta> v : this.vertices) {
+				if(v.getValor().equals(p)) {
+					v.setColor(Color.RED);
+				}
+			}
+		}
+		repaint = true;
+		repaint();
+	}
+
+	public void desmarcarVertices(){
+
+			for(VerticeView<Planta> v : this.vertices) {
+				if(v.getValor() instanceof PlantaProduccion && v.getColor().equals(Color.RED) ) {
+					v.setColor(Color.BLUE);
+				}
+		repaint = true;		
+		repaint();
+		}
+		
+	}
 
 	private void dibujarVertices(Graphics2D g2d) {
 		for (VerticeView<Planta> v : this.vertices) {
@@ -254,7 +278,7 @@ public class GrafoPanel extends JPanel {
 			int y = getCordY(angle);
 			int x = getCordX(angle);
 			if(!repaint)
-				tx.translate(line.x2+x, line.y2+y);
+				tx.translate(line.x2+x, line.y2+y+20);
 			else
 				tx.translate(line.x2+x, line.y2+10);
 			tx.rotate((angle-Math.PI/2d)); 
@@ -280,7 +304,7 @@ public class GrafoPanel extends JPanel {
 		if(angle > 0.5 && angle < 1)
 			return 6;
 		if(angle < -0.5 && angle >= -1)
-			return 3;
+			return 5;
 		if(angle <= -2 && angle > -3)
 			return 11;
 		if(angle <= -3 && angle > -4)
@@ -289,7 +313,7 @@ public class GrafoPanel extends JPanel {
 			return 10;
 		if(angle >= 2 && angle < 3)
 			return 13;
-		return 7;
+		return 9;
 	}
 
 	private int getCordY(double angle) {
@@ -298,18 +322,18 @@ public class GrafoPanel extends JPanel {
 		if(angle <= -1.5 && angle > -2.2)
 			return 37;
 		if(angle > 0.5 && angle < 1)
-			return 30;
+			return 27;
 		if(angle < -0.5 && angle >= -1)
 			return 38;
 		if(angle <= -2 && angle > -3)
-			return 36;
+			return 38;
 		if(angle <= -3 && angle > -4)
 			return 31;
 		if(angle >= 1 && angle < 2)
-			return 29;
+			return 27;
 		if(angle >= 2 && angle < 3)
 			return 36;
-		return 32;
+		return 30;
 	}
 
 	private Color getArrowHeadColor(long count) {

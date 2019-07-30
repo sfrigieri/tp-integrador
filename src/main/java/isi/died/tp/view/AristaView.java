@@ -73,7 +73,7 @@ public class AristaView<T> {
      * @return 
      */
     public Stroke getFormatoLinea() {
-        if(this.formatoLinea==null)  this.formatoLinea = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);       
+        if(this.formatoLinea==null)  this.formatoLinea = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);       
         return formatoLinea;
     }
 

@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 
 import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.estructuras.Ruta;
+import isi.died.tp.model.Insumo;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
@@ -35,11 +36,11 @@ public class GrafoPlantaController {
 		pc = GestionEntidadesController.plantaController;
 		rc = GestionEntidadesController.rutaController;
 		glc = glcontroller;
-		//GestionLogistica.getPlantasBuscarCaminos(pc.listaPlantas());
+
 		this.plantasEnPanel = new ArrayList<VerticeView<Planta>>();
 		this.rutasEnPanel = new ArrayList<AristaView<Planta>>();
 	}
-	
+
 	public void setGrafoPanel(GrafoPanel gw) {
 		grafoView = gw;
 	}
@@ -47,84 +48,74 @@ public class GrafoPlantaController {
 	public void setRutasEnPanel(List<AristaView<Planta>> lista) {
 		this.rutasEnPanel = lista;
 	}
-	
+
 	public void setPlantasEnPanel(List<VerticeView<Planta>> lista) {
 		this.plantasEnPanel = lista;
 	}
-	
+
 	public void setPlantas() {
-		
+
 		PlantaAcopio origen = pc.buscarAcopioInicial();
 		PlantaAcopio fin = pc.buscarAcopioFinal();
 		VerticeView<Planta> v;
 		if(origen != null) {
-			v = new VerticeView<Planta>(20,250,Color.BLACK);
+			v = new VerticeView<Planta>(20,150,Color.BLACK);
 			v.setId(origen.getId());
 			v.setNombre(origen.getNombre());
 			v.setValor(origen);
 			grafoView.agregar(v);
 			grafoView.repaint();
 		}
-		
+
 		if(fin != null) {
-			v = new VerticeView<Planta>(700,250,Color.BLACK);
+			v = new VerticeView<Planta>(700,150,Color.BLACK);
 			v.setId(fin.getId());
 			v.setNombre(fin.getNombre());
 			v.setValor(fin);
 			grafoView.agregar(v);
 			grafoView.repaint();
 		}
-			
+
 		List<PlantaProduccion> lista = pc.listaPlantasProduccion();
-		
+
 		if(!lista.isEmpty()) {
-		int y = 0;
-		int x = 0;
-		int i = 1;
-		for(Planta p : lista){
+			int y = 20;
+			int x = 300;
+			for(Planta p : lista){
+
+				if(y>350)
+					x= 500;
+
+				if(y > 350)
+					y =40;	
+
+				v = new VerticeView<Planta>(x,y,Color.BLUE);
+				y+=70;
+				v.setId(p.getId());
+				v.setNombre(p.getNombre());
+				v.setValor(p);
+				grafoView.agregar(v);
 			
-			if(x > 650)
-				x= 30;
-			
-			x +=90;
-			if(i == 1) {
-				y =100;	
 			}
-			if(i == 2) {
-				y =350;	
-			}
-			if(i == 3) {
-				y =150;
-				i = 1;
-			}
-			
-			i++;
-			v = new VerticeView<Planta>(x,y,Color.BLUE);
-			v.setId(p.getId());
-			v.setNombre(p.getNombre());
-			v.setValor(p);
-			grafoView.agregar(v);
 			grafoView.repaint();
 		}
-			
-		}
-		
+
 		this.plantasEnPanel.addAll(grafoView.plantasEnPanel());
 	}
-	
+
 	public void setRutas() {
 		List<Ruta> rutas = rc.listaRutas();
-		
+
 		for(Ruta r : rutas) {
 			grafoView.agregar(new RutaView(r.getId(),this.buscarVertice(r.getInicio().getValor()),
 					this.buscarVertice(r.getFin().getValor()), r.getValor(),r.getDuracionViajeMin(),r.getPesoMaxTon()));
 		}
-		
+
 		this.rutasEnPanel.addAll(grafoView.rutasEnPanel());
 		grafoView.repaint();
 	}
-	
-	
+
+
 	public void crearVertice(Integer coordenadaX, Integer coordenadaY, Color color, Planta p) {
 		VerticeView<Planta> v = new VerticeView<Planta>(coordenadaX, coordenadaY, color);
 		v.setId(p.getId());
@@ -183,6 +174,19 @@ public class GrafoPlantaController {
 	}
 
 
+	public void marcarPlantas(Insumo ins) {
+		grafoView.desmarcarVertices();
+		List<PlantaProduccion> lista = pc.buscarPlantasNecesitanInsumo(ins);
+		if(!lista.isEmpty()) {
+			grafoView.marcarVertices(lista);
+		}
+	}
+
+	public void desmarcarPlantas() {
+
+		grafoView.desmarcarVertices();
+
+	}
 
 	public void buscarMejorCamino(List<PlantaProduccion> plantas) {
 		Recorrido camino = pc.mejorCaminoEnvio(plantas);

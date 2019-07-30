@@ -142,11 +142,11 @@ public class PlantaServiceDefault implements PlantaService {
 	@Override
 	public List<PlantaProduccion> buscarPlantasNecesitanInsumo(Insumo ins) {
 		List<PlantaProduccion> lista = new ArrayList<PlantaProduccion>();
-
+		System.out.println(ins.getDescripcion());
 		for(PlantaProduccion p : this.listaPlantasProduccion())
-			if(p.necesitaInsumo(ins))
+			if(p.necesitaInsumo(ins)) {
 				lista.add(p);
-
+		System.out.println(p.getNombre());}
 		return lista;
 	}
 
