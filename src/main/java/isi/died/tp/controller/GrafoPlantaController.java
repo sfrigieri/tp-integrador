@@ -199,19 +199,8 @@ public class GrafoPlantaController {
 		this.setRutas();
 		grafoView.marcarFlujoActual();
 	}
-	
-	public void buscarCaminos(Planta p1, Planta p2) {
-		List<Recorrido> caminos = pc.buscarCaminosInfo(p1, p2);
-		if(caminos != null) {
-			for(Recorrido camino : caminos)
-				grafoView.marcarCamino(camino);
-			grafoView.repaint();
-		}
-		else
-			JOptionPane.showConfirmDialog(grafoView.getParent(), "No existen Caminos que unan ambas Plantas.", "Información", 
-					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-	}
 
+	
 	public List<Planta> listaVertices() {
 		return pc.listaPlantas();
 	}
@@ -237,6 +226,15 @@ public class GrafoPlantaController {
 
 	public void desmarcarCaminos() {
 		grafoView.desmarcarCaminos();
+	}
+
+	public void marcarCaminos(List<Recorrido> caminos) {
+		if(!caminos.isEmpty()) {
+			for(Recorrido camino : caminos)
+				grafoView.marcarCamino(camino);
+			
+		}
+		grafoView.repaint();
 	}
 
 

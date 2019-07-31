@@ -25,12 +25,10 @@ import isi.died.tp.model.Planta;
 public class GestionLogistica {
 	private static JFrame ventana;
 	public static GestionLogisticaController controller;
-	private static GrafoPlantaController grafoController;
 
 	public GestionLogistica(JFrame v) {
 		ventana = v;
 		controller = new GestionLogisticaController(ventana);
-		grafoController = GestionLogisticaController.grafoController;
 	}
 
 	public static void mostrarMenu() {
@@ -74,7 +72,7 @@ public class GestionLogistica {
 
 		buscarCaminos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.opcion(OpcionesMenuLogistica.MEJOR_CAMINO_ENVIO);
+				controller.opcion(OpcionesMenuLogistica.BUSCAR_CAMINOS);
 			}
 		});
 
@@ -103,28 +101,6 @@ public class GestionLogistica {
 
 	}
 	
-    public void getPlantasBuscarCaminos( List<Planta> listaPlantas){
-    	
-        JComboBox<Planta> opPlantaOrigen;
-        JComboBox<Planta> opPlantaDestino;
-        JButton buscar;
-        JPanel panel = new JPanel();
-    	opPlantaOrigen = new JComboBox<Planta>((Planta[]) listaPlantas.toArray()); 
-    	opPlantaDestino = new JComboBox<Planta>((Planta[]) listaPlantas.toArray());  
-    	buscar = new JButton("Buscar Caminos");
-    	buscar.addActionListener(
-                e -> { 
-                    Planta origen = listaPlantas.get(opPlantaOrigen.getSelectedIndex());
-                    Planta destino = listaPlantas.get(opPlantaDestino.getSelectedIndex());
-                    grafoController.buscarCaminos(origen,destino); 
-                }
-        );
-        panel.add(new JLabel("Planta Origen"));        
-        panel.add(opPlantaOrigen);
-        panel.add(new JLabel("Planta Destino"));
-        panel.add(opPlantaDestino);      
-        panel.add(buscar);        
-    }
 
 }	
 	

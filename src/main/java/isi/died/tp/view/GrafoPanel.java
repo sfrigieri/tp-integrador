@@ -55,7 +55,6 @@ public class GrafoPanel extends JPanel {
 	private List<VerticeView<Planta>> vertices;
 	private List<AristaView<Planta>> aristas;
 	private List<AristaView<Planta>> aristasPintadas;
-	private AristaView<Planta> rutaAux;
 	private VerticeView<Planta> plantaAux;
 	private Boolean agregarRuta = false;
 	private Boolean agregarPlanta = false;
@@ -78,7 +77,6 @@ public class GrafoPanel extends JPanel {
 		this.colaColores.add(Color.BLUE);
 		this.colaColores.add(Color.ORANGE);
 		this.colaColores.add(Color.CYAN);
-		rutaAux = null;
 		plantaAux = null;
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -243,8 +241,16 @@ public class GrafoPanel extends JPanel {
 	public void desmarcarCaminos(){
 
 		for(AristaView<Planta> a : this.aristas) {
-			a.getOrigen().setColor(Color.BLUE);
-			a.getDestino().setColor(Color.BLUE);
+			if(a.getOrigen().getValor() instanceof PlantaProduccion)
+				a.getOrigen().setColor(Color.BLUE);
+			else
+				a.getOrigen().setColor(Color.BLACK);
+			
+			if(a.getDestino().getValor() instanceof PlantaProduccion)
+				a.getDestino().setColor(Color.BLUE);
+			else
+				a.getDestino().setColor(Color.BLACK);
+			
 			a.setColor(Color.DARK_GRAY);
 			a.setFormatoLinea(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 		}
@@ -428,11 +434,6 @@ public class GrafoPanel extends JPanel {
 	}
 
 
-	public void setAuxiliarOrigen(VerticeView<Planta> v) {
-		this.rutaAux = new AristaView<Planta>();
-		this.rutaAux.setOrigen(v);
-	}
-
 	public List<VerticeView<Planta>> plantasEnPanel() {
 		return this.vertices;
 	}
@@ -441,71 +442,6 @@ public class GrafoPanel extends JPanel {
 		return this.aristas;
 	}
 
-	public void buscarCaminos() {
-		JFrame popup = new JFrame("Buscar Caminos");
-		JPanel panel = new JPanel(new GridBagLayout());
-		List<Planta> plantas = new ArrayList<Planta>();
-
-		for(VerticeView<Planta> v: vertices) {
-			plantas.add(v.getValor());
-		}
-
-		JComboBox<Planta> listaInicio = new JComboBox<Planta>(),
-				listaFin = new JComboBox<Planta>();
-
-		for(Planta p: plantas) {
-			listaInicio.addItem(p);
-			listaFin.addItem(p);
-		}
-		JLabel label = new JLabel();
-		GridBagConstraints cons = new GridBagConstraints();
-		JButton aceptar = new JButton("Aceptar"), cancelar = new JButton("Cancelar");
-
-		cons.insets = new Insets(5, 5, 5, 5);
-		cons.gridx = 0;
-		cons.gridx = 0;
-		label.setText("Seleccione Planta Inicial: ");
-		panel.add(label, cons);
-
-		cons.gridx = 1;
-		panel.add(listaInicio, cons);
-
-		cons.gridx=0;
-		cons.gridy=1;
-		label = new JLabel("Seleccione Planta Final: ");
-		panel.add(label, cons);
-
-		cons.gridx=1;
-		panel.add(listaFin, cons);
-
-
-		cons.gridx=0;
-		cons.gridy=3;
-		cancelar.addActionListener(a -> popup.dispose());
-		panel.add(cancelar, cons);
-
-		cons.gridx=1;
-		aceptar.addActionListener(a -> {
-			Planta inicio, fin;
-
-			try {
-				inicio = (Planta) listaInicio.getSelectedItem();
-				fin = (Planta) listaFin.getSelectedItem();
-				controller.buscarCaminos(inicio, fin);
-				popup.dispose();
-				//else JOptionPane.showConfirmDialog(popup, "Ingrese", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-			} catch (NumberFormatException e) {
-				JOptionPane.showConfirmDialog(popup, "El campo Número de saltos debe ser un número entero.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-			}
-		});
-		panel.add(aceptar, cons);
-
-
-		popup.setContentPane(panel);
-		popup.pack();
-		popup.setLocationRelativeTo(framePadre);
-		popup.setVisible(true);
-	}
 
 	public void marcarFlujoActual() {
 		this.mostrarFlujo = true;

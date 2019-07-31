@@ -1,6 +1,8 @@
 package isi.died.tp.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -15,22 +17,24 @@ import isi.died.tp.model.Insumo;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaProduccion;
 public class GestionLogisticaController {
-	
+
 	public static GrafoPlantaController grafoController;
 	public static GrafoPanel grafoPanel;
 	public static InsumoController ic;
 	public static PlantaController pc;
 	private static RedPlantasView redPlantasView;
 	private static JFrame framePadre;
-	private Boolean firstTime; 
+	private Boolean firstTimeRed; 
+	private Boolean firstTimeCaminos; 
 	
 	public GestionLogisticaController(JFrame v) {
 		framePadre = v;
-		firstTime = true;
+		firstTimeRed = true;
+		firstTimeCaminos = true;
 		ic = GestionEntidadesController.insumoController;
 		pc = GestionEntidadesController.plantaController;
 	}
-	
+
 
 	public void opcion(OpcionesMenuLogistica op) {
 		switch(op) {
@@ -39,13 +43,19 @@ public class GestionLogisticaController {
 			grafoPanel = new GrafoPanel(framePadre, grafoController);
 			grafoController.setGrafoPanel(grafoPanel);
 			redPlantasView = new RedPlantasView(framePadre, this);
-			redPlantasView.setRedPlantas(firstTime); 
-			firstTime = false; 
+			redPlantasView.setRedPlantas(firstTimeRed); 
+			firstTimeRed = false; 
 			break;
-		//case MEJOR_CAMINO_ENVIO: grafoPanel.; break;
-		//case BUSCAR_CAMINOS: grafoPanel.; break;
-		//case AGREGAR_PLANTA_PRODUCCION: grafoPanel.; break;
-		//case AGREGAR_RUTA: grafoPanel.; break;
+		case BUSCAR_CAMINOS: 			
+			grafoController = new GrafoPlantaController(framePadre);
+			grafoPanel = new GrafoPanel(framePadre, grafoController);
+			grafoController.setGrafoPanel(grafoPanel);
+			redPlantasView = new RedPlantasView(framePadre, this);
+			redPlantasView.buscarCaminos(firstTimeCaminos);
+			firstTimeCaminos = false; 
+			break;
+			//case AGREGAR_PLANTA_PRODUCCION: grafoPanel.; break;
+			//case AGREGAR_RUTA: grafoPanel.; break;
 		}
 	}
 
@@ -68,7 +78,7 @@ public class GestionLogisticaController {
 
 	public boolean buscarFaltante(Insumo insumo) {
 		return grafoController.marcarPlantas(insumo);
-		
+
 	}
 
 
@@ -76,15 +86,15 @@ public class GestionLogisticaController {
 		List<PlantaProduccion> plantas = pc.buscarPlantasNecesitanInsumo(seleccionado);
 		Recorrido recorrido = pc.mejorCaminoEnvio(plantas);
 		if(recorrido != null) {
-				System.out.println("Mejor Camino para Envío Insumo: "+seleccionado.getDescripcion());
-				System.out.println("Distancia Total: "+recorrido.getDistanciaTotal()+"Km");
-				System.out.println("Duración Viaje: "+recorrido.getDuracionTotal()+" minutos");
-				System.out.println("Recorrido:");
-				for(Ruta ruta : recorrido.getRecorrido())
-					System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
-				System.out.println(" ");
-				System.out.println(" ");
-				
+			System.out.println("Mejor Camino para Envío Insumo: "+seleccionado.getDescripcion());
+			System.out.println("Distancia Total: "+recorrido.getDistanciaTotal()+"Km");
+			System.out.println("Duración Viaje: "+recorrido.getDuracionTotal()+" minutos");
+			System.out.println("Recorrido:");
+			for(Ruta ruta : recorrido.getRecorrido())
+				System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
+			System.out.println(" ");
+			System.out.println(" ");
+
 			grafoController.buscarMejorCamino(recorrido, plantas);
 			JOptionPane.showConfirmDialog(framePadre,"Mejor Camino con Distancia: "+recorrido.getDistanciaTotal()+
 					"Km y Duración Aprox: "+(Double.valueOf(recorrido.getDuracionTotal()/60)).intValue()+"h "+Math.round(((BigDecimal.valueOf(recorrido.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" min.", "Información",
@@ -95,7 +105,22 @@ public class GestionLogisticaController {
 	}
 
 
+	public List<Planta> listaPlantas() {
+		return pc.listaPlantas();
+	}
 
 
-	
+	public List<String> buscarCaminos(Planta p1, Planta p2) {
+		List<Recorrido> caminos =  pc.buscarCaminosInfo(p1, p2);
+		List<String> infoCaminos = new ArrayList<String>();
+		
+		grafoController.marcarCaminos(caminos);
+		return infoCaminos;
+
+	}
+
+
+
+
+
 }

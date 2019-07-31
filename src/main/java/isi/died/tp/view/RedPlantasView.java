@@ -15,11 +15,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import isi.died.tp.controller.GestionLogisticaController;
 import isi.died.tp.controller.GrafoPlantaController;
+import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.model.Insumo;
 import isi.died.tp.model.Planta;
+import isi.died.tp.model.PlantaProduccion;
 import isi.died.tp.view.GrafoPanel;
 
 public class RedPlantasView {
@@ -40,7 +43,7 @@ public class RedPlantasView {
 		GridBagConstraints constraints = new GridBagConstraints();
 		JComboBox<String> seleccionarInsumo = new JComboBox<String>();
 		JLabel info = new JLabel(" ");
-		JButton volver = new JButton("Volver"), mejorCamino = new JButton("Buscar Mejor Camino para Envío");
+		JButton volver = new JButton("Volver"), mejorCamino = new JButton("Buscar Mejor Camino");
 		List<Insumo> lista = new ArrayList<Insumo>();
 
 		constraints.fill=GridBagConstraints.HORIZONTAL;
@@ -49,20 +52,20 @@ public class RedPlantasView {
 		seleccionarInsumo.addItem("Seleccione");
 		for (Insumo ins : lista) {
 			if(ins.getStock() != null)
-				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion()+ " | Tipo: General | Cantidad Disponible: "+ins.getStock().getCantidad()+" ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Desc: " + ins.getDescripcion()+ " | Tipo: General | Cant. Disponible: "+ins.getStock().getCantidad()+" ");
 			else
-				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion()+ " | Tipo: General | Cantidad Disponible: 0 ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Desc: " + ins.getDescripcion()+ " | Tipo: General | Cant. Disponible: 0 ");
 		}
 		lista.addAll(glc.listaInsumosLiquidos());
 		for (Insumo ins : glc.listaInsumosLiquidos()) {
 			if(ins.getStock() != null)
-				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion() + " | Tipo: Líquido | Cantidad Disponible: "+ins.getStock().getCantidad()+" ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Desc: " + ins.getDescripcion() + " | Tipo: Líquido | Cant. Disponible: "+ins.getStock().getCantidad()+" ");
 			else
-				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Descripción: " + ins.getDescripcion()+ " | Tipo: Líquido | Cantidad Disponible: 0 ");
+				seleccionarInsumo.addItem(Integer.toString(ins.getId()) + ": Desc: " + ins.getDescripcion()+ " | Tipo: Líquido | Cant. Disponible: 0 ");
 		}
 		if(lista.isEmpty())
 			seleccionarInsumo.setEnabled(false);
-		
+
 		seleccionarInsumo.setSelectedItem("Seleccione");
 		constraints.gridx=0;
 		constraints.gridy=2;
@@ -95,9 +98,9 @@ public class RedPlantasView {
 		constraints.gridx=1;
 		constraints.gridy=2;
 		mejorCamino.addActionListener(a -> {
-				if(!glc.buscarMejorCamino(seleccionado.get(0)))
-					JOptionPane.showConfirmDialog(ventana, "El Sistema no registra un Camino que incluya a todas las Plantas.", "Información",
-							JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			if(!glc.buscarMejorCamino(seleccionado.get(0)))
+				JOptionPane.showConfirmDialog(ventana, "El Sistema no registra un Camino que incluya a todas las Plantas.", "Información",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 			mejorCamino.setEnabled(false);
 			seleccionado.clear();
 		});
@@ -117,7 +120,7 @@ public class RedPlantasView {
 		constraints.gridy=1;
 		constraints.insets=new Insets(0, 0, 5, 0);
 		panelInterior.add(info,constraints);
-		panelInterior.setPreferredSize(new Dimension(800,50));
+		panelInterior.setPreferredSize(new Dimension(900,50));
 
 
 		grafoController.setPlantas();
@@ -128,7 +131,7 @@ public class RedPlantasView {
 		panel.add(panelInterior, BorderLayout.SOUTH);
 		ventana.setContentPane(panel);
 		ventana.pack();
-		ventana.setSize(800, 600);
+		ventana.setSize(900, 600);
 
 		ventana.setVisible(true);
 
@@ -136,8 +139,146 @@ public class RedPlantasView {
 			JOptionPane.showConfirmDialog(ventana, "Seleccione un Insumo para verificar si existen faltantes.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 		else
 			if(lista.isEmpty())
-			JOptionPane.showConfirmDialog(ventana, "No se registran Insumos en el Sistema.", "Información",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showConfirmDialog(ventana, "No se registran Insumos en el Sistema.", "Información",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void buscarCaminos(Boolean firstTime) {
+		JPanel panel = new JPanel(new BorderLayout()), panelInterior = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		JComboBox<String> seleccionarP1 = new JComboBox<String>(), seleccionarP2 = new JComboBox<String>();
+		JLabel info = new JLabel(" ");
+		JButton volver = new JButton("Volver"), buscarCaminos = new JButton("Buscar Caminos");
+		List<Planta> lista = new ArrayList<Planta>();
+
+		constraints.fill=GridBagConstraints.HORIZONTAL;
+
+		lista.addAll(glc.listaPlantas());
+		seleccionarP1.addItem("Seleccione");
+		for (Planta p : lista) {
+			seleccionarP1.addItem(Integer.toString(p.getId()) + " | Nombre: " + p.getNombre()+" ");				
+		}
+
+		if(lista.isEmpty())
+			seleccionarP1.setEnabled(false);
+
+		seleccionarP2.addItem("Seleccione");
+		for (Planta p : lista) {	
+			seleccionarP2.addItem(Integer.toString(p.getId()) + " | Nombre: " + p.getNombre()+" ");		
+		}
+
+		if(lista.isEmpty())
+			seleccionarP2.setEnabled(false);
+
+		seleccionarP1.setSelectedItem("Seleccione");
+		constraints.gridx=0;
+		constraints.gridy=4;
+
+		panelInterior.add(seleccionarP1,constraints);
+
+		constraints.gridx=1;
+		constraints.insets.set(0,10, 0,0);
+		panelInterior.add(seleccionarP2,constraints);
+
+		List<Planta> seleccionadoP1 = new ArrayList<Planta>();
+		List<Planta> seleccionadoP2 = new ArrayList<Planta>();
+		seleccionarP1.addActionListener (a -> {
+			switch(seleccionarP1.getSelectedIndex()){
+			case 0:
+				buscarCaminos.setEnabled(false);
+				seleccionadoP1.clear();
+				glc.refrescarGrafo();
+				info.setText(" ");
+				break;
+			default:
+				glc.refrescarGrafo();
+				seleccionadoP1.clear();
+				info.setText(" ");
+				seleccionadoP1.add(lista.get(seleccionarP1.getSelectedIndex()-1));
+				if(!seleccionadoP2.isEmpty() && !seleccionadoP1.get(0).equals(seleccionadoP2.get(0))) {
+					buscarCaminos.setEnabled(true);
+				}else {
+					buscarCaminos.setEnabled(false);
+				}
+				break;
+			}
+		});
+
+		seleccionarP2.addActionListener (a -> {
+			switch(seleccionarP2.getSelectedIndex()){
+			case 0:
+				buscarCaminos.setEnabled(false);
+				seleccionadoP2.clear();
+				glc.refrescarGrafo();
+				info.setText(" ");
+				break;
+			default:
+				glc.refrescarGrafo();
+				seleccionadoP2.clear();
+				info.setText(" ");
+				seleccionadoP2.add(lista.get(seleccionarP2.getSelectedIndex()-1));
+				if(!seleccionadoP1.isEmpty() && !seleccionadoP2.get(0).equals(seleccionadoP1.get(0))) {
+					buscarCaminos.setEnabled(true);
+				}else {
+					buscarCaminos.setEnabled(false);
+				}
+				break;
+			}
+		});
+
+		buscarCaminos.addActionListener(a -> {
+			List<String> caminos = glc.buscarCaminos(seleccionadoP1.get(0), seleccionadoP2.get(0));
+			if(caminos.isEmpty())
+				JOptionPane.showConfirmDialog(ventana, "El Sistema no registra Caminos que conecten ambas Plantas.", "Información",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			else
+				info.setText("          El Sistema registra ");//"+cantCaminos+" caminos disponibles.");
+			buscarCaminos.setEnabled(false);
+			//seleccionadoP1.clear();
+			//seleccionadoP2.clear();
+			//seleccionarP1.setSelectedItem("Seleccione");
+			//seleccionarP2.setSelectedItem("Seleccione");
+
+		});
+
+		buscarCaminos.setEnabled(false);
+		constraints.insets.set(0, 20, 0,0);
+		constraints.gridx=2;
+		volver.addActionListener(a -> GestionLogistica.mostrarMenu());
+		constraints.anchor=GridBagConstraints.EAST;
+
+		constraints.insets.set(0, 30, 0,0);
+		panelInterior.add(buscarCaminos,constraints);
+		constraints.gridx=3;
+		panelInterior.add(volver,constraints);
+		constraints.anchor=GridBagConstraints.NORTHEAST;
+		info.setForeground(Color.GREEN);
+		constraints.gridx=1;
+		constraints.gridy=3;
+		constraints.insets=new Insets(0, 0, 5, 0);
+		panelInterior.add(info,constraints);
+		panelInterior.setPreferredSize(new Dimension(900,50));
+
+
+		grafoController.setPlantas();
+		grafoController.setRutas();
+
+		panel.add(new JLabel("Reubicar Plantas: Clic + Arrastrar."), BorderLayout.NORTH);
+		panel.add(grafoView, BorderLayout.CENTER);
+		panel.add(panelInterior, BorderLayout.SOUTH);
+		ventana.setContentPane(panel);
+		ventana.pack();
+		ventana.setSize(900, 600);
+
+		ventana.setVisible(true);
+
+		if(firstTime && !lista.isEmpty())
+			JOptionPane.showConfirmDialog(ventana, "Seleccione Planta Inicial y Final para la búsqueda de Caminos.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+		else
+			if(lista.isEmpty())
+				JOptionPane.showConfirmDialog(ventana, "No se registran Plantas en el Sistema.", "Información",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
 	}
 
 }
