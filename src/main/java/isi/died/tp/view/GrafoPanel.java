@@ -5,42 +5,28 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 
 import isi.died.tp.controller.GrafoPlantaController;
-import isi.died.tp.controller.OpcionesMenuLogistica;
-import isi.died.tp.controller.GestionLogisticaController;
 import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.estructuras.Ruta;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaProduccion;
-import isi.died.tp.app.Main;
 import isi.died.tp.view.AristaView;
 import isi.died.tp.view.VerticeView;
 
@@ -226,16 +212,48 @@ public class GrafoPanel extends JPanel {
 		}
 	}
 
-	public void marcarCamino(Recorrido camino){
-
-		for(Ruta r : camino.getRecorrido()) {
+	public List<JLabel> marcarCamino(Recorrido re, long numColor){
+		
+	
+		List<JLabel> labels = new ArrayList<JLabel>();
+		
+		JLabel infoCamino1 = new JLabel(numColor+1+"° Camino");
+		infoCamino1.setForeground(this.getColor(numColor));
+		String info1, info2;
+		
+		if(re.getDistanciaTotal() < 100)
+			info1 = "  "+re.getDistanciaTotal();
+		else
+			info1 = ""+re.getDistanciaTotal();
+		
+		if(Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60)) < 10)
+			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
+					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" ";
+		else
+			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
+					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+"";
+			
+		JLabel infoCamino2 = new JLabel(info1+"Km          "+info2+" min.          "+
+				re.getPesoMax()+" Ton.");
+		labels.add(infoCamino1);
+		labels.add(infoCamino2);
+		
+		for(Ruta r : re.getRecorrido()) {
 			for(AristaView<Planta> a : this.aristas) {
 				if(a.getOrigen().getValor().equals(r.getInicio().getValor()) && a.getDestino().getValor().equals(r.getFin().getValor())) {
-					a.setColor(Color.GREEN);
+					if(this.aristasPintadas.contains(a) || (this.getReversed(a) != null && this.aristasPintadas.contains(this.getReversed(a))))
+						a.setColor(Color.WHITE);
+					
+					else
+						a.setColor(this.getColor(numColor));
 					a.setFormatoLinea(new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+					this.aristasPintadas.add(a);
 				}
 			}
 		}
+		repaint = true;
+		repaint();
+		return labels;
 	}
 
 	public void desmarcarCaminos(){
@@ -327,7 +345,7 @@ public class GrafoPanel extends JPanel {
 				tx.translate(line.x2+x, line.y2+10);
 			tx.rotate((angle-Math.PI/2d)); 
 			//System.out.println(angle);
-			Color c = getArrowHeadColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
+			Color c = getColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
 			g2d.setPaint(c);
 
 			Graphics2D g = (Graphics2D) g2d.create();
@@ -390,20 +408,42 @@ public class GrafoPanel extends JPanel {
 		return 30;
 	}
 
-	private Color getArrowHeadColor(long count) {
+	private Color getColor(long count) {
 		int i = (int) count;
 		if(i == 0)
-			return Color.magenta;
+			return Color.magenta.darker();
 		if(i == 1)
 			return Color.cyan;
 		if(i == 2)
-			return Color.GRAY;
+			return Color.ORANGE;
 		if(i == 3)
-			return Color.YELLOW;
+			return Color.YELLOW.darker();
 		if(i == 4)
+			return Color.red;
+		if(i == 5)
+			return Color.BLUE;
+		if(i == 6)
+			return Color.green.darker();
+		if(i == 7)
+			return Color.pink;
+		if(i == 8)
+			return Color.gray.darker();
+		if(i == 9)
 			return Color.GREEN;
-
-		return Color.red;
+		if(i == 10)
+			return Color.magenta;
+		if(i == 11)
+			return Color.cyan.darker();
+		if(i == 12)
+			return Color.orange.darker();
+		if(i == 13)
+			return Color.YELLOW;
+		if(i == 14)
+			return Color.red.brighter();
+		if(i == 15)
+			return Color.pink.darker();
+		
+		return Color.black;
 	}
 
 	private VerticeView<Planta> clicEnUnNodo(Point p) {
@@ -433,7 +473,12 @@ public class GrafoPanel extends JPanel {
 		return new Dimension(900, 400);
 	}
 
-
+	
+	
+	public void clearAristas() {
+		this.aristasPintadas.clear();
+	}
+	
 	public List<VerticeView<Planta>> plantasEnPanel() {
 		return this.vertices;
 	}
@@ -490,7 +535,7 @@ public class GrafoPanel extends JPanel {
 					tx.translate(line.x2+x, line.y2+10);
 				tx.rotate((angle-Math.PI/2d)); 
 				//System.out.println(angle);
-				Color c = getArrowHeadColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
+				Color c = getColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
 				g2d.setPaint(c);
 
 				Graphics2D g = (Graphics2D) g2d.create();

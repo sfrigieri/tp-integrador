@@ -3,9 +3,12 @@ package isi.died.tp.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +18,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
+import isi.died.tp.controller.GestionEntidadesController;
+import isi.died.tp.controller.GestionEnviosController;
 import isi.died.tp.controller.GestionLogisticaController;
 import isi.died.tp.controller.GrafoPlantaController;
 import isi.died.tp.estructuras.Recorrido;
@@ -146,8 +152,8 @@ public class RedPlantasView {
 	public void buscarCaminos(Boolean firstTime) {
 		JPanel panel = new JPanel(new BorderLayout()), panelInterior = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
-		JComboBox<String> seleccionarP1 = new JComboBox<String>(), seleccionarP2 = new JComboBox<String>();
 		JLabel info = new JLabel(" ");
+		JComboBox<String> seleccionarP1 = new JComboBox<String>(), seleccionarP2 = new JComboBox<String>();
 		JButton volver = new JButton("Volver"), buscarCaminos = new JButton("Buscar Caminos");
 		List<Planta> lista = new ArrayList<Planta>();
 
@@ -172,8 +178,7 @@ public class RedPlantasView {
 
 		seleccionarP1.setSelectedItem("Seleccione");
 		constraints.gridx=0;
-		constraints.gridy=4;
-
+		constraints.gridy=2;
 		panelInterior.add(seleccionarP1,constraints);
 
 		constraints.gridx=1;
@@ -187,8 +192,8 @@ public class RedPlantasView {
 			case 0:
 				buscarCaminos.setEnabled(false);
 				seleccionadoP1.clear();
-				glc.refrescarGrafo();
 				info.setText(" ");
+				glc.refrescarGrafo();
 				break;
 			default:
 				glc.refrescarGrafo();
@@ -209,8 +214,8 @@ public class RedPlantasView {
 			case 0:
 				buscarCaminos.setEnabled(false);
 				seleccionadoP2.clear();
-				glc.refrescarGrafo();
 				info.setText(" ");
+				glc.refrescarGrafo();
 				break;
 			default:
 				glc.refrescarGrafo();
@@ -227,18 +232,19 @@ public class RedPlantasView {
 		});
 
 		buscarCaminos.addActionListener(a -> {
-			List<String> caminos = glc.buscarCaminos(seleccionadoP1.get(0), seleccionadoP2.get(0));
+			List<List<JLabel>> caminos = glc.buscarCaminos(seleccionadoP1.get(0), seleccionadoP2.get(0));
 			if(caminos.isEmpty())
 				JOptionPane.showConfirmDialog(ventana, "El Sistema no registra Caminos que conecten ambas Plantas.", "Información",
 						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-			else
-				info.setText("          El Sistema registra ");//"+cantCaminos+" caminos disponibles.");
-			buscarCaminos.setEnabled(false);
-			//seleccionadoP1.clear();
-			//seleccionadoP2.clear();
-			//seleccionarP1.setSelectedItem("Seleccione");
-			//seleccionarP2.setSelectedItem("Seleccione");
-
+			else {
+				mostrarCaminosInfo(caminos);
+				info.setText("   * Las Rutas en color BLANCO son aquellas asociadas a más de 1 Camino");
+				buscarCaminos.setEnabled(false);
+				//seleccionadoP1.clear();
+				//seleccionadoP2.clear();
+				//seleccionarP1.setSelectedItem("Seleccione");
+				//seleccionarP2.setSelectedItem("Seleccione");
+			}
 		});
 
 		buscarCaminos.setEnabled(false);
@@ -251,19 +257,14 @@ public class RedPlantasView {
 		panelInterior.add(buscarCaminos,constraints);
 		constraints.gridx=3;
 		panelInterior.add(volver,constraints);
-		constraints.anchor=GridBagConstraints.NORTHEAST;
-		info.setForeground(Color.GREEN);
-		constraints.gridx=1;
-		constraints.gridy=3;
-		constraints.insets=new Insets(0, 0, 5, 0);
-		panelInterior.add(info,constraints);
-		panelInterior.setPreferredSize(new Dimension(900,50));
-
+		panelInterior.setPreferredSize(new Dimension(900,30));
+		
+		info.setFont(new Font(info.getFont().getName(), info.getFont().getStyle(), 15));
+		panel.add(info, BorderLayout.NORTH);
 
 		grafoController.setPlantas();
 		grafoController.setRutas();
 
-		panel.add(new JLabel("Reubicar Plantas: Clic + Arrastrar."), BorderLayout.NORTH);
 		panel.add(grafoView, BorderLayout.CENTER);
 		panel.add(panelInterior, BorderLayout.SOUTH);
 		ventana.setContentPane(panel);
@@ -281,4 +282,30 @@ public class RedPlantasView {
 
 	}
 
+	private static void mostrarCaminosInfo(List<List<JLabel>> caminos) {
+		JFrame popup = new JFrame("Información de Caminos Disponibles");
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		popup.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		popup.setPreferredSize(new Dimension(400,70+caminos.size()*20));
+		panel.setPreferredSize( new Dimension(400,70+caminos.size()*20));
+		int ycord = 2;
+		constraints.gridx=2;
+		constraints.gridy=1;
+		panel.add(new JLabel("    Distancia       Duración      Peso Máximo"), constraints);
+		for(List<JLabel> labels : caminos) {
+			constraints.gridx=1;
+			constraints.gridy=ycord;
+			panel.add(labels.get(0), constraints);
+			constraints.gridx=2;
+			panel.add(labels.get(1), constraints);
+			ycord++;
+		}
+		popup.setContentPane(panel);
+		popup.pack();
+		popup.setLocationRelativeTo(ventana);
+		popup.setVisible(true);
+
+
+	}
 }

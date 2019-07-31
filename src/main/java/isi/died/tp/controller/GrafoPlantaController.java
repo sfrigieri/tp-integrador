@@ -228,13 +228,17 @@ public class GrafoPlantaController {
 		grafoView.desmarcarCaminos();
 	}
 
-	public void marcarCaminos(List<Recorrido> caminos) {
+	public List<List<JLabel>> marcarCaminos(List<Recorrido> caminos) {
+		List<List<JLabel>> lista = new ArrayList<List<JLabel>>();
 		if(!caminos.isEmpty()) {
-			for(Recorrido camino : caminos)
-				grafoView.marcarCamino(camino);
-			
+			long i = 0;
+			for(Recorrido camino : caminos) {
+				lista.add(grafoView.marcarCamino(camino, i));
+				i++;
+			}
 		}
-		grafoView.repaint();
+		grafoView.clearAristas();
+		return lista;
 	}
 
 

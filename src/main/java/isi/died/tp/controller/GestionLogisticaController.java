@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import isi.died.tp.controller.GrafoPlantaController;
@@ -110,12 +111,24 @@ public class GestionLogisticaController {
 	}
 
 
-	public List<String> buscarCaminos(Planta p1, Planta p2) {
+	public List<List<JLabel>> buscarCaminos(Planta p1, Planta p2) {
 		List<Recorrido> caminos =  pc.buscarCaminosInfo(p1, p2);
-		List<String> infoCaminos = new ArrayList<String>();
+		int i = 1;
+		for (Recorrido r : caminos) {
+			System.out.println(" ");
+			System.out.println("Rec n° "+i+" Distancia Total: "+r.getDistanciaTotal()+"Km");
+			System.out.println("Peso Máximo: "+r.getPesoMax()+" Toneladas");
+			System.out.println("Duración: "+(Double.valueOf(r.getDuracionTotal()/60)).intValue()+"h "
+			+Math.round(((BigDecimal.valueOf(r.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" min.");
+			System.out.println("Recorrido:");
+			for(Ruta ruta : r.getRecorrido())
+				System.out.print(ruta.getInicio().getValor().getNombre()+"--"+ruta.getFin().getValor().getNombre());
+			System.out.println(" ");
+			i++;
+		}
+		System.out.println("-----------------------------");
 		
-		grafoController.marcarCaminos(caminos);
-		return infoCaminos;
+		return grafoController.marcarCaminos(caminos);
 
 	}
 
