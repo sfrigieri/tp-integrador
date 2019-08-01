@@ -43,6 +43,8 @@ public class GestionEntidadesController {
 		
 		interfazStock = new ABMStock(ventana, stockController, plantaController, insumoController);
 		
+		interfazCamion = new ABMCamion(ventana, camionController);
+		
 		interfazRuta = new ABMRuta(ventana, rutaController, plantaController);
 	}
 	
@@ -60,6 +62,10 @@ public class GestionEntidadesController {
 		case AGREGAR_STOCK: interfazStock.agregarStock(); break;
 		case MODIFICAR_STOCK: interfazStock.modificarStock(); break;
 		case ELIMINAR_STOCK: interfazStock.eliminarStock(true); break;
+		
+		case AGREGAR_CAMION: interfazCamion.agregarCamion(); break;
+		case MODIFICAR_CAMION: interfazCamion.modificarCamion(); break;
+		case ELIMINAR_CAMION: interfazCamion.eliminarCamion(); break;
 		
 		case AGREGAR_RUTA: interfazRuta.agregarRuta(); break;
 		}

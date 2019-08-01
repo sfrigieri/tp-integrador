@@ -637,28 +637,4 @@ public class ABMStock {
 		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		ventana.setVisible(true);
 	}
-	/*
-	 *
-		
-		
-		//errores
-		constraints.anchor=GridBagConstraints.NORTHWEST;
-		constraints.insets.set(5,0,3,0);
-		constraints.gridx=3;
-		constraints.gridy=2;
-		errorNombre.setPreferredSize(new Dimension(230, 16));
-		errorNombre.setForeground(Color.red);
-		panel.add(errorNombre,constraints);
-				
-		//ventana
-		ventana.setContentPane(panel);
-		ventana.pack();
-		ventana.setSize(800, 600);
-		ventana.setLocationRelativeTo(null);
-		ventana.setTitle("Sistema de Gestión de Entidades");
-		ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		ventana.setVisible(true);
-	}
-	 * */
-	
 }
