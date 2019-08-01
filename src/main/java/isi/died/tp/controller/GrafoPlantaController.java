@@ -24,17 +24,20 @@ import isi.died.tp.view.VerticeView;
 
 public class GrafoPlantaController {
 
+	private static JFrame framePadre;
 	private static GrafoPanel grafoView;
 	private static PlantaController pc;
 	private static RutaController rc;
 	private List<VerticeView<Planta>> plantasEnPanel;
 	private List<AristaView<Planta>> rutasEnPanel;
 
-	public GrafoPlantaController(JFrame framePadre) {
+
+	public GrafoPlantaController(JFrame v) {
 		pc = GestionEntidadesController.plantaController;
 		rc = GestionEntidadesController.rutaController;
 		this.plantasEnPanel = new ArrayList<VerticeView<Planta>>();
 		this.rutasEnPanel = new ArrayList<AristaView<Planta>>();
+		framePadre = v;
 	}
 
 	public void setGrafoPanel(GrafoPanel gw) {
@@ -92,7 +95,7 @@ public class GrafoPlantaController {
 				v.setNombre(p.getNombre());
 				v.setValor(p);
 				grafoView.agregar(v);
-			
+
 			}
 			grafoView.repaint();
 		}
@@ -126,23 +129,46 @@ public class GrafoPlantaController {
 
 		if(!rc.existeRuta((Planta) arista.getOrigen().getValor(),(Planta) arista.getDestino().getValor())) {
 			if(arista.getOrigen().equals(arista.getDestino()))
-				return;
+				JOptionPane.showConfirmDialog(framePadre, "Planta Origen y Destino deben ser diferentes.", "Creación Ruta",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 			else {
 				Integer duracionViajeMin = null, distanciaKm = null, pesoMax = null; 
-				while(distanciaKm == null)
+				while(distanciaKm == null) 
 					distanciaKm = getValor("Distancia en Km");
-				while(pesoMax == null)
-					distanciaKm = getValor("Peso Máximo en Toneladas");
-				while(duracionViajeMin == null)
-					duracionViajeMin = getValor("Distancia en Km");
 
-				if(distanciaKm != null && pesoMax != null && duracionViajeMin != null)
-					rc.agregarRuta((Planta) arista.getOrigen().getValor(), (Planta) arista.getDestino().getValor(),
-							distanciaKm, Double.valueOf(duracionViajeMin), pesoMax);
+				if(distanciaKm != -1) {
+					while(pesoMax == null) 
+						pesoMax = getValor("Peso Máximo en Toneladas");
+
+					if(pesoMax != -1) {	
+						while(duracionViajeMin == null) 
+							duracionViajeMin = getValor("Duración Viaje en Minutos");
+
+						if(duracionViajeMin != -1) {
+							rc.agregarRuta((Planta) arista.getOrigen().getValor(), (Planta) arista.getDestino().getValor(),
+									distanciaKm, Double.valueOf(duracionViajeMin), pesoMax);
+							
+							arista.setValor(distanciaKm);
+							arista.setDuracionViajeMin(duracionViajeMin);
+							arista.setPesoMax(pesoMax);
+							
+							grafoView.agregar(arista);
+							grafoView.isRepaint();
+							grafoView.repaint();
+
+						}
+
+					}
+
+				}
 			}
+
+
 		}
-		grafoView.agregar(arista);
-		grafoView.repaint();
+		else
+			JOptionPane.showConfirmDialog(framePadre, "La Ruta establecida ya existe en el Sistema.", "Acción Interrumpida",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+
 	}
 
 	private Integer getValor(String string) {
@@ -151,7 +177,7 @@ public class GrafoPlantaController {
 		panel.add(new JLabel(string));
 		panel.add(field);
 		int result = JOptionPane.showConfirmDialog(null, panel, "Ingrese",
-				JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (result == JOptionPane.OK_OPTION) {
 			try {
@@ -165,9 +191,12 @@ public class GrafoPlantaController {
 				JOptionPane.showConfirmDialog(grafoView.getParent(), "El valor debe ser numérico.", "Error", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 			}
 
+			return null;
 
 		}
-		return null;
+
+		return -1;
+
 	}
 
 
@@ -184,7 +213,7 @@ public class GrafoPlantaController {
 	public void desmarcarPlantas() {
 
 		grafoView.desmarcarVertices();
-		
+
 	}
 
 	public void buscarMejorCamino(Recorrido camino, List<PlantaProduccion> plantas) {
@@ -200,7 +229,7 @@ public class GrafoPlantaController {
 		grafoView.marcarFlujoActual();
 	}
 
-	
+
 	public List<Planta> listaVertices() {
 		return pc.listaPlantas();
 	}

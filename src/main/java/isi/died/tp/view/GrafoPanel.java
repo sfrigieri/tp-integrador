@@ -20,7 +20,9 @@ import java.util.Queue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import isi.died.tp.controller.GrafoPlantaController;
 import isi.died.tp.estructuras.Recorrido;
@@ -35,20 +37,14 @@ import isi.died.tp.view.VerticeView;
 public class GrafoPanel extends JPanel {
 
 	public static JFrame framePadre;
-	private Queue<Color> colaColores;
 	private static GrafoPlantaController controller;
 
 	private List<VerticeView<Planta>> vertices;
 	private List<AristaView<Planta>> aristas;
 	private List<AristaView<Planta>> aristasPintadas;
 	private VerticeView<Planta> plantaAux;
-	private Boolean agregarRuta = false;
-	private Boolean agregarPlanta = false;
-	private Boolean eliminarPlanta = false;
-	private Boolean buscarCaminos = false;
+	private RutaView rutaAux;
 	private Boolean mostrarFlujo = false;
-	private Boolean buscarMejorCamino = false;
-	private Boolean moverPlanta = true;
 	private Boolean repaint = false;
 
 	public GrafoPanel(JFrame fp, GrafoPlantaController grafoController) {
@@ -58,24 +54,30 @@ public class GrafoPanel extends JPanel {
 		this.aristas = new ArrayList<AristaView<Planta>>();
 		this.aristasPintadas = new ArrayList<AristaView<Planta>>();
 		controller = grafoController;
-		this.colaColores = new LinkedList<Color>();
-		this.colaColores.add(Color.RED);
-		this.colaColores.add(Color.BLUE);
-		this.colaColores.add(Color.ORANGE);
-		this.colaColores.add(Color.CYAN);
+		
 		plantaAux = null;
+		rutaAux = null;
+		
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				/* && !mostrarFlujo
-				 * if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 && !event.isConsumed()) {
+
+				if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 && !event.isConsumed()) {
 					event.consume();
-					if(moverPlanta) {
 						VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
-						if(vPlanta != null)
-					}
+						if(vPlanta != null) {
+							if(rutaAux == null) {
+								rutaAux = new RutaView();
+								rutaAux.setOrigen(vPlanta);
+							}
+							else {
+								rutaAux.setDestino(vPlanta);
+								grafoController.crearRuta(rutaAux);
+								rutaAux = null;
+							}	
+						}
 				}
-				if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2 && !event.isConsumed()) {
+				/*if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2 && !event.isConsumed()) {
 					event.consume();
 					Object[] plantas = controller.listaVertices().toArray();
 					Object verticeMatSeleccionado;
@@ -115,24 +117,19 @@ public class GrafoPanel extends JPanel {
 				}else {
 					if(event.getButton() == MouseEvent.BUTTON3 && event.getClickCount() == 1 && !event.isConsumed()) {
 						event.consume();
-						//                		System.out.println("Mostrar Menu");
 						JPopupMenu menu = new JPopupMenu();
 						JMenuItem menuItem;
-						menuItem = new JMenuItem("Agregar Planta Producción");
-						menuItem.addActionListener(a -> glc.opcion(OpcionesMenuLogistica.AGREGAR_PLANTA_PRODUCCION));
+						menuItem = new JMenuItem("Ver Acciones disponibles");
 						menu.add(menuItem);
-						menuItem = new JMenuItem("Agregar Ruta");
-						menuItem.addActionListener(a -> glc.opcion(OpcionesMenuLogistica.AGREGAR_RUTA));
-						menu.add(menuItem);
+						//menuItem.addActionListener(a -> new JPopupMenu());
 						menu.show(event.getComponent(), event.getX(), event.getY());
 					}                	
-				}
-				 */
+				}*/
+				 
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent event) {
-				if(moverPlanta) {
 					Point point = event.getPoint();
 					VerticeView<Planta> vPlanta = clicEnUnNodo(point);
 					if(plantaAux != null && vPlanta == null) {
@@ -143,7 +140,7 @@ public class GrafoPanel extends JPanel {
 						repaint = true;
 						repaint();
 						plantaAux = null;
-					}
+					
 
 				}
 				/*VerticeView<Planta> vDestino = clicEnUnNodo(event.getPoint());
@@ -163,12 +160,11 @@ public class GrafoPanel extends JPanel {
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent event) {
-				if(moverPlanta) {
 					VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
 					if(vPlanta != null) {
 						plantaAux = vPlanta;
 					}
-				}
+				
 				/*VerticeView<Planta> vOrigen = clicEnUnNodo(event.getPoint());
 				if (rutaAux==null && vOrigen != null) {
 					rutaAux = new AristaView<Planta>();                    
@@ -213,42 +209,47 @@ public class GrafoPanel extends JPanel {
 	}
 
 	public List<JLabel> marcarCamino(Recorrido re, long numColor){
-		
-	
+
+
 		List<JLabel> labels = new ArrayList<JLabel>();
-		
+
 		JLabel infoCamino1 = new JLabel(numColor+1+"° Camino");
-		infoCamino1.setForeground(this.getColor(numColor));
+		infoCamino1.setForeground(this.getCaminoColor(numColor));
 		String info1, info2;
-		
+
 		if(re.getDistanciaTotal() < 100)
 			info1 = "  "+re.getDistanciaTotal();
 		else
 			info1 = ""+re.getDistanciaTotal();
-		
+
 		if(Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60)) < 10)
 			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
 					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" ";
 		else
 			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
 					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+"";
-			
+
 		JLabel infoCamino2 = new JLabel(info1+"Km          "+info2+" min.          "+
 				re.getPesoMax()+" Ton.");
 		labels.add(infoCamino1);
 		labels.add(infoCamino2);
-		
+
 		for(Ruta r : re.getRecorrido()) {
 			for(AristaView<Planta> a : this.aristas) {
 				if(a.getOrigen().getValor().equals(r.getInicio().getValor()) && a.getDestino().getValor().equals(r.getFin().getValor())) {
 					if(this.aristasPintadas.contains(a) || (this.getReversed(a) != null && this.aristasPintadas.contains(this.getReversed(a))))
 						a.setColor(Color.WHITE);
-					
+
 					else
-						a.setColor(this.getColor(numColor));
-					a.setFormatoLinea(new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+						a.setColor(this.getCaminoColor(numColor));
+					a.setFormatoLinea(new BasicStroke(3.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 					this.aristasPintadas.add(a);
 				}
+				else 
+					if(a.getDestino().getValor().equals(r.getInicio().getValor()) && a.getOrigen().getValor().equals(r.getFin().getValor())) {
+						a.setColor(Color.gray.brighter());
+						a.setFormatoLinea(new BasicStroke(0.0001f,BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+					}
 			}
 		}
 		repaint = true;
@@ -263,12 +264,12 @@ public class GrafoPanel extends JPanel {
 				a.getOrigen().setColor(Color.BLUE);
 			else
 				a.getOrigen().setColor(Color.BLACK);
-			
+
 			if(a.getDestino().getValor() instanceof PlantaProduccion)
 				a.getDestino().setColor(Color.BLUE);
 			else
 				a.getDestino().setColor(Color.BLACK);
-			
+
 			a.setColor(Color.DARK_GRAY);
 			a.setFormatoLinea(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 		}
@@ -288,7 +289,7 @@ public class GrafoPanel extends JPanel {
 	}
 
 	public void desmarcarVertices(){
-
+		
 		for(VerticeView<Planta> v : this.vertices) {
 			if(v.getValor() instanceof PlantaProduccion && v.getColor().equals(Color.RED) ) {
 				v.setColor(Color.BLUE);
@@ -340,12 +341,12 @@ public class GrafoPanel extends JPanel {
 			int y = getCordY(angle);
 			int x = getCordX(angle);
 			if(!repaint)
-				tx.translate(line.x2+x, line.y2+y+20);
+				tx.translate(line.x2+x, line.y2+y+35);
 			else
-				tx.translate(line.x2+x, line.y2+10);
+				tx.translate(line.x2+x, line.y2+y-20);
 			tx.rotate((angle-Math.PI/2d)); 
 			//System.out.println(angle);
-			Color c = getColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
+			Color c = getFlechaColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
 			g2d.setPaint(c);
 
 			Graphics2D g = (Graphics2D) g2d.create();
@@ -369,22 +370,34 @@ public class GrafoPanel extends JPanel {
 	}
 
 	private int getCordX(double angle) {
-		if(angle < -1 && angle > -1.5)
-			return 8;
-		if(angle <= -1.5 && angle > -2.2)
+		if(angle < -1 && angle > -1.53)
+			return 9;
+		if(angle <= -1.53 && angle > -2.2)
 			return 11;
 		if(angle > 0.5 && angle < 1)
-			return 6;
+			return 7;
+		if(angle  >=0 && angle <= 0.5)
+			return 5;
 		if(angle < -0.5 && angle >= -1)
 			return 5;
-		if(angle <= -2 && angle > -3)
-			return 11;
+		if(angle < 0 && angle >= -0.5)
+			return 5;
+		if(angle <= -2 && angle > -2.4)
+			return 15;
+		if(angle <= -2.4 && angle > -3)
+			return 17;
 		if(angle <= -3 && angle > -4)
-			return 11;
-		if(angle >= 1 && angle < 2)
-			return 10;
-		if(angle >= 2 && angle < 3)
+			return 15;
+		if(angle >= 1 && angle < 1.6)
+			return 9;
+		if(angle >= 1.6 && angle  <2.0)
 			return 13;
+		if(angle >= 2 && angle  <2.2)
+			return 13;
+		if(angle >= 2.2 && angle < 3)
+			return 15;
+		if(angle >= 3 && angle < 4)
+			return 15;
 		return 9;
 	}
 
@@ -394,21 +407,27 @@ public class GrafoPanel extends JPanel {
 		if(angle <= -1.5 && angle > -2.2)
 			return 37;
 		if(angle > 0.5 && angle < 1)
-			return 27;
+			return 26;
 		if(angle < -0.5 && angle >= -1)
-			return 38;
-		if(angle <= -2 && angle > -3)
-			return 38;
+			return 36;
+		if(angle < -0.35 && angle >= -0.5)
+			return 34;
+		if(angle <= -2 && angle > -2.4)
+			return 36;
+		if(angle <= -2.4 && angle > -3)
+			return 33;
 		if(angle <= -3 && angle > -4)
 			return 31;
 		if(angle >= 1 && angle < 2)
+			return 22;
+		if(angle >= 2 && angle < 2.2)
+			return 24;
+		if(angle >= 2.2 && angle < 3)
 			return 27;
-		if(angle >= 2 && angle < 3)
-			return 36;
 		return 30;
 	}
 
-	private Color getColor(long count) {
+	private Color getFlechaColor(long count) {
 		int i = (int) count;
 		if(i == 0)
 			return Color.magenta.darker();
@@ -442,7 +461,45 @@ public class GrafoPanel extends JPanel {
 			return Color.red.brighter();
 		if(i == 15)
 			return Color.pink.darker();
-		
+
+		return Color.black;
+	}
+
+	private Color getCaminoColor(long count) {
+		int i = (int) count;
+		if(i == 0)
+			return Color.green.darker();
+		if(i == 1)
+			return Color.red.brighter();
+		if(i == 2)
+			return Color.cyan;
+		if(i == 3)
+			return Color.black.brighter();
+		if(i == 4)
+			return Color.ORANGE;
+		if(i == 5)
+			return Color.BLUE;
+		if(i == 6)
+			return Color.GREEN;
+		if(i == 7)
+			return Color.pink;
+		if(i == 8)
+			return Color.YELLOW.darker();
+		if(i == 9)
+			return Color.red.darker();
+		if(i == 10)
+			return Color.magenta;
+		if(i == 11)
+			return Color.cyan.darker();
+		if(i == 12)
+			return Color.orange.darker();
+		if(i == 13)
+			return Color.magenta.darker();
+		if(i == 14)
+			return Color.YELLOW;
+		if(i == 15)
+			return Color.pink.darker();
+
 		return Color.black;
 	}
 
@@ -454,6 +511,16 @@ public class GrafoPanel extends JPanel {
 		}
 		return null;
 	}
+	
+	private AristaView<Planta> clicEnRuta(Point p) {
+		for (AristaView<Planta> r : this.aristas) {
+			if (r.getLinea().contains(p)) {
+				return r;
+			}
+		}
+		return null;
+	}
+	
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -473,12 +540,12 @@ public class GrafoPanel extends JPanel {
 		return new Dimension(900, 400);
 	}
 
-	
-	
+
+
 	public void clearAristas() {
 		this.aristasPintadas.clear();
 	}
-	
+
 	public List<VerticeView<Planta>> plantasEnPanel() {
 		return this.vertices;
 	}
@@ -535,7 +602,7 @@ public class GrafoPanel extends JPanel {
 					tx.translate(line.x2+x, line.y2+10);
 				tx.rotate((angle-Math.PI/2d)); 
 				//System.out.println(angle);
-				Color c = getColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
+				Color c = getFlechaColor(apuntadas.stream().filter(p -> p.equals(a.getDestino().getValor())).count());
 				g2d.setPaint(c);
 
 				Graphics2D g = (Graphics2D) g2d.create();
@@ -548,6 +615,11 @@ public class GrafoPanel extends JPanel {
 		}
 
 		this.aristasPintadas.clear();
+	}
+
+	public void isRepaint() {
+		repaint = true;
+		
 	}
 
 }

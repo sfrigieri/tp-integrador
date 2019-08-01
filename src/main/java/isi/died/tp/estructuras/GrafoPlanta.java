@@ -134,17 +134,18 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 		if(!copiaVisitados.contains(v1.getValor())) {   
 			copiaVisitados.add(v1.getValor());
-
+			//System.out.println("p:"+v1.getValor().getNombre()+" cant caminos: "+this.getAristasSalientes(v1).size()); 
 			if(v1.equals(v2))
 				recorridos.add(new Recorrido(recActual));
 			else
 				for(Arista<Planta> ruta : this.getAristasSalientes(v1)) {
 					Ruta rutaAux = (Ruta) ruta;
-					if(!recActual.contains(rutaAux)){ 
+					//if(!recActual.contains(rutaAux)){ 
+						//System.out.println("p1:"+ruta.getInicio().getValor().getNombre()+" p2: "+ruta.getFin().getValor().getNombre()); 
 						List<Ruta> copiaRecActual = recActual.stream().collect(Collectors.toList());
 						copiaRecActual.add(rutaAux);
 						buscarCaminosInfo(ruta.getFin(), v2, copiaVisitados,recorridos, copiaRecActual);
-					}
+					//}
 				}
 		}
 
@@ -203,7 +204,8 @@ public class GrafoPlanta extends Grafo<Planta> {
 			PorVisitar aVisitar = aVisitarCola.poll();
 			Vertice<Planta> visitar = aVisitar.getVertice();
 
-			if(this.getAdyacentes(visitar).size() == 0) {
+			//if(this.getAdyacentes(visitar).size() == 0) {
+			if(visitar.getValor() instanceof PlantaAcopio && !visitar.getValor().esOrigen()) {
 				//Si llegué al sumidero, flujoActual tendrá el valor de flujo máximo posible por ese camino
 				int flujoActual = aVisitar.getFlujoEnCurso();
 
