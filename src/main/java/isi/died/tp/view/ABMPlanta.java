@@ -6,13 +6,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
-import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,22 +23,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 
 import isi.died.tp.controller.PlantaController;
 import isi.died.tp.controller.StockController;
-import isi.died.tp.model.Insumo;
-import isi.died.tp.model.InsumoLiquido;
 import isi.died.tp.model.Planta;
 import isi.died.tp.model.PlantaAcopio;
 import isi.died.tp.model.PlantaProduccion;
-import isi.died.tp.model.Stock;
-import isi.died.tp.model.StockProduccion;
-import isi.died.tp.model.Unidad;
-import isi.died.tp.service.PlantaService;
 
 public class ABMPlanta {
 	private PlantaController controller;
@@ -485,12 +473,6 @@ public class ABMPlanta {
 		
 		//agregar datos tabla
 		DefaultTableModel model = (DefaultTableModel) tablaPlantas.getModel();
-		DefaultTableModel modeloDefecto = new DefaultTableModel() {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
 		DefaultCellEditor editor = (DefaultCellEditor) tablaPlantas.getDefaultEditor(Object.class);
 		editor.setClickCountToStart(10000);
 		
