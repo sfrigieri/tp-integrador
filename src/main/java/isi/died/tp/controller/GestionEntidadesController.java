@@ -41,7 +41,7 @@ public class GestionEntidadesController {
 
 		interfazPlanta = new ABMPlanta(ventana, plantaController, stockController);
 		
-		interfazRuta = new ABMRuta(ventana,rutaService);
+		interfazRuta = new ABMRuta(ventana, rutaController, plantaController);
 	}
 	
 	
