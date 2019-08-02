@@ -1,15 +1,23 @@
 package isi.died.tp.controller;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 import isi.died.tp.estructuras.Recorrido;
 import isi.died.tp.estructuras.Ruta;
@@ -30,18 +38,24 @@ public class GrafoPlantaController {
 	private static RutaController rc;
 	private List<VerticeView<Planta>> plantasEnPanel;
 	private List<AristaView<Planta>> rutasEnPanel;
-
-
+	private static boolean proximoCamino;
+	private static GestionLogisticaController glc;
+	
 	public GrafoPlantaController(JFrame v) {
 		pc = GestionEntidadesController.plantaController;
 		rc = GestionEntidadesController.rutaController;
 		this.plantasEnPanel = new ArrayList<VerticeView<Planta>>();
 		this.rutasEnPanel = new ArrayList<AristaView<Planta>>();
 		framePadre = v;
+		proximoCamino = true;
 	}
 
 	public void setGrafoPanel(GrafoPanel gw) {
 		grafoView = gw;
+	}
+	
+	public void setGLC(GestionLogisticaController controller) {
+		glc = controller;
 	}
 
 	public void setRutasEnPanel(List<AristaView<Planta>> lista) {
@@ -116,6 +130,111 @@ public class GrafoPlantaController {
 	}
 
 
+	public void editarPlanta(VerticeView<Planta> vPlanta) {
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		JLabel errorNombre = new JLabel();
+		JTextField nombrePlanta = new JTextField(20);
+		JComboBox<String> tipoPlanta = new JComboBox<String>();
+		JCheckBox esOrigen = new JCheckBox();
+
+
+		//labels
+		constraints.fill=GridBagConstraints.NONE;
+		constraints.anchor=GridBagConstraints.EAST;
+		constraints.insets.set(5, 205, 15, 5);
+		constraints.gridx=1;
+		constraints.gridwidth=1;
+
+		constraints.gridy=1;
+		panel.add(new JLabel("Tipo de Planta: "), constraints);
+
+		constraints.gridy=2;
+		panel.add(new JLabel("Nombre: "), constraints);
+
+		constraints.gridy=3;
+		panel.add(new JLabel("Es Origen: "), constraints);
+
+		//checkbox origen
+		constraints.fill=GridBagConstraints.NONE;
+		constraints.anchor=GridBagConstraints.WEST;
+		constraints.insets.set(0, 0, 5, 5);
+		constraints.gridx = 2;
+		constraints.gridy = 3;
+		esOrigen.setEnabled(false);
+		if (vPlanta.getValor().esOrigen())
+			esOrigen.setSelected(true);
+		else
+			esOrigen.setSelected(false);
+		panel.add(esOrigen, constraints);
+
+		//campo texto nombre
+		constraints.fill=GridBagConstraints.HORIZONTAL;
+		constraints.anchor=GridBagConstraints.CENTER;
+		constraints.insets.set(0, 5, 5, 5);
+		constraints.gridy=2;
+		nombrePlanta.setText(vPlanta.getValor().getNombre());
+		panel.add(nombrePlanta, constraints);
+
+		//combobox tipo
+		constraints.fill=GridBagConstraints.HORIZONTAL;
+		constraints.anchor=GridBagConstraints.CENTER;
+		tipoPlanta.setEnabled(false);
+		tipoPlanta.addItem("Acopio");
+		tipoPlanta.addItem("Producción");
+		if (vPlanta.getValor() instanceof PlantaAcopio)
+			tipoPlanta.setSelectedItem("Acopio");
+		else
+			tipoPlanta.setSelectedItem("Producción");
+		constraints.insets.set(0, 5, 5, 5);
+		constraints.gridy = 1;
+		panel.add(tipoPlanta, constraints);	
+
+		//botones
+		constraints.gridy=8;
+		constraints.fill=GridBagConstraints.NONE;
+
+
+		//errores
+		constraints.anchor=GridBagConstraints.NORTHWEST;
+		constraints.insets.set(5,0,3,0);
+		constraints.gridx=3;
+		constraints.gridy=2;errorNombre.setText("");
+		errorNombre.setPreferredSize(new Dimension(230, 16));
+		errorNombre.setForeground(Color.red);
+		panel.add(errorNombre,constraints);
+
+		UIManager.put("OptionPane.okButtonText", "Guardar Cambios");
+		int result = JOptionPane.showConfirmDialog(null, panel, "Editar Planta",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+		UIManager.put("OptionPane.okButtonText", "Aceptar");
+		if(result == JOptionPane.OK_OPTION) {
+
+			String valorNombre = "";
+
+			Planta plantaNueva;
+			if(!nombrePlanta.getText().isEmpty()) {
+				valorNombre = nombrePlanta.getText();
+				if (vPlanta.getValor() instanceof PlantaAcopio) {
+					plantaNueva = new PlantaAcopio(vPlanta.getValor().getId(), valorNombre, vPlanta.getValor().esOrigen());
+					pc.editarPlanta(plantaNueva);
+				} else {
+					plantaNueva = new PlantaProduccion(vPlanta.getValor().getId(), valorNombre);
+					pc.editarPlanta(plantaNueva);
+					plantaNueva = pc.buscarPlantaProduccion(vPlanta.getValor().getId());
+				}
+				JOptionPane.showConfirmDialog(framePadre, "Planta modificada exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				this.setPlantas();
+				this.setRutas();
+				glc.refrescarListasPlantas();
+			}
+			else
+				JOptionPane.showConfirmDialog(framePadre, "Debe ingresar un Nombre.", "Acción Interrumpida", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+			
+		}
+		
+	}
+
 	public void crearVertice(Integer coordenadaX, Integer coordenadaY, Color color, Planta p) {
 		VerticeView<Planta> v = new VerticeView<Planta>(coordenadaX, coordenadaY, color);
 		v.setId(p.getId());
@@ -134,24 +253,24 @@ public class GrafoPlantaController {
 			else {
 				Integer duracionViajeMin = null, distanciaKm = null, pesoMax = null; 
 				while(distanciaKm == null) 
-					distanciaKm = getValor("Distancia en Km");
+					distanciaKm = getValorNumerico("Distancia en Km");
 
 				if(distanciaKm != -1) {
 					while(pesoMax == null) 
-						pesoMax = getValor("Peso Máximo en Toneladas");
+						pesoMax = getValorNumerico("Peso Máximo en Toneladas");
 
 					if(pesoMax != -1) {	
 						while(duracionViajeMin == null) 
-							duracionViajeMin = getValor("Duración Viaje en Minutos");
+							duracionViajeMin = getValorNumerico("Duración Viaje en Minutos");
 
 						if(duracionViajeMin != -1) {
 							rc.agregarRuta((Planta) arista.getOrigen().getValor(), (Planta) arista.getDestino().getValor(),
 									distanciaKm, Double.valueOf(duracionViajeMin), pesoMax);
-							
+
 							arista.setValor(distanciaKm);
 							arista.setDuracionViajeMin(duracionViajeMin);
 							arista.setPesoMax(pesoMax);
-							
+
 							grafoView.agregar(arista);
 							grafoView.isRepaint();
 							grafoView.repaint();
@@ -170,8 +289,13 @@ public class GrafoPlantaController {
 					JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 
 	}
+	
+	public void eliminarRuta(AristaView<Planta> vRuta) {
+		rc.eliminarRuta(rc.buscarRuta(vRuta.getId()));
+		
+	}
 
-	private Integer getValor(String string) {
+	private Integer getValorNumerico(String string) {
 		JTextField field = new JTextField(5);
 		JPanel panel = new JPanel();
 		panel.add(new JLabel(string));
@@ -257,18 +381,131 @@ public class GrafoPlantaController {
 		grafoView.desmarcarCaminos();
 	}
 
-	public List<List<JLabel>> marcarCaminos(List<Recorrido> caminos) {
+	public void marcarCaminos(List<Recorrido> caminos) {
 		List<List<JLabel>> lista = new ArrayList<List<JLabel>>();
 		if(!caminos.isEmpty()) {
 			long i = 0;
+
+
 			for(Recorrido camino : caminos) {
-				lista.add(grafoView.marcarCamino(camino, i));
+				lista.add(labelsCamino(camino, i));
 				i++;
 			}
+
+			i = 0;
+
+			JPanel panel;
+			GridBagConstraints constraints;
+
+			if(caminos.size() > 1) {
+				for(Recorrido camino : caminos) {
+					if(proximoCamino) {
+						grafoView.desmarcarCaminos();
+						grafoView.marcarCamino(camino, i);
+						JPanel panelInterior = new JPanel(new GridBagLayout());
+						constraints = new GridBagConstraints();
+
+						constraints.gridx=2;
+						constraints.gridy=1;
+						panelInterior.add(new JLabel("    Distancia       Duración      Peso Máximo"), constraints);
+						List<JLabel> labels = lista.get((int) i);
+						constraints.gridx=1;
+						constraints.gridy=2;
+						constraints.insets.set(0,0,25,0);
+						panelInterior.add(labels.get(0), constraints);
+						constraints.gridx=2;
+
+						panelInterior.add(labels.get(1), constraints);
+						UIManager.put("OptionPane.cancelButtonText", "Ver Todos");
+						UIManager.put("OptionPane.okButtonText", "Ver Próximo");
+						int result = JOptionPane.showConfirmDialog(null,panelInterior,"Información",
+								JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+
+						if (result == JOptionPane.OK_OPTION)
+							proximoCamino = true;
+						else
+							proximoCamino = false;
+					}
+					i++;
+				}
+
+				proximoCamino =true;
+				UIManager.put("OptionPane.cancelButtonText", "Cancelar");
+				UIManager.put("OptionPane.okButtonText", "Aceptar");
+			}
+
+
+			JFrame popup = new JFrame("Información de Caminos Disponibles");
+			popup.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			int ycord = 2;
+			constraints = new GridBagConstraints();
+			panel = new JPanel(new GridBagLayout());
+			i = 0;
+			grafoView.desmarcarCaminos();
+			panel = new JPanel(new GridBagLayout());
+			constraints = new GridBagConstraints();
+			panel.setPreferredSize( new Dimension(400,70+caminos.size()*20));
+
+			for(Recorrido camino : caminos) {
+
+				grafoView.marcarCamino(camino, i);
+				i++;
+			}
+
+			ycord = 2;
+			constraints.gridx=2;
+			constraints.gridy=1;
+			panel.add(new JLabel("    Distancia       Duración      Peso Máximo"), constraints);
+			for(List<JLabel> labels : lista) {
+				constraints.gridx=1;
+				constraints.gridy=ycord;
+				panel.add(labels.get(0), constraints);
+				constraints.gridx=2;
+				panel.add(labels.get(1), constraints);
+				ycord++;
+			}
+			popup.setContentPane(panel);
+			popup.pack();
+			popup.setLocationRelativeTo(framePadre);
+			popup.setVisible(true);
 		}
-		grafoView.clearAristas();
-		return lista;
+
 	}
+
+
+	private List<JLabel> labelsCamino(Recorrido re, long numColor){
+
+
+		List<JLabel> labels = new ArrayList<JLabel>();
+
+		JLabel infoCamino1 = new JLabel(numColor+1+"° Camino");
+		infoCamino1.setForeground(grafoView.getCaminoColor(numColor));
+		String info1, info2;
+
+		if(re.getDistanciaTotal() < 100)
+			info1 = "  "+re.getDistanciaTotal();
+		else
+			info1 = ""+re.getDistanciaTotal();
+
+		if(Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60)) < 10)
+			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
+					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" ";
+		else
+			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
+					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+"";
+
+		JLabel infoCamino2 = new JLabel(info1+"Km          "+info2+" min.          "+
+				re.getPesoMax()+" Ton.");
+		labels.add(infoCamino1);
+		labels.add(infoCamino2);
+
+
+		return labels;
+	}
+
+
+
 
 
 }

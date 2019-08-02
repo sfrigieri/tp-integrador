@@ -170,7 +170,6 @@ public class GrafoPlanta extends Grafo<Planta> {
 
 	public void setRutas(List<Arista<Planta>> lista) {
 		this.aristas = lista;
-
 	}
 
 	public List<Arista<Planta>> getRutas() {

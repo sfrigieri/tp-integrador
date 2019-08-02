@@ -42,6 +42,7 @@ public class GestionLogisticaController {
 		case GESTION_RED_PLANTAS: 
 			grafoController = new GrafoPlantaController(framePadre);
 			grafoPanel = new GrafoPanel(framePadre, grafoController);
+			grafoController.setGLC(this);
 			grafoController.setGrafoPanel(grafoPanel);
 			redPlantasView = new RedPlantasView(framePadre, this);
 			redPlantasView.setRedPlantas(firstTimeRed); 
@@ -50,6 +51,7 @@ public class GestionLogisticaController {
 		case BUSCAR_CAMINOS: 			
 			grafoController = new GrafoPlantaController(framePadre);
 			grafoPanel = new GrafoPanel(framePadre, grafoController);
+			grafoController.setGLC(this);
 			grafoController.setGrafoPanel(grafoPanel);
 			redPlantasView = new RedPlantasView(framePadre, this);
 			redPlantasView.buscarCaminos(firstTimeCaminos);
@@ -82,6 +84,9 @@ public class GestionLogisticaController {
 
 	}
 
+	public void refrescarListasPlantas() {
+		redPlantasView.refrescarListasPlantas();
+	}
 
 	public boolean buscarMejorCamino(Insumo seleccionado) {
 		List<PlantaProduccion> plantas = pc.buscarPlantasNecesitanInsumo(seleccionado);
@@ -111,7 +116,7 @@ public class GestionLogisticaController {
 	}
 
 
-	public List<List<JLabel>> buscarCaminos(Planta p1, Planta p2) {
+	public Integer buscarCaminos(Planta p1, Planta p2) {
 		List<Recorrido> caminos =  pc.buscarCaminosInfo(p1, p2);
 		int i = 1;
 		for (Recorrido r : caminos) {
@@ -128,8 +133,9 @@ public class GestionLogisticaController {
 		}
 		System.out.println("-----------------------------");
 		
-		return grafoController.marcarCaminos(caminos);
-
+		grafoController.marcarCaminos(caminos);
+		
+		return caminos.size();
 	}
 
 
