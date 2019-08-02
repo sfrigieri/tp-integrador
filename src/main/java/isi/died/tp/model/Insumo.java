@@ -7,15 +7,26 @@ import isi.died.tp.dao.util.CsvRecord;
 
 public class Insumo implements Comparable<Insumo>, CsvRecord{
 
+	
+
 	protected int id;
 	protected String descripcion;
 	protected Unidad unidadDeMedida;
 	protected double costo;
+	protected int cantidadTotal;
 	protected StockAcopio stock;
 	protected double peso;
 	protected boolean esRefrigerado;
 	
 	
+	public int getCantidadTotal() {
+		return cantidadTotal;
+	}
+
+	public void setCantidadTotal(int cantidadTotal) {
+		this.cantidadTotal = cantidadTotal;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -33,13 +44,16 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 		return this.stock;
 	}
 	
-	public Insumo() {}
+	public Insumo() {
+		this.cantidadTotal = -1;
+	}
 
 	public Insumo(int id, double costo) {
 		super();
 		this.id = id;
 		this.costo = costo;
 		this.stock = null;
+		this.cantidadTotal = -1;
 	}
 
 
@@ -53,6 +67,7 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 		this.stock = null;
 		this.peso = peso;
 		this.esRefrigerado = esRefrigerado;
+		this.cantidadTotal = -1;
 	}
 
 
@@ -66,12 +81,14 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 		this.stock = (StockAcopio) stock;
 		this.peso = peso;
 		this.esRefrigerado = esRefrigerado;
+		this.cantidadTotal = -1;
 	}
 
 	public Insumo(int id) {
 		super();
 		this.id = id;
 		this.stock = null;
+		this.cantidadTotal = -1;
 	}
 
 
@@ -85,6 +102,11 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 	public Double getCosto() {
 		return this.costo;
 	}
+	
+	public void setCosto(Double costo) {
+		this.costo = costo;
+		
+	}
 
 	public double getPeso() {
 		return peso;
@@ -92,6 +114,10 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 	
 	public String getDescripcion() {
 		return descripcion;
+	}
+	
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 	
 	public boolean getEsRefrigerado() {
@@ -190,5 +216,7 @@ public class Insumo implements Comparable<Insumo>, CsvRecord{
 		this.stock = null;
 		
 	}
+
+
 
 }

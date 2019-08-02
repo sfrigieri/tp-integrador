@@ -11,6 +11,7 @@ public class GestionEntidadesController {
 	private ABMStock interfazStock;
 	private ABMCamion interfazCamion;
 	private ABMRuta interfazRuta;
+	private BusquedaInsumosView interfazBusquedaInsumos;
 	private PlantaService plantaService;
 	private StockService stockService;
 	private InsumoService insumoService;
@@ -32,12 +33,15 @@ public class GestionEntidadesController {
 		plantaService.setInsumoService(insumoService);
 		plantaService.setStockService(stockService);
 		stockController = new StockController(stockService);
+		insumoController.setStockController(stockController);
 		camionService = new CamionServiceDefault();
 		rutaService = new RutaServiceDefault(plantaService, camionService);
 		camionController = new CamionController(camionService);
 		rutaController = new RutaController(rutaService);
 		
 		interfazInsumo = new ABMInsumo(ventana, insumoController, stockController);
+		
+		interfazBusquedaInsumos = new BusquedaInsumosView(ventana);
 
 		interfazPlanta = new ABMPlanta(ventana, plantaController, stockController);
 		
@@ -50,6 +54,7 @@ public class GestionEntidadesController {
 	
 	public void opcion(OpcionesMenu op, JFrame ventana) {
 		switch(op) {
+		case BUSCAR_INSUMOS: interfazBusquedaInsumos.busquedaEnABB(); break;
 		case AGREGAR_INSUMO: interfazInsumo.agregarInsumo(); break;
 		case MODIFICAR_INSUMO: interfazInsumo.modificarInsumo(); break;
 		case ELIMINAR_INSUMO: interfazInsumo.eliminarInsumo(true); break;

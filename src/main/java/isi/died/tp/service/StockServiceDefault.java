@@ -64,7 +64,7 @@ public class StockServiceDefault implements StockService {
 	}
 
 	@Override
-	public int calcularCantidadTotal(Insumo i1) {
+	public void calcularCantidadTotal(Insumo i1) {
 		int cant = 0;
 		for(StockProduccion s: stockDao.listaStocksProduccion())
 			if(s.getInsumo() != null && s.getInsumo().equals(i1))
@@ -74,7 +74,7 @@ public class StockServiceDefault implements StockService {
 			if(s.getInsumo() != null && s.getInsumo().equals(i1))
 				cant = cant + s.getCantidad();
 		
-		return cant;
+		i1.setCantidadTotal(cant);
 	}
 
 

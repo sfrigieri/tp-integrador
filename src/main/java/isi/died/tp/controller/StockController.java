@@ -58,8 +58,8 @@ public class StockController {
 	}
 
 
-	public int calcularCantidadTotal(Insumo i1) {
-		return ss.calcularCantidadTotal(i1);
+	public void calcularCantidadTotal(Insumo i1) {
+		ss.calcularCantidadTotal(i1);
 	}
 
 }

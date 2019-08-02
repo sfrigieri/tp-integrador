@@ -38,7 +38,7 @@ public class GestionEntidades {
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel encabezado = new JLabel("Gestión de Entidades");
 		JButton agregar = new JButton("Agregar"), modificar = new JButton("Modificar"), eliminar = new JButton("Eliminar"),
-				volver = new JButton("Volver");
+				volver = new JButton("Volver"), buscar = new JButton("Buscar");
 		JComboBox<String> opcionSeleccionada = new JComboBox<String>();
 			
 		//titulo
@@ -70,9 +70,18 @@ public class GestionEntidades {
 		panel.add(opcionSeleccionada, constraints);
 				
 		//botones ocultos
+		
 		constraints.gridx=7;
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.insets.set(0, 80, 5, 70);		
+		constraints.gridy=1;
+		buscar.setVisible(false);
+		buscar.setEnabled(false);
+		panel.add(buscar, constraints);
+
+		
+		constraints.gridx=7;
+		constraints.fill=GridBagConstraints.HORIZONTAL;		
 		constraints.gridy=2;
 		panel.add(agregar, constraints);
 		agregar.setEnabled(false);
@@ -101,11 +110,22 @@ public class GestionEntidades {
 		opcionSeleccionada.addActionListener (a -> {
 			switch((String)opcionSeleccionada.getSelectedItem()){
 			case "Seleccione":
+				buscar.setVisible(false);
+				buscar.setEnabled(false);
 				agregar.setEnabled(false);
 				modificar.setEnabled(false);
 				eliminar.setEnabled(false);
 				break;
+			case "Insumo":
+				buscar.setVisible(true);
+				buscar.setEnabled(true);
+				agregar.setEnabled(true);
+				modificar.setEnabled(true);
+				eliminar.setEnabled(true);
+				break;
 			default:
+				buscar.setVisible(false);
+				buscar.setEnabled(false);
 				agregar.setEnabled(true);
 				modificar.setEnabled(true);
 				eliminar.setEnabled(true);
@@ -113,6 +133,11 @@ public class GestionEntidades {
 			}
 		});
 				
+		
+		buscar.addActionListener(a -> {
+				controller.opcion(OpcionesMenu.BUSCAR_INSUMOS, ventana);
+		});
+		
 		//listener agregarX
 		agregar.addActionListener(a -> {
 			switch((String)opcionSeleccionada.getSelectedItem()){

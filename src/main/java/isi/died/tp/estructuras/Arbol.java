@@ -41,4 +41,7 @@ public abstract class Arbol<E extends Comparable<E>> {
 	public void agregarComp(E a) {
 			
 	}
+
+	public abstract List<E> rangoComp(E inicio, E fin);
+
 }

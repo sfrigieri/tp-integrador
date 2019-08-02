@@ -229,4 +229,24 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		return lista;
 	}
 	
+	@Override
+	public List<E> rangoComp(E inicio,E fin){
+		List<E> lista = new ArrayList<E>();
+		int compararMin = this.comparator.compare(this.valor,inicio);
+		int compararMax = this.comparator.compare(this.valor,fin);
+		
+		if(compararMax <= 0 && compararMin >= 0) {
+			lista.addAll(this.izquierdo().rangoComp(inicio, fin));
+			lista.add(valor);
+			lista.addAll(this.derecho().rangoComp(inicio, fin));
+		}else {
+			if(compararMax < 0) 
+				lista.addAll(this.derecho().rangoComp(inicio, fin));
+			else
+				lista.addAll(this.izquierdo().rangoComp(inicio, fin));
+		}
+		
+		return lista;
+	}
+	
 }

@@ -82,6 +82,11 @@ public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public ArrayList<E> rango(E inicio,E fin){
 		return new ArrayList<E>();
+	}
+
+	@Override
+	public List<E> rangoComp(E inicio, E fin) {
+		return new ArrayList<E>();
 	};
 
 }
