@@ -48,7 +48,6 @@ public class GestionEntidadesController {
 		interfazRuta = new ABMRuta(ventana, rutaController, plantaController);
 	}
 	
-	
 	public void opcion(OpcionesMenu op, JFrame ventana) {
 		switch(op) {
 		case AGREGAR_INSUMO: interfazInsumo.agregarInsumo(); break;
@@ -68,6 +67,8 @@ public class GestionEntidadesController {
 		case ELIMINAR_CAMION: interfazCamion.eliminarCamion(); break;
 		
 		case AGREGAR_RUTA: interfazRuta.agregarRuta(); break;
+		case MODIFICAR_RUTA: interfazRuta.modificarRuta(); break;
+		case ELIMINAR_RUTA: interfazRuta.eliminarRuta(); break;
 		}
 	}
 }
