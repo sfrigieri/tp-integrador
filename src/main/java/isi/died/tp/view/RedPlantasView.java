@@ -28,7 +28,7 @@ public class RedPlantasView {
 	public static GrafoPlantaController grafoController;
 	private static JFrame ventana;
 	private static GrafoPanel grafoView;
-	private JComboBox<String> seleccionarP1 = new JComboBox<String>(), seleccionarP2 = new JComboBox<String>();
+
 	
 	public RedPlantasView(JFrame v,GestionLogisticaController glcontroller ) {
 		glc = glcontroller;
@@ -170,6 +170,7 @@ public class RedPlantasView {
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel info = new JLabel("* Resultados búsqueda: Las posibles Rutas en BLANCO son aquellas asociadas a más de 1 Camino");
 		List<Planta> lista = new ArrayList<Planta>();
+		JComboBox<String> seleccionarP1 = new JComboBox<String>(), seleccionarP2 = new JComboBox<String>();
 		JButton volver = new JButton("Volver"), buscarCaminos = new JButton("Buscar Caminos"),
 				accionesInfo = new JButton("Ver Acciones Disponibles");
 
@@ -311,27 +312,4 @@ public class RedPlantasView {
 	}
 
 
-	public void refrescarListasPlantas() {
-		
-		List<Planta> lista = new ArrayList<Planta>();
-		seleccionarP1.removeAllItems();
-		seleccionarP2.removeAllItems();
-		lista.addAll(glc.listaPlantas());
-		seleccionarP1.addItem("Seleccione");
-		for (Planta p : lista) {
-			seleccionarP1.addItem(Integer.toString(p.getId()) + " | Nombre: " + p.getNombre()+" ");				
-		}
-
-		if(lista.isEmpty())
-			seleccionarP1.setEnabled(false);
-		seleccionarP1.removeAllItems();
-		seleccionarP2.addItem("Seleccione");
-		for (Planta p : lista) {	
-			seleccionarP2.addItem(Integer.toString(p.getId()) + " | Nombre: " + p.getNombre()+" ");		
-		}
-
-		if(lista.isEmpty())
-			seleccionarP2.setEnabled(false);
-
-	}
 }

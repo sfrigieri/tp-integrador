@@ -39,7 +39,6 @@ public class GrafoPlantaController {
 	private List<VerticeView<Planta>> plantasEnPanel;
 	private List<AristaView<Planta>> rutasEnPanel;
 	private static boolean proximoCamino;
-	private static GestionLogisticaController glc;
 	
 	public GrafoPlantaController(JFrame v) {
 		pc = GestionEntidadesController.plantaController;
@@ -54,9 +53,6 @@ public class GrafoPlantaController {
 		grafoView = gw;
 	}
 	
-	public void setGLC(GestionLogisticaController controller) {
-		glc = controller;
-	}
 
 	public void setRutasEnPanel(List<AristaView<Planta>> lista) {
 		this.rutasEnPanel = lista;
@@ -129,120 +125,6 @@ public class GrafoPlantaController {
 		grafoView.repaint();
 	}
 
-
-	public void editarPlanta(VerticeView<Planta> vPlanta) {
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		JLabel errorNombre = new JLabel();
-		JTextField nombrePlanta = new JTextField(20);
-		JComboBox<String> tipoPlanta = new JComboBox<String>();
-		JCheckBox esOrigen = new JCheckBox();
-
-
-		//labels
-		constraints.fill=GridBagConstraints.NONE;
-		constraints.anchor=GridBagConstraints.EAST;
-		constraints.insets.set(5, 205, 15, 5);
-		constraints.gridx=1;
-		constraints.gridwidth=1;
-
-		constraints.gridy=1;
-		panel.add(new JLabel("Tipo de Planta: "), constraints);
-
-		constraints.gridy=2;
-		panel.add(new JLabel("Nombre: "), constraints);
-
-		constraints.gridy=3;
-		panel.add(new JLabel("Es Origen: "), constraints);
-
-		//checkbox origen
-		constraints.fill=GridBagConstraints.NONE;
-		constraints.anchor=GridBagConstraints.WEST;
-		constraints.insets.set(0, 0, 5, 5);
-		constraints.gridx = 2;
-		constraints.gridy = 3;
-		esOrigen.setEnabled(false);
-		if (vPlanta.getValor().esOrigen())
-			esOrigen.setSelected(true);
-		else
-			esOrigen.setSelected(false);
-		panel.add(esOrigen, constraints);
-
-		//campo texto nombre
-		constraints.fill=GridBagConstraints.HORIZONTAL;
-		constraints.anchor=GridBagConstraints.CENTER;
-		constraints.insets.set(0, 5, 5, 5);
-		constraints.gridy=2;
-		nombrePlanta.setText(vPlanta.getValor().getNombre());
-		panel.add(nombrePlanta, constraints);
-
-		//combobox tipo
-		constraints.fill=GridBagConstraints.HORIZONTAL;
-		constraints.anchor=GridBagConstraints.CENTER;
-		tipoPlanta.setEnabled(false);
-		tipoPlanta.addItem("Acopio");
-		tipoPlanta.addItem("Producción");
-		if (vPlanta.getValor() instanceof PlantaAcopio)
-			tipoPlanta.setSelectedItem("Acopio");
-		else
-			tipoPlanta.setSelectedItem("Producción");
-		constraints.insets.set(0, 5, 5, 5);
-		constraints.gridy = 1;
-		panel.add(tipoPlanta, constraints);	
-
-		//botones
-		constraints.gridy=8;
-		constraints.fill=GridBagConstraints.NONE;
-
-
-		//errores
-		constraints.anchor=GridBagConstraints.NORTHWEST;
-		constraints.insets.set(5,0,3,0);
-		constraints.gridx=3;
-		constraints.gridy=2;errorNombre.setText("");
-		errorNombre.setPreferredSize(new Dimension(230, 16));
-		errorNombre.setForeground(Color.red);
-		panel.add(errorNombre,constraints);
-
-		UIManager.put("OptionPane.okButtonText", "Guardar Cambios");
-		int result = JOptionPane.showConfirmDialog(null, panel, "Editar Planta",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
-		UIManager.put("OptionPane.okButtonText", "Aceptar");
-		if(result == JOptionPane.OK_OPTION) {
-
-			String valorNombre = "";
-
-			Planta plantaNueva;
-			if(!nombrePlanta.getText().isEmpty()) {
-				valorNombre = nombrePlanta.getText();
-				if (vPlanta.getValor() instanceof PlantaAcopio) {
-					plantaNueva = new PlantaAcopio(vPlanta.getValor().getId(), valorNombre, vPlanta.getValor().esOrigen());
-					pc.editarPlanta(plantaNueva);
-				} else {
-					plantaNueva = new PlantaProduccion(vPlanta.getValor().getId(), valorNombre);
-					pc.editarPlanta(plantaNueva);
-					plantaNueva = pc.buscarPlantaProduccion(vPlanta.getValor().getId());
-				}
-				JOptionPane.showConfirmDialog(framePadre, "Planta modificada exitosamente.", "Información", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-				this.setPlantas();
-				this.setRutas();
-				glc.refrescarListasPlantas();
-			}
-			else
-				JOptionPane.showConfirmDialog(framePadre, "Debe ingresar un Nombre.", "Acción Interrumpida", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-			
-		}
-		
-	}
-
-	public void crearVertice(Integer coordenadaX, Integer coordenadaY, Color color, Planta p) {
-		VerticeView<Planta> v = new VerticeView<Planta>(coordenadaX, coordenadaY, color);
-		v.setId(p.getId());
-		v.setNombre(p.getNombre());
-		this.plantasEnPanel.add(v);
-		grafoView.agregar(v);
-		grafoView.repaint();
-	}
 
 	public void crearRuta(AristaView<Planta> arista) {
 

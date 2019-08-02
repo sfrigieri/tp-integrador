@@ -27,4 +27,6 @@ public interface StockService {
 
 	public boolean existenStocksAsociados(Insumo ins);
 
+	public int calcularCantidadTotal(Insumo i1);
+
 }

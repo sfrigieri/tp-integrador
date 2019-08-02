@@ -42,7 +42,6 @@ public class GestionLogisticaController {
 		case GESTION_RED_PLANTAS: 
 			grafoController = new GrafoPlantaController(framePadre);
 			grafoPanel = new GrafoPanel(framePadre, grafoController);
-			grafoController.setGLC(this);
 			grafoController.setGrafoPanel(grafoPanel);
 			redPlantasView = new RedPlantasView(framePadre, this);
 			redPlantasView.setRedPlantas(firstTimeRed); 
@@ -51,14 +50,11 @@ public class GestionLogisticaController {
 		case BUSCAR_CAMINOS: 			
 			grafoController = new GrafoPlantaController(framePadre);
 			grafoPanel = new GrafoPanel(framePadre, grafoController);
-			grafoController.setGLC(this);
 			grafoController.setGrafoPanel(grafoPanel);
 			redPlantasView = new RedPlantasView(framePadre, this);
 			redPlantasView.buscarCaminos(firstTimeCaminos);
 			firstTimeCaminos = false; 
 			break;
-			//case AGREGAR_PLANTA_PRODUCCION: grafoPanel.; break;
-			//case AGREGAR_RUTA: grafoPanel.; break;
 		}
 	}
 
@@ -82,10 +78,6 @@ public class GestionLogisticaController {
 	public boolean buscarFaltante(Insumo insumo) {
 		return grafoController.marcarPlantas(insumo);
 
-	}
-
-	public void refrescarListasPlantas() {
-		redPlantasView.refrescarListasPlantas();
 	}
 
 	public boolean buscarMejorCamino(Insumo seleccionado) {

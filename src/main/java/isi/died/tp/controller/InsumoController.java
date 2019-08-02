@@ -1,19 +1,38 @@
 package isi.died.tp.controller;
 
 
+import java.util.Comparator;
 import java.util.List;
 
+import isi.died.tp.estructuras.ArbolBinarioBusqueda;
 import isi.died.tp.model.*;
 import isi.died.tp.service.*;
 
 public class InsumoController {
 	
 	private InsumoService insumoService;
+	private ArbolBinarioBusqueda<Insumo> arbolBB;
+	private Comparator<Insumo> compNombreAsc= (i1,i2)-> i1.getDescripcion().compareTo(i2.getDescripcion());
+	private Comparator<Insumo> compNombreDesc= (i1,i2)-> i2.getDescripcion().compareTo(i1.getDescripcion());
+	private Comparator<Insumo> compCostoAsc= (i1,i2)-> i1.getCosto().intValue()- i2.getCosto().intValue();
+	private Comparator<Insumo> compCostoDesc= (i1,i2)-> i2.getCosto().intValue()- i1.getCosto().intValue();
+	private Comparator<Insumo> compStockAsc= (i1,i2)-> sc.calcularCantidadTotal(i1)- sc.calcularCantidadTotal(i2);
+	private Comparator<Insumo> compStockDesc= (i1,i2)-> sc.calcularCantidadTotal(i2)- sc.calcularCantidadTotal(i1);
+	private static StockController sc;
 	
 	public InsumoController(InsumoService insumoService) {
 		this.insumoService =  insumoService;
+		sc = GestionEntidadesController.stockController;
 	}
 	
+	public void ordenarPor(OpcionesOrdenInsumo op) {
+		List<Insumo> listaInsumos = this.listaInsumos();
+		listaInsumos.addAll(this.listaInsumosLiquidos());
+		
+		for(Insumo ins : listaInsumos)
+			arbolBB.agregarComp(ins);
+		
+	}
 	public void agregarInsumo(Insumo ins) {
 		insumoService.agregarInsumo(ins);
 	}

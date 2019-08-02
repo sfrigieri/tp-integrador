@@ -57,4 +57,9 @@ public class StockController {
 		return ss.existenStocksAsociados(ins);
 	}
 
+
+	public int calcularCantidadTotal(Insumo i1) {
+		return ss.calcularCantidadTotal(i1);
+	}
+
 }

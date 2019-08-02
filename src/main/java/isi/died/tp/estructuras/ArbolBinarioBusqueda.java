@@ -1,6 +1,7 @@
 package isi.died.tp.estructuras;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -8,11 +9,13 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
 	protected Arbol<E> izquierdo;
 	protected Arbol<E> derecho;
+	private Comparator<E> comparator;
 	
-	public ArbolBinarioBusqueda(){
+	public ArbolBinarioBusqueda(Comparator<E> comparator){
 		this.valor=null;
 		this.izquierdo=new ArbolVacio<E>();
 		this.derecho=new ArbolVacio<E>();
+		this.comparator = comparator;
 	}
 	
 	public ArbolBinarioBusqueda(E e){
@@ -27,6 +30,13 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		this.derecho=d;
 	}
 	
+	public ArbolBinarioBusqueda(E e, Comparator<E> comparator) {
+		this.valor=e;
+		this.izquierdo=new ArbolVacio<E>();
+		this.derecho=new ArbolVacio<E>();
+		this.comparator = comparator;
+	}
+
 	@Override
 	public List<E> preOrden() {
 		List<E> lista = new ArrayList<E>();
@@ -82,6 +92,25 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 			if (this.izquierdo.esVacio()) this.izquierdo= new ArbolBinarioBusqueda<E>(a);
 			else this.izquierdo.agregar(a);
 		}
+	}
+	
+	@Override
+	public void agregarComp(E a) {
+	if (this.valor == null)
+		this.valor = a;
+	else
+		if (this.comparator.compare(a, this.valor) > 0) {
+			if (this.derecho.esVacio())
+				this.derecho = new ArbolBinarioBusqueda<E>(a, this.comparator);
+			else
+				this.derecho.agregarComp(a);
+		} else {
+			if (this.izquierdo.esVacio())
+				this.izquierdo = new ArbolBinarioBusqueda<E>(a, this.comparator);
+			else
+				this.izquierdo.agregarComp(a);
+		}
+	
 	}
 	
 	@Override

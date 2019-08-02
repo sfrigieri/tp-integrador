@@ -63,6 +63,20 @@ public class StockServiceDefault implements StockService {
 		return false;
 	}
 
+	@Override
+	public int calcularCantidadTotal(Insumo i1) {
+		int cant = 0;
+		for(StockProduccion s: stockDao.listaStocksProduccion())
+			if(s.getInsumo() != null && s.getInsumo().equals(i1))
+				cant = cant + s.getCantidad();
+		
+		for(StockAcopio s: stockDao.listaStocksAcopio())
+			if(s.getInsumo() != null && s.getInsumo().equals(i1))
+				cant = cant + s.getCantidad();
+		
+		return cant;
+	}
+
 
 
 }

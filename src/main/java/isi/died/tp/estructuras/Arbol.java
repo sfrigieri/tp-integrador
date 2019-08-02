@@ -37,4 +37,8 @@ public abstract class Arbol<E extends Comparable<E>> {
 	public abstract boolean esLleno();
 
 	public abstract ArrayList<E> rango(E inicio, E fin);
+
+	public void agregarComp(E a) {
+			
+	}
 }

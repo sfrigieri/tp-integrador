@@ -489,10 +489,6 @@ public class GrafoPanel extends JPanel {
 
 
 
-	public void clearAristas() {
-		this.aristasPintadas.clear();
-	}
-
 	public List<VerticeView<Planta>> plantasEnPanel() {
 		return this.vertices;
 	}
