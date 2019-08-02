@@ -73,6 +73,39 @@ public class Ruta extends Arista<Planta> implements CsvRecord {
 
 	
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		long temp;
+		temp = Double.doubleToLongBits(duracionViajeMin);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + id;
+		result = prime * result + pesoEnCursoTon;
+		result = prime * result + pesoMaxTon;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Ruta other = (Ruta) obj;
+		if (Double.doubleToLongBits(duracionViajeMin) != Double.doubleToLongBits(other.duracionViajeMin))
+			return false;
+		if (id != other.id)
+			return false;
+		if (pesoEnCursoTon != other.pesoEnCursoTon)
+			return false;
+		if (pesoMaxTon != other.pesoMaxTon)
+			return false;
+		return true;
+	}
+
+	@Override
 	public List<String> asCsvRow() {
 		List<String> lista = new ArrayList<String>();
 		lista.add(this.id+"");

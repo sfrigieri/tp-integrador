@@ -28,7 +28,8 @@ public class RedPlantasView {
 	public static GrafoPlantaController grafoController;
 	private static JFrame ventana;
 	private static GrafoPanel grafoView;
-
+	private JComboBox<String> seleccionarP1 = new JComboBox<String>(), seleccionarP2 = new JComboBox<String>();
+	
 	public RedPlantasView(JFrame v,GestionLogisticaController glcontroller ) {
 		glc = glcontroller;
 		ventana = v;
@@ -129,13 +130,11 @@ public class RedPlantasView {
 		
 		
 		accionesInfo.addActionListener(a -> {
-			JOptionPane.showConfirmDialog(ventana, "* Reubicar Plantas:   Clic sobre Planta + Arrastrar\r\n" + 
+			JOptionPane.showConfirmDialog(ventana, "* Reubicar Plantas:   Clic sobre Planta + Arrastrar.\r\n" + 
 					"\r\n" + 
-					"* Agregar Ruta:   Clic sobre Planta Origen y Destino\r\n" + 
-					"      \r\n" + 
-					"* Agregar Planta:   Doble Clic en espacio libre\r\n" + 
-					"\r\n" + 
-					"* Editar / Eliminar:   Doble Clic sobre la Planta o Ruta", "Información",
+					"* Agregar Ruta:   Clic sobre Planta Origen y Destino.\r\n" + 
+					"      \r\n" +
+					"* Eliminar Ruta:   Doble Clic sobre la Ruta deseada.", "Información"+"\r\n"+" ",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
 	});
@@ -163,20 +162,19 @@ public class RedPlantasView {
 	}
 
 	
-	
+
 	
 	public void buscarCaminos(Boolean firstTime) {
 		JPanel panel = new JPanel(new BorderLayout()), panelInferior = new JPanel(new GridBagLayout()),
 				panelSuperior = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		JLabel info = new JLabel("* Resultados búsqueda: Las posibles Rutas en BLANCO son aquellas asociadas a más de 1 Camino");
-		JComboBox<String> seleccionarP1 = new JComboBox<String>(), seleccionarP2 = new JComboBox<String>();
+		List<Planta> lista = new ArrayList<Planta>();
 		JButton volver = new JButton("Volver"), buscarCaminos = new JButton("Buscar Caminos"),
 				accionesInfo = new JButton("Ver Acciones Disponibles");
-		List<Planta> lista = new ArrayList<Planta>();
 
 		constraints.fill=GridBagConstraints.HORIZONTAL;
-
+		
 		lista.addAll(glc.listaPlantas());
 		seleccionarP1.addItem("Seleccione");
 		for (Planta p : lista) {
@@ -185,7 +183,6 @@ public class RedPlantasView {
 
 		if(lista.isEmpty())
 			seleccionarP1.setEnabled(false);
-
 		seleccionarP2.addItem("Seleccione");
 		for (Planta p : lista) {	
 			seleccionarP2.addItem(Integer.toString(p.getId()) + " | Nombre: " + p.getNombre()+" ");		
@@ -246,12 +243,11 @@ public class RedPlantasView {
 		});
 
 		buscarCaminos.addActionListener(a -> {
-			List<List<JLabel>> caminos = glc.buscarCaminos(seleccionadoP1.get(0), seleccionadoP2.get(0));
-			if(caminos.isEmpty())
+			Integer caminos = glc.buscarCaminos(seleccionadoP1.get(0), seleccionadoP2.get(0));
+			if(caminos == 0)
 				JOptionPane.showConfirmDialog(ventana, "El Sistema no registra Caminos que conecten ambas Plantas.", "Información",
 						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 			else {
-				mostrarCaminosInfo(caminos);
 				buscarCaminos.setEnabled(false);
 				//seleccionadoP1.clear();
 				//seleccionadoP2.clear();
@@ -279,15 +275,12 @@ public class RedPlantasView {
 
 		
 		accionesInfo.addActionListener(a -> {
-				JOptionPane.showConfirmDialog(ventana, "* Reubicar Plantas:   Clic sobre Planta + Arrastrar\r\n" + 
-						"\r\n" + 
-						"* Agregar Ruta:   Clic sobre Planta Origen y Destino\r\n" + 
-						"      \r\n" + 
-						"* Agregar Planta:   Doble Clic en espacio libre\r\n" + 
-						"\r\n" + 
-						"* Editar / Eliminar:   Doble Clic sobre la Planta o Ruta", "Información",
-						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-
+			JOptionPane.showConfirmDialog(ventana, "* Reubicar Plantas:   Clic sobre Planta + Arrastrar.\r\n" + 
+					"\r\n" + 
+					"* Agregar Ruta:   Clic sobre Planta Origen y Destino.\r\n" + 
+					"      \r\n" +
+					"* Eliminar Ruta:   Doble Clic sobre la Ruta deseada.", "Información"+"\r\n"+" ",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 		});
 		
 		constraints.gridx=0;
@@ -317,30 +310,28 @@ public class RedPlantasView {
 
 	}
 
-	private static void mostrarCaminosInfo(List<List<JLabel>> caminos) {
-		JFrame popup = new JFrame("Información de Caminos Disponibles");
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		popup.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		popup.setPreferredSize(new Dimension(400,70+caminos.size()*20));
-		panel.setPreferredSize( new Dimension(400,70+caminos.size()*20));
-		int ycord = 2;
-		constraints.gridx=2;
-		constraints.gridy=1;
-		panel.add(new JLabel("    Distancia       Duración      Peso Máximo"), constraints);
-		for(List<JLabel> labels : caminos) {
-			constraints.gridx=1;
-			constraints.gridy=ycord;
-			panel.add(labels.get(0), constraints);
-			constraints.gridx=2;
-			panel.add(labels.get(1), constraints);
-			ycord++;
-		}
-		popup.setContentPane(panel);
-		popup.pack();
-		popup.setLocationRelativeTo(ventana);
-		popup.setVisible(true);
 
+	public void refrescarListasPlantas() {
+		
+		List<Planta> lista = new ArrayList<Planta>();
+		seleccionarP1.removeAllItems();
+		seleccionarP2.removeAllItems();
+		lista.addAll(glc.listaPlantas());
+		seleccionarP1.addItem("Seleccione");
+		for (Planta p : lista) {
+			seleccionarP1.addItem(Integer.toString(p.getId()) + " | Nombre: " + p.getNombre()+" ");				
+		}
+
+		if(lista.isEmpty())
+			seleccionarP1.setEnabled(false);
+		seleccionarP1.removeAllItems();
+		seleccionarP2.addItem("Seleccione");
+		for (Planta p : lista) {	
+			seleccionarP2.addItem(Integer.toString(p.getId()) + " | Nombre: " + p.getNombre()+" ");		
+		}
+
+		if(lista.isEmpty())
+			seleccionarP2.setEnabled(false);
 
 	}
 }

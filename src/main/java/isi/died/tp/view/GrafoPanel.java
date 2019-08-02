@@ -21,8 +21,11 @@ import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import isi.died.tp.controller.GrafoPlantaController;
 import isi.died.tp.estructuras.Recorrido;
@@ -54,17 +57,41 @@ public class GrafoPanel extends JPanel {
 		this.aristas = new ArrayList<AristaView<Planta>>();
 		this.aristasPintadas = new ArrayList<AristaView<Planta>>();
 		controller = grafoController;
-		
+
 		plantaAux = null;
 		rutaAux = null;
-		
+
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 
-				if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 && !event.isConsumed()) {
+				if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2 && !event.isConsumed()) {
 					event.consume();
+					AristaView<Planta> vRuta = clicEnRuta(event.getPoint());
+
+						if(vRuta != null) {
+							int result = JOptionPane.showConfirmDialog(getParent(),"Desea Eliminar la Ruta seleccionada: "+
+									vRuta.getOrigen().getNombre()+" a "+vRuta.getDestino().getNombre(),"Acción a Realizar",
+									JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+	
+							if (result == JOptionPane.OK_OPTION) {
+								grafoController.eliminarRuta(vRuta);
+								aristas.remove(vRuta);
+								grafoController.setRutasEnPanel(aristas);
+								repaint = true;
+								repaint();
+							}
+
+
+						}
+
+					rutaAux = null;
+
+				}else 
+					if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 && !event.isConsumed()) {
+						event.consume();
 						VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
+
 						if(vPlanta != null) {
 							if(rutaAux == null) {
 								rutaAux = new RutaView();
@@ -74,85 +101,30 @@ public class GrafoPanel extends JPanel {
 								rutaAux.setDestino(vPlanta);
 								grafoController.crearRuta(rutaAux);
 								rutaAux = null;
+								grafoController.setRutasEnPanel(aristas);
 							}	
 						}
-				}
-				/*if (event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 2 && !event.isConsumed()) {
-					event.consume();
-					Object[] plantas = controller.listaVertices().toArray();
-					Object verticeMatSeleccionado;
-					try {
-						verticeMatSeleccionado = JOptionPane.showInputDialog(framePadre, 
-								"¿Qué material corresponde con el vertice?",
-								"Agregar Vertice",
-								JOptionPane.QUESTION_MESSAGE, 
-								null, 
-								plantas, 
-								plantas[0]);
-						if (verticeMatSeleccionado != null & !controller.existeVertice((Planta)verticeMatSeleccionado)) {
-							Color aux = ((Planta)verticeMatSeleccionado).esLibro()?Color.RED:Color.BLUE;
-							controller.crearVertice(event.getX(), event.getY(), aux,(Planta) verticeMatSeleccionado);
-							//Confirmo que no haya una arista existente
-							//	                        if (rutaAux!=null) {
-							//	                        	if (controller.existeArista(rutaAux.getOrigen().getId(),((Planta)verticeMatSeleccionado).getId())) {
-							//		                        	AristaView<Planta> existente = new AristaView<Planta>();
-							//		                        	existente.setOrigen(rutaAux.getOrigen());
-							//		                        	existente.setDestino(controller.buscarVertice((Planta)verticeMatSeleccionado));
-							//		                        	controller.dibujarAristaExistente(existente);
-							//		                        	if(controller.existeArista(existente.getDestino().getId(), existente.getOrigen().getId())) {
-							//		                        		VerticeView<Planta> auxV = existente.getDestino();
-							//		                        		existente.setDestino(existente.getOrigen());
-							//		                        		existente.setOrigen(auxV);
-							//		                        		controller.dibujarAristaExistente(existente);
-							//		                        	}
-							//		                        }
-							//		                    }
-						}else {
-							JOptionPane.showConfirmDialog(framePadre, "Ese material ya fue añadido", "Material existente", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-						}
-					} catch (ArrayIndexOutOfBoundsException e) {
-						JOptionPane.showConfirmDialog(framePadre, "No quedan más plantas para agregar", "Sin plantas", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-					}  
-					//					System.out.println("vertices: "+vertices);
-				}else {
-					if(event.getButton() == MouseEvent.BUTTON3 && event.getClickCount() == 1 && !event.isConsumed()) {
-						event.consume();
-						JPopupMenu menu = new JPopupMenu();
-						JMenuItem menuItem;
-						menuItem = new JMenuItem("Ver Acciones disponibles");
-						menu.add(menuItem);
-						//menuItem.addActionListener(a -> new JPopupMenu());
-						menu.show(event.getComponent(), event.getX(), event.getY());
-					}                	
-				}*/
-				 
+
+
+					}
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent event) {
-					Point point = event.getPoint();
-					VerticeView<Planta> vPlanta = clicEnUnNodo(point);
-					if(plantaAux != null && vPlanta == null) {
-						plantaAux.setCoordenadaX(point.x);
-						plantaAux.setCoordenadaY(point.y);
-						controller.setPlantasEnPanel(vertices);
-						revalidate();
-						repaint = true;
-						repaint();
-						plantaAux = null;
-					
+				Point point = event.getPoint();
+				VerticeView<Planta> vPlanta = clicEnUnNodo(point);
+				if(plantaAux != null && vPlanta == null) {
+					plantaAux.setCoordenadaX(point.x);
+					plantaAux.setCoordenadaY(point.y);
+					controller.setPlantasEnPanel(vertices);
+					revalidate();
+					repaint = true;
+					repaint();
+					plantaAux = null;
+
 
 				}
-				/*VerticeView<Planta> vDestino = clicEnUnNodo(event.getPoint());
-				if (rutaAux!=null && vDestino != null) {
-					//                	if (!controller.existeArista(rutaAux.getOrigen().getId(),vDestino.getId())) {
-					rutaAux.setDestino(vDestino);
-					controller.crearRuta(rutaAux);
-					rutaAux = null;
-					//                	}else {
-					//                		controller.dibujarAristaExistente(rutaAux);
-					//                	}
-				}*/
 			}
 
 		} );
@@ -160,16 +132,10 @@ public class GrafoPanel extends JPanel {
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent event) {
-					VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
-					if(vPlanta != null) {
-						plantaAux = vPlanta;
-					}
-				
-				/*VerticeView<Planta> vOrigen = clicEnUnNodo(event.getPoint());
-				if (rutaAux==null && vOrigen != null) {
-					rutaAux = new AristaView<Planta>();                    
-					rutaAux.setOrigen(vOrigen);
-				}*/
+				VerticeView<Planta> vPlanta = clicEnUnNodo(event.getPoint());
+				if(vPlanta != null) {
+					plantaAux = vPlanta;
+				}
 			}
 		});
 	}
@@ -208,31 +174,7 @@ public class GrafoPanel extends JPanel {
 		}
 	}
 
-	public List<JLabel> marcarCamino(Recorrido re, long numColor){
-
-
-		List<JLabel> labels = new ArrayList<JLabel>();
-
-		JLabel infoCamino1 = new JLabel(numColor+1+"° Camino");
-		infoCamino1.setForeground(this.getCaminoColor(numColor));
-		String info1, info2;
-
-		if(re.getDistanciaTotal() < 100)
-			info1 = "  "+re.getDistanciaTotal();
-		else
-			info1 = ""+re.getDistanciaTotal();
-
-		if(Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60)) < 10)
-			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
-					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+" ";
-		else
-			info2 = (Double.valueOf(re.getDuracionTotal()/60)).intValue()+"h "
-					+Math.round(((BigDecimal.valueOf(re.getDuracionTotal()/60)).remainder(BigDecimal.ONE).floatValue()*60))+"";
-
-		JLabel infoCamino2 = new JLabel(info1+"Km          "+info2+" min.          "+
-				re.getPesoMax()+" Ton.");
-		labels.add(infoCamino1);
-		labels.add(infoCamino2);
+	public void marcarCamino(Recorrido re, long numColor){
 
 		for(Ruta r : re.getRecorrido()) {
 			for(AristaView<Planta> a : this.aristas) {
@@ -254,8 +196,11 @@ public class GrafoPanel extends JPanel {
 		}
 		repaint = true;
 		repaint();
-		return labels;
+
 	}
+
+
+
 
 	public void desmarcarCaminos(){
 
@@ -273,6 +218,8 @@ public class GrafoPanel extends JPanel {
 			a.setColor(Color.DARK_GRAY);
 			a.setFormatoLinea(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 		}
+		
+		this.aristasPintadas.clear();
 	}
 
 	public void marcarVertices(List<PlantaProduccion> lista){
@@ -289,7 +236,7 @@ public class GrafoPanel extends JPanel {
 	}
 
 	public void desmarcarVertices(){
-		
+
 		for(VerticeView<Planta> v : this.vertices) {
 			if(v.getValor() instanceof PlantaProduccion && v.getColor().equals(Color.RED) ) {
 				v.setColor(Color.BLUE);
@@ -465,7 +412,7 @@ public class GrafoPanel extends JPanel {
 		return Color.black;
 	}
 
-	private Color getCaminoColor(long count) {
+	public Color getCaminoColor(long count) {
 		int i = (int) count;
 		if(i == 0)
 			return Color.green.darker();
@@ -511,16 +458,16 @@ public class GrafoPanel extends JPanel {
 		}
 		return null;
 	}
-	
+
 	private AristaView<Planta> clicEnRuta(Point p) {
 		for (AristaView<Planta> r : this.aristas) {
-			if (r.getLinea().contains(p)) {
+			if (r.getLinea().intersects(p.getX(),p.getY(),p.getX()-2,p.getY()-2) || r.getLinea().intersects(p.getX()+2,p.getY()+2,p.getX(),p.getY()) ) {
 				return r;
 			}
 		}
 		return null;
 	}
-	
+
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -619,7 +566,7 @@ public class GrafoPanel extends JPanel {
 
 	public void isRepaint() {
 		repaint = true;
-		
+
 	}
 
 }

@@ -144,5 +144,9 @@ public class AristaView<T> {
 		return " ";
 	}
 
+	public int getId() {
+		return -1;
+	}
+
 }
 
