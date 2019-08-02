@@ -53,15 +53,18 @@ public class ABMStock {
 	public void agregarStock() {
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
-		JLabel errorCantidad = new JLabel(), errorPuntoPedido = new JLabel(),
+		JLabel errorCantidad = new JLabel(), errorPuntoPedido = new JLabel(), errorPlantaSeleccionada = new JLabel(), errorInsumoSeleccionado = new JLabel(),
 				encabezado = new JLabel("Agregar Nuevo Stock");
 		JTextField cantidad = new JTextField(20), puntoPedido = new JTextField(20);
 		JButton aceptar = new JButton("Aceptar"), volver = new JButton("Volver");
 		JComboBox<String> listaPlantas = new JComboBox<String>(), listaInsumos = new JComboBox<String>();
 		List<Planta> listaPlantasCreadas = pc.listaPlantas();
 		List<Insumo> listaInsumosCreados = new ArrayList<Insumo>();
+		List<Stock> listaStocksCreados = new ArrayList<Stock>();
 		listaInsumosCreados.addAll(ic.listaInsumos());
 		listaInsumosCreados.addAll(ic.listaInsumosLiquidos());
+		listaStocksCreados.addAll(controller.listaStocksAcopio());
+		listaStocksCreados.addAll(controller.listaStocksProduccion());
 		
 		//titulo
 		constraints.insets.set(0, 20, 145, 5);
@@ -96,6 +99,7 @@ public class ABMStock {
 		constraints.insets.set(5, 5, 15, 5);
 		constraints.fill=GridBagConstraints.HORIZONTAL;
 		constraints.anchor=GridBagConstraints.CENTER;
+		listaPlantas.addItem("Seleccione");
 		for (Planta planta : listaPlantasCreadas) {
 			if (planta instanceof PlantaAcopio) {
 				listaPlantas.addItem(planta.getId() + ": " + planta.getNombre() + " (A)");
@@ -153,17 +157,7 @@ public class ABMStock {
 		
 		constraints.gridx=1;
 		aceptar.addActionListener(a -> {
-			String stringPlanta = (String)listaPlantas.getSelectedItem();
-			String arrP[] = stringPlanta.split(": ");
-			Integer idPlantaSeleccionada = Integer.valueOf(arrP[0]);
-			String segPartePlantas[] = arrP[1].split(" ");
-			String tipoPlantaSeleccionada = segPartePlantas[segPartePlantas.length-1];
 			
-			String stringInsumo = (String)listaInsumos.getSelectedItem();
-			String arrI[] = stringInsumo.split(": ");
-			Integer idInsumoSeleccionado = Integer.valueOf(arrI[0]);
-			String segParteInsumos[] = arrI[1].split(" ");
-			String tipoInsumoSeleccionado = segParteInsumos[segParteInsumos.length-1];
 			
 			Planta plantaAux = null;
 			Insumo insumoAux;
@@ -172,18 +166,46 @@ public class ABMStock {
 
 			errorCantidad.setText("");
 			errorPuntoPedido.setText("");
+			errorPlantaSeleccionada.setText("");
+			errorInsumoSeleccionado.setText("");
 			
 			try {
-				if (tipoPlantaSeleccionada.equals("(A)")) {
-					plantaAux = pc.buscarPlantaAcopio(idPlantaSeleccionada);
+				String stringPlanta = (String)listaPlantas.getSelectedItem();
+				if (stringPlanta.equals("Seleccione")) {
+					errorPlantaSeleccionada.setText("Debe seleccionar una planta");
+					return;
 				} else {
-					plantaAux = pc.buscarPlantaProduccion(idPlantaSeleccionada);
+					String arrP[] = stringPlanta.split(": ");
+					Integer idPlantaSeleccionada = Integer.valueOf(arrP[0]);
+					String segPartePlantas[] = arrP[1].split(" ");
+					String tipoPlantaSeleccionada = segPartePlantas[segPartePlantas.length-1];
+					
+					if (tipoPlantaSeleccionada.equals("(A)")) {
+						plantaAux = pc.buscarPlantaAcopio(idPlantaSeleccionada);
+					} else {
+						plantaAux = pc.buscarPlantaProduccion(idPlantaSeleccionada);
+					}
 				}
+				
+				String stringInsumo = (String)listaInsumos.getSelectedItem();
+				String arrI[] = stringInsumo.split(": ");
+				Integer idInsumoSeleccionado = Integer.valueOf(arrI[0]);
+				String segParteInsumos[] = arrI[1].split(" ");
+				String tipoInsumoSeleccionado = segParteInsumos[segParteInsumos.length-1];
 				
 				if (tipoInsumoSeleccionado.equals("(L)")) {
 					insumoAux = ic.buscarInsumoLiquido(idInsumoSeleccionado);
 				} else {
 					insumoAux = ic.buscarInsumoNoLiquido(idInsumoSeleccionado);
+				}
+				
+				for (Stock stock : listaStocksCreados) {
+					if (stock.getPlanta().equals(plantaAux)) {
+						if (stock.getInsumo().equals(insumoAux)) {
+							errorInsumoSeleccionado.setText("Ya existe stock para ese insumo");
+							return;
+						}
+					}
 				}
 				
 				if (cantidad.getText().isEmpty()) {
@@ -193,14 +215,14 @@ public class ABMStock {
 					cantidadAux = Integer.parseInt(cantidad.getText());
 				}
 				
-				if (puntoPedido.getText().isEmpty()) {
+				if (plantaAux instanceof PlantaProduccion && puntoPedido.getText().isEmpty()) {
 					errorPuntoPedido.setText("Debe ingresar un punto de pedido");
 					return;
-				} else {
+				} else if (plantaAux instanceof PlantaProduccion){
 					ptoPedidoAux = Integer.parseInt(puntoPedido.getText());
 				}
 				
-				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar la nueva planta con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
+				if(JOptionPane.showConfirmDialog(ventana, "¿Desea guardar el nuevo Stock con los datos ingresados?","Confirmación",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==0) {
 					if (plantaAux instanceof PlantaAcopio) {
 						Stock stockAux = new StockAcopio(0, cantidadAux, insumoAux, plantaAux);
 						controller.agregarStock(stockAux);
@@ -232,6 +254,16 @@ public class ABMStock {
 		constraints.anchor=GridBagConstraints.NORTHWEST;
 		constraints.insets.set(5,0,3,0);
 		constraints.gridx=3;
+		
+		constraints.gridy=1;
+		errorPlantaSeleccionada.setPreferredSize(new Dimension(230, 16));
+		errorPlantaSeleccionada.setForeground(Color.red);
+		panel.add(errorPlantaSeleccionada,constraints);
+		
+		constraints.gridy=2;
+		errorInsumoSeleccionado.setPreferredSize(new Dimension(230, 16));
+		errorInsumoSeleccionado.setForeground(Color.red);
+		panel.add(errorInsumoSeleccionado,constraints);
 				
 		constraints.gridy=3;
 		errorCantidad.setPreferredSize(new Dimension(230, 16));
